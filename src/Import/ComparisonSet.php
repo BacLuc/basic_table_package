@@ -10,10 +10,13 @@ namespace Concrete\Package\BasicTablePackage\Src\Import;
 
 
 use Concrete\Package\BasicTablePackage\Src\BaseEntity;
-use Doctrine\ORM\Query\Expr\Base;
 
 class ComparisonSet implements \Countable, \SeekableIterator
 {
+    const KEY_CURRENT  = 'current';
+    const KEY_IMPORTED = 'imported';
+    const KEY_RESULT   = 'result';
+    const KEY_NEWENTRY = 'newentry';
     /**
      * @var int
      */
@@ -22,21 +25,14 @@ class ComparisonSet implements \Countable, \SeekableIterator
      * @var BaseEntity
      */
     protected $currentModel;
-
     /**
      * @var BaseEntity
      */
     protected $importModel;
-
     /**
      * @var BaseEntity
      */
     protected $resultModel;
-
-    const KEY_CURRENT = 'current';
-    const KEY_IMPORTED = 'imported';
-    const KEY_RESULT = 'result';
-    const KEY_NEWENTRY = 'newentry';
 
     /**
      * @return BaseEntity
@@ -92,44 +88,15 @@ class ComparisonSet implements \Countable, \SeekableIterator
         return $this;
     }
 
-    public function compareAndCreateResultModel(){
-        $classname = get_class($this->importModel);
-        if($this->currentModel == null){
-            $this->currentModel = new $classname;
-            $this->resultModel = $this->importModel;
-            return $this;
-        }
-
-        //TODO what happens if importmodel is null
-
-
-        $this->resultModel = new $classname;
-        $importModelFieldTypes = $this->importModel->getFieldTypes();
-        foreach ($this->currentModel->getFieldTypes() as $sqlFieldName => $fieldType){
-            switch ($fieldType) {
-
-                default:
-                    if($sqlFieldName ==$this->currentModel->getIdFieldName()){
-                        $this->resultModel->set($sqlFieldName, $this->currentModel->getId());
-                    }elseif ($this->importModel->getFieldTypeIsNotSet($sqlFieldName)){
-                        $this->resultModel->set($sqlFieldName, $this->currentModel->get($sqlFieldName));
-                    }else{
-                        $this->resultModel->set($sqlFieldName, $this->importModel->get($sqlFieldName));
-                    }
-                    break;
-            }
-        }
-
-    }
-
-    public function isCurrentAndResultSame(){
-        if($this->resultModel == null){
+    public function isCurrentAndResultSame()
+    {
+        if ($this->resultModel == null) {
             //TODO maybe throw exception instead
             $this->compareAndCreateResultModel();
         }
         $fieldTypes = $this->resultModel->getFieldTypes();
-        foreach($fieldTypes as $sqlFieldName => $field){
-            if($this->currentModel->get($sqlFieldName) != $this->resultModel->get($sqlFieldName)){
+        foreach ($fieldTypes as $sqlFieldName => $field) {
+            if ($this->currentModel->get($sqlFieldName) != $this->resultModel->get($sqlFieldName)) {
                 return false;
             }
         }
@@ -137,6 +104,36 @@ class ComparisonSet implements \Countable, \SeekableIterator
 
     }
 
+    public function compareAndCreateResultModel()
+    {
+        $classname = get_class($this->importModel);
+        if ($this->currentModel == null) {
+            $this->currentModel = new $classname();
+            $this->resultModel = $this->importModel;
+            return $this;
+        }
+
+        //TODO what happens if importmodel is null
+
+
+        $this->resultModel = new $classname();
+        $importModelFieldTypes = $this->importModel->getFieldTypes();
+        foreach ($this->currentModel->getFieldTypes() as $sqlFieldName => $fieldType) {
+            switch ($fieldType) {
+
+                default:
+                    if ($sqlFieldName == $this->currentModel->getIdFieldName()) {
+                        $this->resultModel->set($sqlFieldName, $this->currentModel->getId());
+                    } elseif ($this->importModel->getFieldTypeIsNotSet($sqlFieldName)) {
+                        $this->resultModel->set($sqlFieldName, $this->currentModel->get($sqlFieldName));
+                    } else {
+                        $this->resultModel->set($sqlFieldName, $this->importModel->get($sqlFieldName));
+                    }
+                    break;
+            }
+        }
+
+    }
 
     /**
      * Return the current element
@@ -146,18 +143,18 @@ class ComparisonSet implements \Countable, \SeekableIterator
      */
     public function current()
     {
-       switch ($this->position){
-           case 0:
-               return $this->currentModel;
-               break;
-           case 1:
-               return $this->importModel;
-               break;
-           case 2:
-               return $this->resultModel;
-               break;
+        switch ($this->position) {
+            case 0:
+                return $this->currentModel;
+                break;
+            case 1:
+                return $this->importModel;
+                break;
+            case 2:
+                return $this->resultModel;
+                break;
 
-       }
+        }
     }
 
     /**
@@ -180,7 +177,7 @@ class ComparisonSet implements \Countable, \SeekableIterator
      */
     public function key()
     {
-        switch ($this->position){
+        switch ($this->position) {
             case 0:
                 return static::KEY_CURRENT;
                 break;
@@ -192,18 +189,6 @@ class ComparisonSet implements \Countable, \SeekableIterator
                 break;
 
         }
-    }
-
-    /**
-     * Checks if current position is valid
-     * @link http://php.net/manual/en/iterator.valid.php
-     * @return boolean The return value will be casted to boolean and then evaluated.
-     * Returns true on success or false on failure.
-     * @since 5.0.0
-     */
-    public function valid()
-    {
-        return $this->position >=0 && $this->position <3;
     }
 
     /**
@@ -228,7 +213,7 @@ class ComparisonSet implements \Countable, \SeekableIterator
      */
     public function count()
     {
-       return 3;
+        return 3;
     }
 
     /**
@@ -244,10 +229,22 @@ class ComparisonSet implements \Countable, \SeekableIterator
     {
         $tempposition = $this->position;
         $this->position = $position;
-        if($this->valid()){
+        if ($this->valid()) {
             return;
         }
         $this->position = $tempposition;
         throw new \OutOfBoundsException("invalid seek position ($position)");
+    }
+
+    /**
+     * Checks if current position is valid
+     * @link http://php.net/manual/en/iterator.valid.php
+     * @return boolean The return value will be casted to boolean and then evaluated.
+     * Returns true on success or false on failure.
+     * @since 5.0.0
+     */
+    public function valid()
+    {
+        return $this->position >= 0 && $this->position < 3;
     }
 }

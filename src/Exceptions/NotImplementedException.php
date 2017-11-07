@@ -9,7 +9,6 @@
 namespace Concrete\Package\BasicTablePackage\Src\Exceptions;
 
 
-
 class NotImplementedException extends \Exception
 {
 

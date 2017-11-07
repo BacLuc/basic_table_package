@@ -12,6 +12,7 @@ namespace Concrete\Package\BasicTablePackage\Src\NewFieldTypes\Strategy;
 interface Validator
 {
     const NULLERRORMSG = ' cannot be empty.';
+
     /**
      * @param $value
      * @return $this

@@ -9,31 +9,27 @@
 namespace Concrete\Package\BasicTablePackage\Src\NewFieldTypes;
 
 
-use Concrete\Core\Package\Package;
 use Concrete\Package\BasicTablePackage\Controller;
 use Concrete\Package\BasicTablePackage\Src\BaseEntity;
 use Concrete\Package\BasicTablePackage\Src\BaseEntityRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
-use Doctrine\ORM\Query\Expr\Base;
 
 abstract class AbstractAssociationField extends AbstractField implements AssociationFieldInterface
 {
+    const DEFAULT_ASSOCIATION_TYPE = ClassMetadataInfo::MANY_TO_ONE;
     /**
      * @var BaseEntity
      */
     protected $sourceEntity;
-
     /**
      * @var String
      */
     protected $sourceField;
-
     /**
      * @var string
      */
     protected $targetEntity;
-
     /**
      * @var callable
      */
@@ -42,59 +38,24 @@ abstract class AbstractAssociationField extends AbstractField implements Associa
      * @var string
      */
     protected $targetField;
-
     /**
      * @var callable
      */
     protected $filter;
-
     /**
      * @var array
      */
     protected $options;
-
     protected $associationType;
 
-    const DEFAULT_ASSOCIATION_TYPE = ClassMetadataInfo::MANY_TO_ONE;
-
     //TODO check if $callable's first parameter is of class Entity
-    /**
-     * set the Info for the Link table
-     * @param BaseEntity $sourceEntity
-     * @param $sourceField
-     * @param $targetEntity
-     * @param null $targetField
-     * @param null $associationType
-     * @param callable|null $getDisplayString to overrride the default getDisplayStringFunction provided by the Entity
-     * @param array|callable|null $filter
-     * @return $this
-     */
-    public function setLinkInfo($sourceEntity, $sourceField, $targetEntity, $targetField = null, $associationType = null, callable $getDisplayString = null, callable $filter = null){
-        $this->sourceEntity = $sourceEntity;
-        $this->sourceField = $sourceField;
-        $this->targetEntity = $targetEntity;
-        $this->targetField = $targetField;
-
-        if($associationType == null){
-            $this->associationType = static::DEFAULT_ASSOCIATION_TYPE;
-        }else{
-            $this->associationType = $associationType;
-        }
-
-
-        $this->getDisplayString = $getDisplayString;
-        if($this->getDisplayString == null){
-            $this->getDisplayString = $targetEntity::getDefaultgetDisplayStringFunction();
-        }
-        $this->filter = $filter;
-        return $this;
-    }
 
     /**
      * @param DropdownLinkField $source
      * @param DropdownLinkField $target
      */
-    public static function copyLinkInfo(AssociationFieldInterface $source, AssociationFieldInterface &$target){
+    public static function copyLinkInfo(AssociationFieldInterface $source, AssociationFieldInterface &$target)
+    {
         $target->setLinkInfo(
             $source->getSourceEntity()
             , $source->getSourceField()
@@ -106,30 +67,112 @@ abstract class AbstractAssociationField extends AbstractField implements Associa
         );
     }
 
-    public function setGetDisplayString(callable $getDisplayString){
+    /**
+     * set the Info for the Link table
+     * @param BaseEntity $sourceEntity
+     * @param $sourceField
+     * @param $targetEntity
+     * @param null $targetField
+     * @param null $associationType
+     * @param callable|null $getDisplayString to overrride the default getDisplayStringFunction provided by the Entity
+     * @param array|callable|null $filter
+     * @return $this
+     */
+    public function setLinkInfo(
+        $sourceEntity,
+        $sourceField,
+        $targetEntity,
+        $targetField = null,
+        $associationType = null,
+        callable $getDisplayString = null,
+        callable $filter = null
+    ) {
+        $this->sourceEntity = $sourceEntity;
+        $this->sourceField = $sourceField;
+        $this->targetEntity = $targetEntity;
+        $this->targetField = $targetField;
+
+        if ($associationType == null) {
+            $this->associationType = static::DEFAULT_ASSOCIATION_TYPE;
+        } else {
+            $this->associationType = $associationType;
+        }
+
+
+        $this->getDisplayString = $getDisplayString;
+        if ($this->getDisplayString == null) {
+            $this->getDisplayString = $targetEntity::getDefaultgetDisplayStringFunction();
+        }
+        $this->filter = $filter;
+        return $this;
+    }
+
+    public function setGetDisplayString(callable $getDisplayString)
+    {
         $this->getDisplayString = $getDisplayString;
         return $this;
     }
 
     public function getGetDisplayStringFunction()
     {
-       return $this->getDisplayString;
+        return $this->getDisplayString;
     }
 
+    public function getFilter()
+    {
+        return $this->filter;
+    }
 
-
-    public function setFilter(callable $filter){
+    public function setFilter(callable $filter)
+    {
         $this->filter = $filter;
         return $this;
     }
 
-    public function getFilter(){
-        return $this->filter;
+    /**
+     * @return array of options
+     */
+    public function getOptions()
+    {
+        /**
+         * @var $em EntityManager
+         */
+        $modelList = $this->getOptionsModelList();
+
+        $options = array();
+        if (count($this->options) == 0) {
+            if (count($modelList) > 0) {
+
+                foreach ($modelList as $model) {
+                    if ($this->getDisplayString != null) {
+                        $displayFunction = $this->getDisplayString;
+                        $options[$model->getId()] = trim($displayFunction($model));
+                    }
+                }
+            }
+        } else {
+            return $this->options;
+        }
+
+        if ($this->getNullable() !== false) {
+            $options = array("" => "") + $options;
+        }
+        $this->setOptions($options);
+        return $this->options;
+
+
+    }
+
+    public function setOptions($options)
+    {
+        $this->options = $options;
+        $this->validator->setOptions($options);
+        $this->editRepresentation->setOptions($options);
+        $this->viewRepresentation->setOptions($options);
     }
 
     public function getOptionsModelList()
     {
-
 
 
         $queryBuilder = BaseEntityRepository::getBuildQueryWithJoinedAssociations($this->getTargetEntity());
@@ -144,15 +187,16 @@ abstract class AbstractAssociationField extends AbstractField implements Associa
             $subquery = Controller::getEntityManagerStatic()->createQueryBuilder();
 
             $subquery->select("sub0." . $this->getSourceEntity()->getIdFieldName())
-                ->from(get_class($this->getSourceEntity()), "sub0")
-                ->leftJoin("sub0." . $this->getSourceField(), "sub1")
-                ->where($subquery->expr()->eq("sub1", $targetEntityAlias));
+                     ->from(get_class($this->getSourceEntity()), "sub0")
+                     ->leftJoin("sub0." . $this->getSourceField(), "sub1")
+                     ->where($subquery->expr()->eq("sub1", $targetEntityAlias))
+            ;
 
             //if sourceentity already exists, its value can be in the options too
             if ($this->getSourceEntity()->getId() != null) {
                 $subquery
-                    ->andWhere($subquery->expr()->neq("sub0." . $this->getSourceEntity()->getIdFieldName(), ":sourceEntityId"))
-                ;
+                    ->andWhere($subquery->expr()->neq("sub0." . $this->getSourceEntity()->getIdFieldName(),
+                        ":sourceEntityId"));
                 $queryBuilder->setParameter(":sourceEntityId", $this->getSourceEntity()->getId());
             }
             $queryBuilder->andWhere(
@@ -167,89 +211,9 @@ abstract class AbstractAssociationField extends AbstractField implements Associa
         return $modelList;
     }
 
-    /**
-     * @return array of options
-     */
-    public function getOptions(){
-        /**
-         * @var $em EntityManager
-         */
-        $modelList = $this->getOptionsModelList();
-
-        $options = array();
-        if(count($this->options)==0) {
-            if (count($modelList) > 0) {
-
-                foreach ($modelList as $model) {
-                    if ($this->getDisplayString != null) {
-                        $displayFunction = $this->getDisplayString;
-                        $options[$model->getId()] = trim($displayFunction($model));
-                    }
-                }
-            }
-        }else{
-            return $this->options;
-        }
-
-        if($this->getNullable() !==false){
-            $options = array(""=>"")+$options;
-        }
-        $this->setOptions($options);
-        return $this->options;
-
-
-    }
-
-
-    public function getFullOptions(){
-        /**
-         * @var $em EntityManager
-         */
-        $em = BaseEntity::getEntityManagerStatic();
-
-
-        $modelList=$this->getOptionsModelList();
-
-        $options = array();
-        if (count($modelList) > 0) {
-
-            /**
-             * @var BaseEntity $model
-             */
-            foreach ($modelList as $model) {
-                $model->setDefaultFieldTypes();
-                $options[$model->getId()] = $model->toTableAssoc();
-                $displayStringFunction = $this->getDisplayString;
-                $options[$model->getId()]->uniqueIdString=$displayStringFunction($model);
-
-            }
-        }
-
-
-        return $options;
-    }
-
-    public function getSourceEntity(){
-        return $this->sourceEntity;
-    }
-
-    public function getSourceField(){
-        return $this->sourceField;
-    }
-
-    public function getTargetEntity(){
+    public function getTargetEntity()
+    {
         return $this->targetEntity;
-    }
-
-    public function getTargetField(){
-        return $this->targetField;
-    }
-
-    public function setOptions($options){
-        $this->options = $options;
-        $this->validator->setOptions($options);
-        $this->editRepresentation->setOptions($options);
-        $this->viewRepresentation->setOptions($options);
     }
 
     /**
@@ -270,6 +234,49 @@ abstract class AbstractAssociationField extends AbstractField implements Associa
         return $this;
     }
 
-    
+    public function getSourceEntity()
+    {
+        return $this->sourceEntity;
+    }
+
+    public function getSourceField()
+    {
+        return $this->sourceField;
+    }
+
+    public function getFullOptions()
+    {
+        /**
+         * @var $em EntityManager
+         */
+        $em = BaseEntity::getEntityManagerStatic();
+
+
+        $modelList = $this->getOptionsModelList();
+
+        $options = array();
+        if (count($modelList) > 0) {
+
+            /**
+             * @var BaseEntity $model
+             */
+            foreach ($modelList as $model) {
+                $model->setDefaultFieldTypes();
+                $options[$model->getId()] = $model->toTableAssoc();
+                $displayStringFunction = $this->getDisplayString;
+                $options[$model->getId()]->uniqueIdString = $displayStringFunction($model);
+
+            }
+        }
+
+
+        return $options;
+    }
+
+    public function getTargetField()
+    {
+        return $this->targetField;
+    }
+
 
 }

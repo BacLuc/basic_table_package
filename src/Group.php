@@ -7,34 +7,33 @@
  */
 
 namespace Concrete\Package\BasicTablePackage\Src;
-use Concrete\Package\BasicTablePackage\Src\BaseEntity;
+
+use Concrete\Package\BasicTablePackage\Src\DiscriminatorEntry\DiscriminatorEntry;
+use Doctrine\ORM\Mapping\DiscriminatorColumn;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\Index;
+use Doctrine\ORM\Mapping\InheritanceType;
 
 /*because of the hack with @DiscriminatorEntry Annotation, all Doctrine Annotations need to be
 properly imported*/
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\InheritanceType;
-use Doctrine\ORM\Mapping\DiscriminatorColumn;
-use Concrete\Package\BasicTablePackage\Src\DiscriminatorEntry\DiscriminatorEntry;
-use Doctrine\ORM\Mapping\Table;
-use Doctrine\ORM\Mapping\Index;
 
 /**
  * Class Group
  * package Concrete\Package\BasicTablePackage\Src
  * @Entity
- *  @InheritanceType("JOINED")
+ * @InheritanceType("JOINED")
  * @DiscriminatorColumn(name="discr", type="string")
  * @DiscriminatorEntry( value = "Concrete\Package\BasicTablePackage\Src\Group" )
-  @Table(name="Groups"
-  , indexes={
-           @Index(name="gName",
-                   columns={"gName"}),
-           @Index(name="gBadgeFID",
-                   columns={"gBadgeFID"}),
-          @Index(name="pkgID",
-                   columns={"pkgID"})
-    }
-  )
+@Table(name="Groups"
+ * , indexes={
+ * @Index(name="gName",
+ * columns={"gName"}),
+ * @Index(name="gBadgeFID",
+ * columns={"gBadgeFID"}),
+ * @Index(name="pkgID",
+ * columns={"pkgID"})
+ * }
+ * )
  *
  */
 class Group extends BaseEntity
@@ -106,9 +105,6 @@ class Group extends BaseEntity
     private $gBadgeFID;
 
 
-
-
-
     /**
      * @var string
      * @Column(type="string", length=255)
@@ -158,26 +154,25 @@ class Group extends BaseEntity
      */
     private $pkgID;
 
+    public static function getDefaultGetDisplayStringFunction()
+    {
+        $function = function (Group $item) {
+            $returnString = $item->gName;
 
 
+            return $returnString;
+        };
+        return $function;
+    }
 
-    public function getId(){
+    public function getId()
+    {
         return $this->gID;
     }
 
     public function getIdFieldName()
     {
         return 'gID';
-    }
-
-    public static function getDefaultGetDisplayStringFunction(){
-        $function = function(Group $item){
-            $returnString =$item->gName;
-
-
-            return $returnString;
-        };
-        return $function;
     }
 
     /**

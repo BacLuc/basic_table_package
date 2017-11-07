@@ -9,9 +9,7 @@
 namespace Concrete\Package\BasicTablePackage\Src;
 
 
-use Concrete\Core\Package\Package;
 use Concrete\Package\BasicTablePackage\Controller;
-use Concrete\Package\BasicTablePackage\Src\FieldTypes\DateField;
 use Doctrine\Common\Proxy\Exception\InvalidArgumentException;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Proxy\Proxy;
@@ -20,8 +18,9 @@ use Doctrine\ORM\QueryBuilder;
 class BaseEntityRepository
 {
 
-    public static function getBaseEntityFromProxy(BaseEntity $item){
-        if(!($item instanceof Proxy)){
+    public static function getBaseEntityFromProxy(BaseEntity $item)
+    {
+        if (!($item instanceof Proxy)) {
             return $item;
         }
         return static::getEntityById(get_class($item), $item->getId());
@@ -29,21 +28,28 @@ class BaseEntityRepository
     }
 
     /**
-     * @param string|object $classname or object where the constants need to be extracted
-     * @param string $constant_starts_with First part of the constant (if there are multiple constanted options)
-     * @return array
+     * @param $classname
+     * @param $id
+     * @param callable|null $addFilterFunction
+     * @return BaseEntity
      */
-    public static function getOptionsOfConstants($classname, $constant_starts_with)
+    public static function getEntityById($classname, $id, callable $addFilterFunction = null)
     {
-        $refl = new \ReflectionClass($classname);
-        $constants = $refl->getConstants();
-        $userConstants = array();
-        foreach ($constants as $key => $value) {
-            if (mb_strpos($value, $constant_starts_with) !== null) {
-                $userConstants[$value] = $value;
-            }
+        $queryBuilder = static::getBuildQueryWithJoinedAssociations($classname, $addFilterFunction);
+        $queryConfig = static::getQueryConfigOf($classname);
+        $instanceForId = new $classname();
+        $idFieldName = $instanceForId->getIdFieldName();
+        $queryBuilder->andWhere(
+            $queryBuilder->expr()->eq($queryConfig['fromEntityStart']['shortname'] . "." . $idFieldName,
+                ":getEntityById")
+        );
+        $queryBuilder->setParameter(":getEntityById", $id);
+        $models = $queryBuilder->getQuery()->getResult();
+        if ($models != null) {
+            return $models[0];
         }
-        return $userConstants;
+        return null;
+
     }
 
     /**
@@ -63,7 +69,7 @@ class BaseEntityRepository
      * @param array $queryConfig
      *  array of:
      * array(
-    'fromEntityStart' => array('shortname'=> 'e0'
+     * 'fromEntityStart' => array('shortname'=> 'e0'
      *                                                       , 'class'=>get_class($this->model)
      *                                             )
      *       ,'firstAssociationFieldname'=> array('shortname' => 'e1'
@@ -71,20 +77,20 @@ class BaseEntityRepository
      *
      * );
      * @return QueryBuilder
-
      *
      */
-    public static function getBuildQueryWithJoinedAssociations($classname, callable $addFilterFunction =null){
+    public static function getBuildQueryWithJoinedAssociations($classname, callable $addFilterFunction = null)
+    {
 
-        if($classname == null){
+        if ($classname == null) {
             throw new InvalidArgumentException("the first parameter cannot be null");
         }
 
         //if the staticEntityfilterfunction was passed, then use the staticEntityfilterFunciton of the Entity called
-        if($addFilterFunction == BaseEntity::$staticEntityfilterfunction){
+        if ($addFilterFunction == BaseEntity::$staticEntityfilterfunction) {
             $fullclassname = $classname;
-            if($classname[0]!='\\'){
-                $fullclassname = '\\'.$classname;
+            if ($classname[0] != '\\') {
+                $fullclassname = '\\' . $classname;
             }
             $addFilterFunction = $fullclassname::$staticEntityfilterfunction;
         }
@@ -94,7 +100,6 @@ class BaseEntityRepository
 
         //
         $selectEntities = static::getSelectEntitiesOf($classname);
-
 
 
         /**
@@ -108,11 +113,11 @@ class BaseEntityRepository
 
         $selectString = "";
         $entityCounter = 0;
-        foreach($entities as $fieldname => $entityName){
-            if($entityCounter > 0){
-                $selectString.=",";
+        foreach ($entities as $fieldname => $entityName) {
+            if ($entityCounter > 0) {
+                $selectString .= ",";
             }
-            $selectString.=" e".$entityCounter++;
+            $selectString .= " e" . $entityCounter++;
         }
         $query->select($selectString);
 
@@ -126,22 +131,22 @@ class BaseEntityRepository
          * array(sqlfieldname => array('shortname'=> e1, 'class'=> classname))
          * first entry is fromEntityStart
          */
-        foreach($selectEntities as $fieldName => $entityName){
-            if($first){
+        foreach ($selectEntities as $fieldName => $entityName) {
+            if ($first) {
 
                 //first entity is the from clause, so no join required
                 $first = false;
                 continue;
             }
-            $query->leftJoin("e0.".$fieldName, "e".$entityCounter++);
+            $query->leftJoin("e0." . $fieldName, "e" . $entityCounter++);
 
         }
 
         $queryConfig = static::getQueryConfigOf($classname);
 
 
-        if($addFilterFunction != null){
-            $query = $addFilterFunction($query,$queryConfig);
+        if ($addFilterFunction != null) {
+            $query = $addFilterFunction($query, $queryConfig);
         }
 
         return $query;
@@ -153,20 +158,21 @@ class BaseEntityRepository
      * @return array of the associated entities with $classname, or static::getFullClassName if $classname is null
      * is in form of:
      * array(
-    Namespace\To\StartEntity\Classname => null,
+     * Namespace\To\StartEntity\Classname => null,
      * 'associationfieldname' => Namespace\To\Association\Classname
      * );
      */
-    public static function getSelectEntitiesOf($classname){
+    public static function getSelectEntitiesOf($classname)
+    {
 
-        $selectEntities = array($classname=>null);
+        $selectEntities = array($classname => null);
 
         /**
          * @var ClassMetadata $metadata
          */
         $metadata = Controller::getEntityManagerStatic()->getMetadataFactory()->getMetadataFor($classname);
-        foreach($metadata->getAssociationMappings() as $mappingnum => $mapping){
-            $targetEntityInstance = new $mapping['targetEntity'];
+        foreach ($metadata->getAssociationMappings() as $mappingnum => $mapping) {
+            $targetEntityInstance = new $mapping['targetEntity']();
             $selectEntities[$mapping['fieldName']] = $mapping['targetEntity'];
 
         }
@@ -179,7 +185,7 @@ class BaseEntityRepository
      * @param string $classname
      * @return array
      * array(
-    'fromEntityStart' => array('shortname'=> 'e0'
+     * 'fromEntityStart' => array('shortname'=> 'e0'
      *                                                       , 'class'=>get_class($this->model)
      *                                             )
      *       ,'firstAssociationFieldname'=> array('shortname' => 'e1'
@@ -187,25 +193,30 @@ class BaseEntityRepository
      *
      * );
      */
-    public static function getQueryConfigOf($classname){
-        if($classname == null){
+    public static function getQueryConfigOf($classname)
+    {
+        if ($classname == null) {
             throw new \InvalidArgumentException("the parameter cannot be null");
         }
 
         $selectEntities = static::getSelectEntitiesOf($classname);
         $first = true;
         $entityCounter = 1;
-        foreach($selectEntities as $fieldName => $entityName){
-            if($first){
-                $queryConfig['fromEntityStart']= array('shortname'=> "e0"
-                ,'class' => $classname
+        foreach ($selectEntities as $fieldName => $entityName) {
+            if ($first) {
+                $queryConfig['fromEntityStart'] = array(
+                    'shortname' => "e0"
+                    ,
+                    'class'     => $classname,
                 );
                 //first entity is the from clause, so no join required
                 $first = false;
                 continue;
-            }else{
-                $queryConfig[$fieldName]= array('shortname'=> "e".$entityCounter
-                ,'class' => $entityName
+            } else {
+                $queryConfig[$fieldName] = array(
+                    'shortname' => "e" . $entityCounter
+                    ,
+                    'class'     => $entityName,
                 );
             }
 
@@ -216,26 +227,21 @@ class BaseEntityRepository
     }
 
     /**
-     * @param $classname
-     * @param $id
-     * @param callable|null $addFilterFunction
-     * @return BaseEntity
+     * @param string|object $classname or object where the constants need to be extracted
+     * @param string $constant_starts_with First part of the constant (if there are multiple constanted options)
+     * @return array
      */
-    public static function getEntityById($classname, $id, callable $addFilterFunction =null){
-        $queryBuilder = static::getBuildQueryWithJoinedAssociations($classname,$addFilterFunction);
-        $queryConfig = static::getQueryConfigOf($classname);
-        $instanceForId = new $classname;
-        $idFieldName = $instanceForId->getIdFieldName();
-        $queryBuilder->andWhere(
-            $queryBuilder->expr()->eq($queryConfig['fromEntityStart']['shortname'].".".$idFieldName,":getEntityById")
-        );
-        $queryBuilder->setParameter(":getEntityById",$id);
-        $models = $queryBuilder->getQuery()->getResult();
-        if($models!=null){
-            return $models[0];
+    public static function getOptionsOfConstants($classname, $constant_starts_with)
+    {
+        $refl = new \ReflectionClass($classname);
+        $constants = $refl->getConstants();
+        $userConstants = array();
+        foreach ($constants as $key => $value) {
+            if (mb_strpos($value, $constant_starts_with) !== null) {
+                $userConstants[$value] = $value;
+            }
         }
-        return null;
-
+        return $userConstants;
     }
 
 //

@@ -1,27 +1,15 @@
 <?php
+
 namespace Concrete\Package\BasicTablePackage\Src\FieldTypes;
 
-use Concrete\Core\Block\BlockController;
 use Concrete\Flysystem\Exception;
 use Concrete\Package\BasicTablePackage\Src\AssociationBaseEntity;
-use Concrete\Package\BasicTablePackage\Src\BaseEntity;
 use Concrete\Package\BasicTablePackage\Src\BaseEntityRepository;
-use Concrete\Package\BasicTablePackage\Src\FieldTypes\Field as Field;
-use Concrete\Package\BasicTablePackage\Src\FieldTypes\DropdownField as DropdownField;
-use Concrete\Package\BasicTablePackage\Src\FieldTypes\DropdownLinkField as DropdownLinkField;
 use Concrete\Package\EntitiesExample\Src\Entity;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Proxy\Proxy;
-use Loader;
-use Page;
-use User;
-use Core;
-use File;
-use Concrete\Controller\SinglePage\Dashboard\Block\Permissions as Permissions;
-use Concrete\Core\Block\View\BlockView as View;
-use Concrete\Package\BasicTablePackage\Src\FieldTypes\SelfSaveInterface as SelfSaveInterface;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Class DropdownMultilinkField
@@ -29,32 +17,42 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Field for an n;m relation with bootstrap tagsinput
  * TODO change to twitter tagsinput, bootstrap tagsinput is depricated
  */
-class DropdownMultilinkFieldAssociated extends DropdownMultilinkField implements AssociationFieldInterface {
+class DropdownMultilinkFieldAssociated extends DropdownMultilinkField implements AssociationFieldInterface
+{
     protected $linktable;
     protected $ntomtable;
     protected $sqlfilter = " 1=1 ";
-    protected $sqlvars = array();
+    protected $sqlvars   = array();
     protected $showcolumn;
     protected $linkfieldself;
     protected $linkfieldext;
     protected $rowid;
     protected $idfieldext;
     protected $idfieldself;
-    protected $values = array();
-    protected $allowAdd = false;
+    protected $values    = array();
+    protected $allowAdd  = false;
     protected $associationEntity;
     protected $targetFieldAssociationEntity;
     protected $sourceEntityAssociationField;
 
 
-    public function setLinkInfo($sourceEntity, $sourceField, $targetEntity, $targetField = null, $associationType = null, callable $getDisplayString = null, callable $filter = null){
+    public function setLinkInfo(
+        $sourceEntity,
+        $sourceField,
+        $targetEntity,
+        $targetField = null,
+        $associationType = null,
+        callable $getDisplayString = null,
+        callable $filter = null
+    ) {
         $this->sourceEntity = $sourceEntity;
         $this->sourceField = $sourceField;
 
         $targetEntityObject = new $targetEntity();
 
-        if(! ($targetEntityObject instanceof  AssociationBaseEntity)){
-            throw new Exception("Cannot use ".get_class($this)." with an association pointing to a class which is not a subclass of AssociationEntity");
+        if (!($targetEntityObject instanceof AssociationBaseEntity)) {
+            throw new Exception("Cannot use " . get_class($this)
+                                . " with an association pointing to a class which is not a subclass of AssociationEntity");
         }
 
         //now get the entity the association points really to
@@ -64,14 +62,16 @@ class DropdownMultilinkFieldAssociated extends DropdownMultilinkField implements
         $metadata = $this->getEntityManager()->getMetadataFactory()->getMetadataFor($className);
 
         $associations = $metadata->getAssociationMappings();
-        if(count($associations)!=2){
-            throw new Exception("Cannot use ".get_class($this)." can only handle Association classes with 2 associations");
+        if (count($associations) != 2) {
+            throw new Exception("Cannot use " . get_class($this)
+                                . " can only handle Association classes with 2 associations");
         }
-        foreach($associations as $num => $associationMeta){
-            if($metadata->isSingleValuedAssociation($associationMeta['fieldName'])){
-                if($associationMeta['targetEntity'] == (is_object($this->sourceEntity)?get_class($this->sourceEntity):$this->sourceEntity)){
+        foreach ($associations as $num => $associationMeta) {
+            if ($metadata->isSingleValuedAssociation($associationMeta['fieldName'])) {
+                if ($associationMeta['targetEntity'] == (is_object($this->sourceEntity) ?
+                        get_class($this->sourceEntity) : $this->sourceEntity)) {
                     $this->sourceEntityAssociationField = $associationMeta['fieldName'];
-                }else{
+                } else {
                     $this->targetEntity = $associationMeta['targetEntity'];
                     $this->targetFieldAssociationEntity = $associationMeta['fieldName'];
                     $this->associationEntity = $targetEntity;
@@ -80,53 +80,53 @@ class DropdownMultilinkFieldAssociated extends DropdownMultilinkField implements
         }
 
 
-
         $this->targetField = $targetField;
-        $targetClassName =  $this->targetEntity;
+        $targetClassName = $this->targetEntity;
 
-        if($associationType == null){
+        if ($associationType == null) {
             $this->associationType = static::DEFAULT_ASSOCIATION_TYPE;
-        }else{
+        } else {
             $this->associationType = $associationType;
         }
 
-        $this->getDisplayString =$targetClassName::getDefaultgetDisplayStringFunction();
+        $this->getDisplayString = $targetClassName::getDefaultgetDisplayStringFunction();
         $this->filter = $filter;
     }
 
-    public function validatePost($value){
+    public function validatePost($value)
+    {
 
 
         $postvalues = explode(",", $value);
-        $targetModelForIdField = new $this->targetEntity;
+        $targetModelForIdField = new $this->targetEntity();
         $options = $this->getOptions();
 
         $flipoptions = array_flip($options);
 
         $sqlArray = new ArrayCollection();
-        foreach($postvalues as $num => $postvalue){
+        foreach ($postvalues as $num => $postvalue) {
             $postvalue = trim($postvalue);
-            if(in_array($postvalue, $options) ){
+            if (in_array($postvalue, $options)) {
                 $findItem = BaseEntityRepository::getEntityById($this->targetEntity, $flipoptions[$postvalue]);
 
-                $associationEntity = new $this->associationEntity;
-                $associationEntity->set($this->sourceEntityAssociationField,$this->sourceEntity);
+                $associationEntity = new $this->associationEntity();
+                $associationEntity->set($this->sourceEntityAssociationField, $this->sourceEntity);
                 $this->getEntityManager()->persist($this->sourceEntity);
-                $associationEntity->set($this->targetFieldAssociationEntity,$findItem);
+                $associationEntity->set($this->targetFieldAssociationEntity, $findItem);
                 $this->getEntityManager()->persist($findItem);
                 $this->getEntityManager()->persist($associationEntity);
                 $sqlArray->add($associationEntity);
-            }else{
-               //TODO throw exception, if invalid values should produce an error message
+            } else {
+                //TODO throw exception, if invalid values should produce an error message
             }
         }
         //delete the existing
         $toDelete = $this->sourceEntity->get($this->getSQLFieldName());
-        if(count($toDelete)>0){
-            if($toDelete instanceof Collection){
+        if (count($toDelete) > 0) {
+            if ($toDelete instanceof Collection) {
                 $toDelete = $toDelete->toArray();
             }
-            foreach($toDelete as $todelnum => $delItem){
+            foreach ($toDelete as $todelnum => $delItem) {
                 $this->getEntityManager()->remove($delItem);
             }
         }
@@ -135,57 +135,20 @@ class DropdownMultilinkFieldAssociated extends DropdownMultilinkField implements
         return true;
     }
 
-    /**
-     * get the Values of
-     * @return ArrayCollection
-     */
-    protected function getValues(){
-        if(count($this->value)==0 && !is_null($this->rowid)) {
-            $modelForIdField = new $this->targetEntity;
-            /**
-             * @var $model \Entity
-             */
-
-
-
-            $model = $this->getEntityManager()
-                ->getRepository($this->targetEntity)
-                ->findOneBy(array(
-                    $modelForIdField->getIdFieldName() => $this->rowid
-                ));
-            $values = $model->get($this->sourceField);
-            //now we got the associated fields, now we want the real object behind
-            $realObjects = new ArrayCollection();
-            if(count($values)>0) {
-                foreach ($values->toArray() as $assnum => $associationObject) {
-                    $realObjects->add($associationObject->get($this->targetFieldAssociationEntity));
-                }
-            }
-            if(count($realObjects)>0 && $realObjects != null) {
-                foreach ($realObjects->toArray() as $valnum => $value) {
-                    $this->value[$value->getId()]=$this->getDisplayString($value);
-                }
-            }
-        }
-
-        return $this->value;
-
-    }
-
-
-
-    public function setSQLValue($value){
-        if($value instanceof PersistentCollection){
+    public function setSQLValue($value)
+    {
+        if ($value instanceof PersistentCollection) {
             $value = new ArrayCollection($value->toArray());
         }
 
-        if(count($value)==0){
-            $this->value=new ArrayCollection();
-        }elseif($value instanceof ArrayCollection){
+        if (count($value) == 0) {
+            $this->value = new ArrayCollection();
+        } elseif ($value instanceof ArrayCollection) {
             //check if values are of the right entitiy
-            foreach($value->toArray() as $valnum => $valueitem){
-                if(!$valueitem instanceof $this->associationEntity){
-                    throw new \InvalidArgumentException("Item number $valnum is ".get_class($valueitem).", should be ".$this->targetEntity." sein");
+            foreach ($value->toArray() as $valnum => $valueitem) {
+                if (!$valueitem instanceof $this->associationEntity) {
+                    throw new \InvalidArgumentException("Item number $valnum is " . get_class($valueitem)
+                                                        . ", should be " . $this->targetEntity . " sein");
                 }
 
                 //s$this->em->persist($valueitem);
@@ -197,51 +160,13 @@ class DropdownMultilinkFieldAssociated extends DropdownMultilinkField implements
         return $this;
     }
 
-    public function getFormView($form, $clientSideValidationActivated = true){
-        $html = "<label for='".$this->getHtmlId()."'>".$this->getLabel()."</label>";
+    public function getFormView($form, $clientSideValidationActivated = true)
+    {
+        $html = "<label for='" . $this->getHtmlId() . "'>" . $this->getLabel() . "</label>";
 
 
         $html .= $this->getInputHtml($form, $clientSideValidationActivated);
         return $html;
-    }
-
-    public function getTableView(){
-        $values = $this->getValues();
-        if($values instanceof  PersistentCollection || $values instanceof  ArrayCollection){
-            $values = $values->toArray();
-        }
-
-        $string = "";
-        if(is_array($values)){
-            $first = true;
-
-            foreach($values as $valuenum => $value){
-                $appendString = "";
-
-
-                if(is_object($value)){
-                    $realEntity = $value->get($this->targetFieldAssociationEntity);
-                    if($realEntity instanceof  Proxy){
-                        $realEntity->__load();
-                    }
-                    $value = $realEntity;
-                    $classname = $this->targetEntity;
-                    $function = $classname::getDefaultGetDisplayStringFunction();
-                    $appendString = $function($value);
-
-                }else{
-                    $appendString = $value;
-                }
-
-                if($first){
-                    $first = false;
-                }else{
-                    $string.=", ";
-                }
-                $string.= $appendString;
-            }
-        }
-        return $string;
     }
 
     /**
@@ -249,11 +174,11 @@ class DropdownMultilinkFieldAssociated extends DropdownMultilinkField implements
      * @param bool $clientSideValidationActivated
      * @return string
      */
-    public function getInputHtml($form, $clientSideValidationActivated=true)
+    public function getInputHtml($form, $clientSideValidationActivated = true)
     {
         $associations = $this->getValues();
 
-        if(($associations == null || count($associations)==0) && count($this->getDefault())>0){
+        if (($associations == null || count($associations) == 0) && count($this->getDefault()) > 0) {
             $associations = $this->getDefault();
         }
         if ($associations instanceof ArrayCollection) {
@@ -280,7 +205,8 @@ class DropdownMultilinkFieldAssociated extends DropdownMultilinkField implements
 
 
         $valuestring = implode(", ", $valueStrings);
-        $html = "<input type='text' width = '100%' id='" . $this->getHtmlId() . "' name ='" . $this->getPostName() . "' value='$valuestring'/>";
+        $html = "<input type='text' width = '100%' id='" . $this->getHtmlId() . "' name ='" . $this->getPostName()
+                . "' value='$valuestring'/>";
 
 
         $options = $this->getOptions();
@@ -332,6 +258,84 @@ class DropdownMultilinkFieldAssociated extends DropdownMultilinkField implements
 
         $html .= $this->getHtmlErrorMsg();
         return $html;
+    }
+
+    /**
+     * get the Values of
+     * @return ArrayCollection
+     */
+    protected function getValues()
+    {
+        if (count($this->value) == 0 && !is_null($this->rowid)) {
+            $modelForIdField = new $this->targetEntity();
+            /**
+             * @var $model \Entity
+             */
+
+
+            $model = $this->getEntityManager()
+                          ->getRepository($this->targetEntity)
+                          ->findOneBy(array(
+                              $modelForIdField->getIdFieldName() => $this->rowid,
+                          ))
+            ;
+            $values = $model->get($this->sourceField);
+            //now we got the associated fields, now we want the real object behind
+            $realObjects = new ArrayCollection();
+            if (count($values) > 0) {
+                foreach ($values->toArray() as $assnum => $associationObject) {
+                    $realObjects->add($associationObject->get($this->targetFieldAssociationEntity));
+                }
+            }
+            if (count($realObjects) > 0 && $realObjects != null) {
+                foreach ($realObjects->toArray() as $valnum => $value) {
+                    $this->value[$value->getId()] = $this->getDisplayString($value);
+                }
+            }
+        }
+
+        return $this->value;
+
+    }
+
+    public function getTableView()
+    {
+        $values = $this->getValues();
+        if ($values instanceof PersistentCollection || $values instanceof ArrayCollection) {
+            $values = $values->toArray();
+        }
+
+        $string = "";
+        if (is_array($values)) {
+            $first = true;
+
+            foreach ($values as $valuenum => $value) {
+                $appendString = "";
+
+
+                if (is_object($value)) {
+                    $realEntity = $value->get($this->targetFieldAssociationEntity);
+                    if ($realEntity instanceof Proxy) {
+                        $realEntity->__load();
+                    }
+                    $value = $realEntity;
+                    $classname = $this->targetEntity;
+                    $function = $classname::getDefaultGetDisplayStringFunction();
+                    $appendString = $function($value);
+
+                } else {
+                    $appendString = $value;
+                }
+
+                if ($first) {
+                    $first = false;
+                } else {
+                    $string .= ", ";
+                }
+                $string .= $appendString;
+            }
+        }
+        return $string;
     }
 
 

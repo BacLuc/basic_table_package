@@ -9,21 +9,14 @@
 namespace Concrete\Package\BasicTablePackage\Src\FieldTypes;
 
 
-use Concrete\Core\Device\DeviceInterface;
-use Concrete\Core\Html\Object\Collection;
 use Concrete\Package\BasicTablePackage\Src\AbstractFormView;
 use Concrete\Package\BasicTablePackage\Src\BaseEntity;
 use Concrete\Package\BasicTablePackage\Src\BaseEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\PersistentCollection;
-use Concrete\Core\Support\Facade\Application;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 class DirectEditAssociatedEntityMultipleField extends AbstractDirectEditField
 {
-
-
-
 
 
     public function __construct($sqlFieldname, $label, $postName)
@@ -35,7 +28,7 @@ class DirectEditAssociatedEntityMultipleField extends AbstractDirectEditField
 
     public function validatePost($value)
     {
-        if($value == null || !is_array($value)){
+        if ($value == null || !is_array($value)) {
             $this->setSQLValue(new ArrayCollection());
         }
 
@@ -45,42 +38,40 @@ class DirectEditAssociatedEntityMultipleField extends AbstractDirectEditField
         $error = false;
 
         /**
-         * @var BaseEntity $instanceforidfield;
+         * @var BaseEntity $instanceforidfield ;
          */
-        $instanceforidfield = new $this->targetEntity;
+        $instanceforidfield = new $this->targetEntity();
         $idfieldname = $instanceforidfield->getIdFieldName();
 
-        if(count($value)>0) {
-            foreach ($value as $rownum =>$postvalues) {
+        if (count($value) > 0) {
+            foreach ($value as $rownum => $postvalues) {
                 if (!is_array($postvalues)) {
                     continue;
                 }
 
 
-
                 $fields = $instanceforidfield->getFieldTypes();
                 $idpostname = $fields[$idfieldname]->getPostName();
                 $toSaveModel = null;
-                if($postvalues['newentrycheckbox']
+                if ($postvalues['newentrycheckbox']
                     || filter_var($postvalues[$idpostname], FILTER_VALIDATE_INT) === false
                     || $this->isAlwaysCreateNewInstance()) {
                     //create entity or modify it
-                    $toSaveModel = new $this->targetEntity;
-                }else{
+                    $toSaveModel = new $this->targetEntity();
+                } else {
                     $options = $this->getOptions();
 
-                    if(isset($options[$postvalues[$idpostname]])){
+                    if (isset($options[$postvalues[$idpostname]])) {
                         $model = BaseEntityRepository::getEntityById($this->targetEntity, $postvalues[$idpostname]);
-                        if($model != null && $model instanceof BaseEntity){
+                        if ($model != null && $model instanceof BaseEntity) {
                             $toSaveModel = $model;
                         }
                     }
-                    if($toSaveModel == null){
-                        $toSaveModel = new $this->targetEntity;
+                    if ($toSaveModel == null) {
+                        $toSaveModel = new $this->targetEntity();
                     }
 
                 }
-
 
 
                 /**
@@ -92,17 +83,17 @@ class DirectEditAssociatedEntityMultipleField extends AbstractDirectEditField
                         || $field instanceof DirectEditInterface
                     ) {
                         //$toSaveModel->set($this->targetField,$this->sourceEntity);
-                        if($this->targetField == $field->getSQLFieldName()){
+                        if ($this->targetField == $field->getSQLFieldName()) {
                             //first determine if targetfield is arraycollection
                             $currentValue = $toSaveModel->get($this->targetField);
-                            if(is_object($currentValue)){
+                            if (is_object($currentValue)) {
 
-                                if($currentValue instanceof  \Doctrine\Common\Collections\Collection){
+                                if ($currentValue instanceof \Doctrine\Common\Collections\Collection) {
                                     $currentValue->add($this->sourceEntity);
-                                    $toSaveModel->set($this->targetField,$currentValue);
+                                    $toSaveModel->set($this->targetField, $currentValue);
                                 }
-                            }elseif($currentValue == null){
-                                $toSaveModel->set($this->targetField,$this->sourceEntity);
+                            } elseif ($currentValue == null) {
+                                $toSaveModel->set($this->targetField, $this->sourceEntity);
                             }
                         }
 
@@ -110,14 +101,14 @@ class DirectEditAssociatedEntityMultipleField extends AbstractDirectEditField
                     }
                     if ($field->validatePost($postvalues[$field->getPostName()])) {
                         $toSaveModel->set($field->getSQLFieldName(), $field->getSQLValue());
-                    }else{
+                    } else {
                         $this->subErrorMsg[$rownum][$field->getPostName()] = $field->getErrorMsg();
                         $error = true;
                     }
                 }
 
-                if($error){
-                    $this->errMsg = $this->getLabel().t(DirectEditAssociatedEntityField::SUBFORMERROR);
+                if ($error) {
+                    $this->errMsg = $this->getLabel() . t(DirectEditAssociatedEntityField::SUBFORMERROR);
                     $this->saveSubErrorMsg();
                     return false;
                 }
@@ -135,20 +126,45 @@ class DirectEditAssociatedEntityMultipleField extends AbstractDirectEditField
 
     }
 
+    public function setSQLValue($value)
+    {
+        if ($value == null) {
+            $value = new $this->getDefault();
+            return $this;
+        }
+        if ($value instanceof \Doctrine\Common\Collections\Collection) {
+
+            if (count($value) == 0) {
+                //add empty collection
+                $this->value = $value;
+                return $this;
+            }
+            foreach ($value->getIterator() as $num => $item) {
+                if (!($item instanceof $this->targetEntity)) {
+                    throw new \InvalidArgumentException(
+                        sprintf("Element in given collection was of type %s, but only elements of type %s are allowed"
+                            , get_class($item), $this->targetEntity)
+                    );
+                }
+            }
+            $this->value = $value;
+            return $this;
+        }
+    }
 
     /**
      * @param $form
      * @param $clientSideValidationActivated
      * @return string
      */
-    public function getInputHtml($form, $clientSideValidationActivated=true)
+    public function getInputHtml($form, $clientSideValidationActivated = true)
     {
         /**
          * @var BaseEntity $value
          */
         $values = $this->getSQLValue();
 
-        if(($values == null || count($values)==0) && count($this->getDefault())>0){
+        if (($values == null || count($values) == 0) && count($this->getDefault()) > 0) {
             $values = $this->getDefault();
         }
 
@@ -157,7 +173,7 @@ class DirectEditAssociatedEntityMultipleField extends AbstractDirectEditField
         if ($values instanceof \Doctrine\Common\Collections\Collection) {
             $values = $values->toArray();
         }
-       $html = '';
+        $html = '';
         if (count($values) > 0) {
             $html .= "<button type='button' value='' class='btn bacluc-inlineform actionbutton add'><i class ='fa fa-plus'></i></button>";
         }
@@ -185,19 +201,20 @@ class DirectEditAssociatedEntityMultipleField extends AbstractDirectEditField
                     <div class='subentityrowedit  row'>
                 ";
 
-                if($value instanceof Proxy){
+                if ($value instanceof Proxy) {
                     $value = $this->getEntityManager()
-                        ->getRepository($this->targetEntity)
-                        ->find($value->getId());
+                                  ->getRepository($this->targetEntity)
+                                  ->find($value->getId())
+                    ;
                 }
                 $value->setDefaultFormViews();
 
                 /**
                  * @var AbstractFormView $defaultFormView
                  */
-                $defaultFormView = $value->getDefaultFormView($form,$clientSideValidationActivated);
+                $defaultFormView = $value->getDefaultFormView($form, $clientSideValidationActivated);
 
-                if($defaultFormView===false) {
+                if ($defaultFormView === false) {
                     /**
                      * @var Field $field
                      */
@@ -229,20 +246,20 @@ class DirectEditAssociatedEntityMultipleField extends AbstractDirectEditField
                         $field->setPostName($oldpostname);
                         $field->setErrorMessage(null);
                     }
-                }else{
+                } else {
                     $defaultFormView->setErrorMsg($this->subErrorMsg[$rownum]);
-                    $defaultFormView->setParentPostName($this->getPostName(). "[" . $rownum . "]");
-                    $html.= $defaultFormView->getFormView($form,$clientSideValidationActivated);
+                    $defaultFormView->setParentPostName($this->getPostName() . "[" . $rownum . "]");
+                    $html .= $defaultFormView->getFormView($form, $clientSideValidationActivated);
 
                 }
                 $idNewEntryCheckbox = $this->getPostName()
-                    . static::REPLACE_BRACE_IN_ID_WITH
-                    . $rownum
-                    . static::REPLACE_BRACE_IN_ID_WITH . static::REPLACE_BRACE_IN_ID_WITH
-                    . "newentrycheckbox" . static::REPLACE_BRACE_IN_ID_WITH;
+                                      . static::REPLACE_BRACE_IN_ID_WITH
+                                      . $rownum
+                                      . static::REPLACE_BRACE_IN_ID_WITH . static::REPLACE_BRACE_IN_ID_WITH
+                                      . "newentrycheckbox" . static::REPLACE_BRACE_IN_ID_WITH;
                 $nameNewEntryCheckbox = $this->getPostName() . "[" . $rownum . "][newentrycheckbox]";
 
-                if($this->isAlwaysCreateNewInstance()!== true) {
+                if ($this->isAlwaysCreateNewInstance() !== true) {
                     $html .= "
                     <div class='basic-table-newentrycheckbox'>
                     <label for=''>" . t("Create new entry of %s", $this->getLabel()) . "</label>
@@ -276,8 +293,8 @@ class DirectEditAssociatedEntityMultipleField extends AbstractDirectEditField
         /**
          * @var AbstractFormView $defaultFormView
          */
-        $defaultFormView = $emptyEdit->getDefaultFormView($form,$clientSideValidationActivated);
-        if($defaultFormView === false) {
+        $defaultFormView = $emptyEdit->getDefaultFormView($form, $clientSideValidationActivated);
+        if ($defaultFormView === false) {
             foreach ($fields as $field) {
                 //if id or another directedit possibility, skip (because of possible circle)
                 if ($field instanceof DirectEditInterface || !$field->showInForm()) {
@@ -293,14 +310,14 @@ class DirectEditAssociatedEntityMultipleField extends AbstractDirectEditField
                 //get the form view
                 $html .= $field->getFormView($form, $clientSideValidationActivated);
             }
-        }else{
-            $defaultFormView->setParentPostName(static::PREPEND_BEFORE_REALNAME );
-            $html.= $defaultFormView->getFormView($form,$clientSideValidationActivated);
+        } else {
+            $defaultFormView->setParentPostName(static::PREPEND_BEFORE_REALNAME);
+            $html .= $defaultFormView->getFormView($form, $clientSideValidationActivated);
         }
         $idNewEntryCheckbox = static::PREPEND_BEFORE_REALNAME . "newentrycheckbox";
         $nameNewEntryCheckbox = static::PREPEND_BEFORE_REALNAME . "newentrycheckbox";
 
-        if($this->isAlwaysCreateNewInstance()!== true) {
+        if ($this->isAlwaysCreateNewInstance() !== true) {
             $html .= "
                     <div class='basic-table-newentrycheckbox'>
                     <label for='$idNewEntryCheckbox'>" . t("Create new entry of %s", $this->getLabel()) . "</label>
@@ -316,7 +333,8 @@ class DirectEditAssociatedEntityMultipleField extends AbstractDirectEditField
         $html .= "<div class='parent_idname hiddenforminfo'>" . $this->getHtmlId() . "</div>";
         $html .= "<div class='replace_brace_in_id_with hiddenforminfo'>" . static::REPLACE_BRACE_IN_ID_WITH . "</div>";
         $html .= "<div class='prepended_before_realname hiddenforminfo'>" . static::PREPEND_BEFORE_REALNAME . "</div>";
-        $html .= "<div class='options_url hiddenforminfo'>" . $this->view->action("get_options_of_field") . "?fieldname=" . $this->getPostName() . "</div>";
+        $html .= "<div class='options_url hiddenforminfo'>" . $this->view->action("get_options_of_field")
+                 . "?fieldname=" . $this->getPostName() . "</div>";
         $html .= "<div class='options_template hiddenforminfo'>" . $entityForFields->getTypeaheadTemplate() . "</div>";
 
         $html .= "</div>
@@ -334,61 +352,35 @@ class DirectEditAssociatedEntityMultipleField extends AbstractDirectEditField
         return $html;
     }
 
-    public function setSQLValue($value)
+    public function getTableView()
     {
-        if($value == null){
-            $value = new $this->getDefault();
-            return $this;
-        }
-        if($value instanceof \Doctrine\Common\Collections\Collection){
-
-            if(count($value)==0){
-                //add empty collection
-                $this->value = $value;
-                return $this;
-            }
-            foreach($value->getIterator() as $num => $item){
-                if(!($item instanceof $this->targetEntity)){
-                    throw new \InvalidArgumentException(
-                        sprintf("Element in given collection was of type %s, but only elements of type %s are allowed"
-                        , get_class($item), $this->targetEntity)
-                    );
-                }
-            }
-            $this->value = $value;
-            return $this;
-        }
-    }
-
-
-    public function getTableView(){
         $values = $this->getSQLValue();
-        if($values instanceof  PersistentCollection || $values instanceof  ArrayCollection){
+        if ($values instanceof PersistentCollection || $values instanceof ArrayCollection) {
             $values = $values->toArray();
         }
 
         $string = "";
-        if(is_array($values)){
+        if (is_array($values)) {
             $first = true;
 
-            foreach($values as $valuenum => $value){
+            foreach ($values as $valuenum => $value) {
                 $appendString = "";
-                if(is_object($value)){
+                if (is_object($value)) {
                     $classname = get_class($value);
-                    if($value instanceof  BaseEntity){
+                    if ($value instanceof BaseEntity) {
                         $function = $classname::getDefaultGetDisplayStringFunction();
                         $appendString = $function($value);
                     }
-                }else{
+                } else {
                     $appendString = $value;
                 }
 
-                if($first){
+                if ($first) {
                     $first = false;
-                }else{
-                    $string.=", ";
+                } else {
+                    $string .= ", ";
                 }
-                $string.= $appendString;
+                $string .= $appendString;
             }
         }
         return $string;

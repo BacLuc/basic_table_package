@@ -9,26 +9,15 @@
 namespace Concrete\Package\BasicTablePackage\Src\NewFieldTypes\Strategy;
 
 
-class TextStrategy extends AbstractEditRepresentation implements Validator,EditRepresentation,ViewRepresentation
+class TextStrategy extends AbstractEditRepresentation implements Validator, EditRepresentation, ViewRepresentation
 {
 
     protected $errMsg;
-    public function addValidationAttributes($attributes)
-    {
-        return parent::addValidationAttributes($attributes);
-    }
-
-    public function setValue($value)
-    {
-        if(is_object($value) || is_array($value)){
-            throw new \InvalidArgumentException("%s can only accept primitive types", __CLASS__);
-        }
-        $this->value = $value;
-    }
 
     public function getEditRepresentation($form, $clientSideValidationActivated)
     {
-        $returnString = "<label for='".$this->fieldType->getHtmlId()."'>".$this->fieldType->getLabel()."</label>";
+        $returnString =
+            "<label for='" . $this->fieldType->getHtmlId() . "'>" . $this->fieldType->getLabel() . "</label>";
 
         $returnString .= $this->getInputHtml($form, $clientSideValidationActivated);
         return $returnString;
@@ -36,9 +25,10 @@ class TextStrategy extends AbstractEditRepresentation implements Validator,EditR
 
     public function getInputHtml($form, $clientSideValidationActivated)
     {
-        $attributes = array('title' => $this->fieldType->getPostName(),
+        $attributes = array(
+            'title' => $this->fieldType->getPostName(),
             'value' => $this->fieldType->getSQLValue(),
-            'id' => $this->fieldType->getHtmlId(),
+            'id'    => $this->fieldType->getHtmlId(),
         );
 
         if ($clientSideValidationActivated) {
@@ -47,20 +37,22 @@ class TextStrategy extends AbstractEditRepresentation implements Validator,EditR
 
         $value = $this->getSQLValue();
         $default = $this->fieldType->getDefault();
-        if($value == null && $default != null){
+        if ($value == null && $default != null) {
             $value = $default;
         }
         /**
          * @var Form $form
          */
-        $returnString = static::inputType($this->fieldType->getHtmlId(), $this->fieldType->getPostName(), "text", $value, $attributes, $form);
+        $returnString =
+            static::inputType($this->fieldType->getHtmlId(), $this->fieldType->getPostName(), "text", $value,
+                $attributes, $form);
         $returnString .= $this->fieldType->getHtmlErrorMsg();
         return $returnString;
     }
 
-    public function setSQLValue($value)
+    public function addValidationAttributes($attributes)
     {
-        $this->setValue($value);
+        return parent::addValidationAttributes($attributes);
     }
 
     public function getSQLValue()
@@ -68,10 +60,23 @@ class TextStrategy extends AbstractEditRepresentation implements Validator,EditR
         return $this->value;
     }
 
+    public function setSQLValue($value)
+    {
+        $this->setValue($value);
+    }
+
+    public function setValue($value)
+    {
+        if (is_object($value) || is_array($value)) {
+            throw new \InvalidArgumentException("%s can only accept primitive types", __CLASS__);
+        }
+        $this->value = $value;
+    }
+
     public function validatePost($value)
     {
-        if(!$this->fieldType->getNullable() && strlen($value)==0) {
-            $this->errMsg = $this->fieldType->getLabel().t(static::NULLERRORMSG);
+        if (!$this->fieldType->getNullable() && strlen($value) == 0) {
+            $this->errMsg = $this->fieldType->getLabel() . t(static::NULLERRORMSG);
             return false;
         }
 

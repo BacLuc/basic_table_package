@@ -13,6 +13,7 @@ properly imported*/
 use Concrete\Package\BasicTablePackage\Src\EntityViews\ExampleEntityFormView;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;
+
 /**
  * Class ExampleEntity
  * @IgnoreAnnotation("package")
@@ -39,16 +40,14 @@ class ExampleEntity extends BaseEntity
     protected $value;
 
 
-
-    public function __construct(){
+    public function __construct()
+    {
         parent::__construct();
-        $this->fieldTypes['id']=new FieldTypes\Field('id', 'ID', 'identifier');
-        $this->fieldTypes['value']=new FieldTypes\Field('value', 'Value', 'value');
+        $this->fieldTypes['id'] = new FieldTypes\Field('id', 'ID', 'identifier');
+        $this->fieldTypes['value'] = new FieldTypes\Field('value', 'Value', 'value');
 
         $this->defaultFormView = new ExampleEntityFormView($this);
     }
-
-
 
 
 }

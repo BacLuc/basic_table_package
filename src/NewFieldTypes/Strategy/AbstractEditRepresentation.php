@@ -19,26 +19,42 @@ abstract class AbstractEditRepresentation extends AbstractFieldStrategy implemen
         $this->value = $value;
     }
 
-    /**
-     * Create an HTML fragment of attribute values, merging any CSS class names as necessary.
-     *
-     * @param string $defaultClass Default CSS class name
-     * @param array $attributes A hash array of attributes (name => value), possibly including 'class'.
-     *
-     * @return string A fragment of attributes suitable to put inside of an HTML tag
-     */
-    public static function parseMiscFields($defaultClass, $attributes)
+    public function getInputHtml($form, $clientSideValidationActivated)
     {
-        $attributes = (array) $attributes;
-        if ($defaultClass) {
-            $attributes['class'] = trim((isset($attributes['class']) ? $attributes['class'] : '') . ' ' . $defaultClass);
-        }
-        $attr = '';
-        foreach ($attributes as $k => $v) {
-            $attr .= " $k=\"$v\"";
+        $attributes = array(
+            'title' => $this->fieldType->getPostName(),
+            'value' => $this->value,
+            'id'    => $this->fieldType->getHtmlId(),
+        );
+
+        if ($clientSideValidationActivated) {
+            $attributes = $this->addValidationAttributes($attributes);
         }
 
-        return $attr;
+        $value = $this->value;
+        $default = $this->fieldType->getDefault();
+        if ($value == null && $default != null) {
+            $value = $default;
+        }
+        /**
+         * @var Form $form
+         */
+        $returnString =
+            static::inputType($this->fieldType->getHtmlId(), $this->fieldType->getPostName(), "text", $value,
+                $attributes, $form);
+        $returnString .= $this->fieldType->getHtmlErrorMsg();
+        return $returnString;
+    }
+
+    public function addValidationAttributes($attributes)
+    {
+        if (!$this->fieldType->getNullable()) {
+            $attributes['required'] = 'true';
+            //parsley dependendt, TODO extract
+            $attributes['data-parsley-required'] = 'true';
+        }
+
+        return $attributes;
     }
 
     /**
@@ -51,9 +67,8 @@ abstract class AbstractEditRepresentation extends AbstractFieldStrategy implemen
      * @param Form $form
      *
      * @return string
-
      */
-    public static function inputType($id,$key, $type, $valueOrMiscFields, $miscFields,$form)
+    public static function inputType($id, $key, $type, $valueOrMiscFields, $miscFields, $form)
     {
         if (is_array($valueOrMiscFields)) {
             $value = '';
@@ -64,42 +79,31 @@ abstract class AbstractEditRepresentation extends AbstractFieldStrategy implemen
 
         $value = h($value);
 
-        return "<input type=\"$type\" id=\"$id\" name=\"$key\" value=\"$value\"" . static::parseMiscFields("form-control ccm-input-$type", $miscFields) . ' />';
+        return "<input type=\"$type\" id=\"$id\" name=\"$key\" value=\"$value\""
+               . static::parseMiscFields("form-control ccm-input-$type", $miscFields) . ' />';
     }
 
-    public function getInputHtml($form, $clientSideValidationActivated)
+    /**
+     * Create an HTML fragment of attribute values, merging any CSS class names as necessary.
+     *
+     * @param string $defaultClass Default CSS class name
+     * @param array $attributes A hash array of attributes (name => value), possibly including 'class'.
+     *
+     * @return string A fragment of attributes suitable to put inside of an HTML tag
+     */
+    public static function parseMiscFields($defaultClass, $attributes)
     {
-        $attributes = array('title' => $this->fieldType->getPostName(),
-            'value' => $this->value,
-            'id' => $this->fieldType->getHtmlId(),
-        );
-
-        if ($clientSideValidationActivated) {
-            $attributes = $this->addValidationAttributes($attributes);
+        $attributes = (array)$attributes;
+        if ($defaultClass) {
+            $attributes['class'] =
+                trim((isset($attributes['class']) ? $attributes['class'] : '') . ' ' . $defaultClass);
+        }
+        $attr = '';
+        foreach ($attributes as $k => $v) {
+            $attr .= " $k=\"$v\"";
         }
 
-        $value = $this->value;
-        $default = $this->fieldType->getDefault();
-        if($value == null && $default != null){
-            $value = $default;
-        }
-        /**
-         * @var Form $form
-         */
-        $returnString = static::inputType($this->fieldType->getHtmlId(), $this->fieldType->getPostName(), "text", $value, $attributes, $form);
-        $returnString .= $this->fieldType->getHtmlErrorMsg();
-        return $returnString;
-    }
-
-    public function addValidationAttributes($attributes)
-    {
-        if(!$this->fieldType->getNullable()){
-            $attributes['required']='true';
-            //parsley dependendt, TODO extract
-            $attributes['data-parsley-required']='true';
-        }
-
-        return $attributes;
+        return $attr;
     }
 
 }

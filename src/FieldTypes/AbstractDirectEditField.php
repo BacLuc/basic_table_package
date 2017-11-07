@@ -9,8 +9,8 @@
 namespace Concrete\Package\BasicTablePackage\Src\FieldTypes;
 
 
-use Concrete\Package\BasicTablePackage\Src\Exceptions\NotImplementedException;
 use Concrete\Core\Support\Facade\Application;
+use Concrete\Package\BasicTablePackage\Src\Exceptions\NotImplementedException;
 
 abstract class AbstractDirectEditField extends DropdownLinkField implements DirectEditInterface
 {
@@ -39,8 +39,28 @@ abstract class AbstractDirectEditField extends DropdownLinkField implements Dire
         return $this;
     }
 
+    public function getFormView($form, $clientSideValidationActivated = true)
+    {
+        $html = "
+        <div class='subentityedit col-xs-12'>
+            <label>" . $this->getLabel() . "</label>
+            <div class='row'>
+        ";
+        $html .= $this->getInputHtml($form, $clientSideValidationActivated);
+        $html .= "</div>
+           </div>
+        ";
+        return $html;
+    }
 
-    protected function saveSubErrorMsg(){
+    function getInputHtml($form, $clientSideValidationActivated = true)
+    {
+        throw new NotImplementedException(sprintf("To extend %s, you need to override %s in the child class", __CLASS__,
+            __METHOD__));
+    }
+
+    protected function saveSubErrorMsg()
+    {
         $app = Application::getFacadeApplication();
 
         /**
@@ -48,42 +68,25 @@ abstract class AbstractDirectEditField extends DropdownLinkField implements Dire
          */
         $session = $app['session'];
 
-        $session->set($this->postName."subformerrors", $this->subErrorMsg);
+        $session->set($this->postName . "subformerrors", $this->subErrorMsg);
     }
 
-    protected function loadSubErrorMsg(){
+    protected function loadSubErrorMsg()
+    {
         $app = Application::getFacadeApplication();
-          /**
+        /**
          * @var Session $session
          */
         $session = $app['session'];
-        if(count($this->subErrorMsg)>0){
-            $session->remove($this->postName."subformerrors");
+        if (count($this->subErrorMsg) > 0) {
+            $session->remove($this->postName . "subformerrors");
             return $this->subErrorMsg;
         }
 
-        $this->subErrorMsg=$session->get($this->postName."subformerrors", array());
-        $session->remove($this->postName."subformerrors");
+        $this->subErrorMsg = $session->get($this->postName . "subformerrors", array());
+        $session->remove($this->postName . "subformerrors");
         return $this->subErrorMsg;
 
-    }
-
-
-    public function getFormView($form, $clientSideValidationActivated = true){
-        $html = "
-        <div class='subentityedit col-xs-12'>
-            <label>" . $this->getLabel() . "</label>
-            <div class='row'>
-        ";
-        $html.= $this->getInputHtml($form, $clientSideValidationActivated);
-        $html.="</div>
-           </div>
-        ";
-        return $html;
-    }
-
-    function getInputHtml($form, $clientSideValidationActivated = true){
-        throw new NotImplementedException(sprintf("To extend %s, you need to override %s in the child class", __CLASS__, __METHOD__));
     }
 
 

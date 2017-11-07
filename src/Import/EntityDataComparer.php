@@ -35,35 +35,36 @@ class EntityDataComparer
     }
 
 
-
-    public function compare(){
+    public function compare()
+    {
 
 
         //then get all existing data and create a uniquestring -> object map
-        $modelList = BaseEntityRepository::getBuildQueryWithJoinedAssociations(get_class($this->model))->getQuery()->execute();
+        $modelList =
+            BaseEntityRepository::getBuildQueryWithJoinedAssociations(get_class($this->model))->getQuery()->execute();
         $uniqueStringMap = array();
         $classname = get_class($this->model);
         $uniqueFunction = $classname::getDefaultGetDisplayStringFunction();
 
-        foreach($modelList as $num => $model){
+        foreach ($modelList as $num => $model) {
             /**
              * @var BaseEntity $model
              */
-            $uniqueStringMap[$uniqueFunction($model)]=$model;
+            $uniqueStringMap[$uniqueFunction($model)] = $model;
         }
 
 
         $factory = new BaseEntityFactory($this->model);
         foreach ($this->reader as $row) {
-            $importModel =$factory->createFromLabelArray($row);
+            $importModel = $factory->createFromLabelArray($row);
             $comparisonSet = new ComparisonSet();
-            if(isset($uniqueStringMap[$uniqueFunction($importModel)])){
+            if (isset($uniqueStringMap[$uniqueFunction($importModel)])) {
                 $comparisonSet->setCurrentModel($uniqueStringMap[$uniqueFunction($importModel)]);
             }
             $comparisonSet->setImportModel($importModel);
             $comparisonSet->compareAndCreateResultModel();
-            if(!$comparisonSet->isCurrentAndResultSame()){
-                $this->comparisonData[]=$comparisonSet;
+            if (!$comparisonSet->isCurrentAndResultSame()) {
+                $this->comparisonData[] = $comparisonSet;
             }
         }
     }
@@ -71,7 +72,8 @@ class EntityDataComparer
     /**
      * @return ComparisonSet[]
      */
-    public function getComparisonData(){
+    public function getComparisonData()
+    {
         return $this->comparisonData;
     }
 

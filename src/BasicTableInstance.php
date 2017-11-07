@@ -9,16 +9,12 @@
 namespace Concrete\Package\BasicTablePackage\Src;
 
 use Concrete\Package\BasicTablePackage\Src\BlockOptions\TableBlockOption;
-use Concrete\Package\BasicTablePackage\Src\BaseEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\Table;
 
 /*because of the hack with @DiscriminatorEntry Annotation, all Doctrine Annotations need to be
 properly imported*/
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\InheritanceType;
-use Doctrine\ORM\Mapping\DiscriminatorColumn;
-use Concrete\Package\BasicTablePackage\Src\DiscriminatorEntry\DiscriminatorEntry;
-use Doctrine\ORM\Mapping\Table;
 
 /**
  * Class BasicTableInstance
@@ -45,29 +41,32 @@ class BasicTableInstance extends BaseEntity
     public function __construct()
     {
         $this->tableBlockOptions = new ArrayCollection();
-        $this->fieldTypes['bID']=new FieldTypes\Field('bID', 'bID', 'identifier');
-        $this->fieldTypes['tableBlockOptions']=new FieldTypes\Field('value', 'Value', 'value');
+        $this->fieldTypes['bID'] = new FieldTypes\Field('bID', 'bID', 'identifier');
+        $this->fieldTypes['tableBlockOptions'] = new FieldTypes\Field('value', 'Value', 'value');
 
     }
-    public function addBlockOption(TableBlockOption $option){
+
+    public function addBlockOption(TableBlockOption $option)
+    {
         $this->tableBlockOptions[] = $option;
     }
 
-    public function removeBlockOption(TableBlockOption $option){
+    public function removeBlockOption(TableBlockOption $option)
+    {
         $this->tableBlockOptions->removeElement($option);
     }
 
 
-
-    public function getId(){
+    public function getId()
+    {
         return $this->bID;
 
     }
 
-    public function getIdFieldName(){
+    public function getIdFieldName()
+    {
         return "bID";
     }
-
 
 
 }

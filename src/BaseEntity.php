@@ -6,7 +6,7 @@
  * and writable from outside of the entity class but each property can be
  * protected from both outside actions (read or write) with the $protect,
  * $protectRead and $protectWrite arrays as follows:
- * 
+ *
  * $protect      - All properties defined within this array are neither writable
  *                 nor readable. They are protected to be used only by this
  *                 entity class.
@@ -16,7 +16,7 @@
  * $protectWrite - All properties defined within this array are protected from
  *                 writing outside of this class. It means that they can only
  *                 be written within this entity class.
- * 
+ *
  * @author Antti Hukkanen <antti.hukkanen(at)mainiotech.fi>
  * @copyright 2014 Mainio Tech Ltd.
  * @license MIT
@@ -24,27 +24,13 @@
 
 namespace Concrete\Package\BasicTablePackage\Src;
 
-use Concrete\Package\BasicTablePackage\Src\Exceptions\ConsistencyCheckException;
-use Concrete\Package\BasicTablePackage\Src\FieldTypes\DateField as DateField;
 use Concrete\Core\Package\Package;
 use Concrete\Package\BasicTablePackage\Src\BlockOptions\CanEditOption;
-use Concrete\Package\BasicTablePackage\Src\BlockOptions\TableBlockOption;
-use Concrete\Package\BasicTablePackage\Src\FieldTypes\DropdownLinkField;
+use Concrete\Package\BasicTablePackage\Src\Exceptions\ConsistencyCheckException;
+use Concrete\Package\BasicTablePackage\Src\FieldTypes\DateField as DateField;
 use Concrete\Package\BasicTablePackage\Src\FieldTypes\Field;
-use Concrete\Package\BasicTablePackage\Src\FieldTypes\DropdownMultilinkField;
-use Concrete\Package\BasicTablePackage\Src\FieldTypes\DropdownMultilinkFieldAssociated;
 use Concrete\Package\BasicTablePackage\Src\FieldTypes\FieldTypeListFactory;
-use Concrete\Package\BasicTablePackage\Src\FieldTypes\FloatField;
-use Concrete\Package\BasicTablePackage\Src\FieldTypes\HiddenField;
-use Concrete\Package\BasicTablePackage\Src\FieldTypes\IntegerField;
-use Concrete\Package\BasicTablePackage\Src\FieldTypes\BooleanField;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Proxy\Exception\InvalidArgumentException;
-use Doctrine\DBAL\Types\BooleanType;
-use Doctrine\ORM\PersistentCollection;
-use Doctrine\ORM\Proxy\Proxy;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Mapping\ClassMetadata;
 
 
 /**
@@ -56,163 +42,135 @@ abstract class BaseEntity
 {
     use EntityGetterSetter;
 
-    protected $protect = array();
-    protected $protectRead = array();
-    protected $protectWrite = array();
+    public static $staticEntityfilterfunction;
+    public static $baseEntityfilterFunction;
+    protected     $protect      = array();
+    protected     $protectRead  = array();
+    protected     $protectWrite = array();
     /**
      * @var Field[]
      */
-    protected $fieldTypes = array();
+    protected $fieldTypes          = array();
     protected $em;
-    protected $defaultFormView = false;
-    protected $defaultSubFormView = false;
+    protected $defaultFormView     = false;
+    protected $defaultSubFormView  = false;
     protected $checkingConsistency = false;
 
-    public static $staticEntityfilterfunction;
-    public static $baseEntityfilterFunction;
-
-    public function __construct(){
-       // $this->setDefaultFieldTypes();
+    public function __construct()
+    {
+        // $this->setDefaultFieldTypes();
         $this->setDefaultFormViews();
     }
 
-    public function setDefaultFormViews(){
+    public function setDefaultFormViews()
+    {
 
     }
 
-    public static function getFullClassName(){
+    public static function getFullClassName()
+    {
         return get_class();
-    }
-
-
-    public function setControllerFieldType($name, Field $field){
-        if(property_exists($this, $name)
-            && !in_array($name, $this->protect)
-            && !in_array($name, $this->protectWrite)
-            && !in_array($name, $this->fieldTypes)
-        ) {
-            $this->fieldTypes[$name]=$field;
-        }
-    }
-
-    /**
-     * @return Field[]
-     */
-    public function getFieldTypes(){
-        if(count($this->fieldTypes) == 0){
-            $this->setDefaultFieldTypes();
-
-        }
-        return $this->fieldTypes;
     }
 
     /**
      * @return \Closure
      * @override
      */
-    public static function getDefaultGetDisplayStringFunction(){
-        $function = function(BaseEntity $item){
+    public static function getDefaultGetDisplayStringFunction()
+    {
+        $function = function (BaseEntity $item) {
             $returnString = "";
             $metadata = $item->getEntityManager()->getMetadataFactory()->getMetadataFor(get_class($item));
             $fieldTypes = $item->get('fieldTypes');
             foreach ($metadata->getFieldNames() as $fieldnum => $fieldname) {
-                    try {
-                        $mapping = $metadata->getFieldMapping($fieldname);
+                try {
+                    $mapping = $metadata->getFieldMapping($fieldname);
 
-                        if(isset($fieldTypes[$fieldname])){
-                            $field = $fieldTypes[$fieldname];
-                        }else {
-                            switch ($mapping['type']) {
+                    if (isset($fieldTypes[$fieldname])) {
+                        $field = $fieldTypes[$fieldname];
+                    } else {
+                        switch ($mapping['type']) {
 
-                                case 'datetime':
-                                    $field = new DateField("justlocal", "justlocal", "justlocal");
-                                    break;
-                                default:
-                                    $field = new Field("justlocal", "justlocal", "justlocal");
-                                    break;
-                            }
+                            case 'datetime':
+                                $field = new DateField("justlocal", "justlocal", "justlocal");
+                                break;
+                            default:
+                                $field = new Field("justlocal", "justlocal", "justlocal");
+                                break;
                         }
-                        $sqlvalue = $item->$fieldname;
-                        $field->setSQLValue($sqlvalue);
-                        $returnString.=$field->getTableView()." ";
-
-
-                    }catch(MappingException $e){
-                        //wenn das feld ein association mapping ist, dann gibts error
-                        // $this->fieldTypes[$field] = new Field($field, t($field), t("post" . $field));
                     }
+                    $sqlvalue = $item->$fieldname;
+                    $field->setSQLValue($sqlvalue);
+                    $returnString .= $field->getTableView() . " ";
+
+
+                } catch (MappingException $e) {
+                    //wenn das feld ein association mapping ist, dann gibts error
+                    // $this->fieldTypes[$field] = new Field($field, t($field), t("post" . $field));
                 }
+            }
             return $returnString;
         };
         return $function;
     }
 
-    public function getAsAssoc(){
-        $returnArray = array();
-        foreach($this->fieldTypes as $key => $value){
-
-            $returnArray[$key]=$this->get($key);
-        }
-        return $returnArray;
-    }
-
-
-    public function getEntityManager(){
-        if($this->em == null){
+    public function getEntityManager()
+    {
+        if ($this->em == null) {
 
             $pkg = Package::getByHandle('basic_table_package');
             $this->em = $pkg->getEntityManager();
             return $this->em;
-        }else{
+        } else {
             return $this->em;
         }
     }
 
-    public function getId(){
-        return $this->get('id');
+    public static function getEntityManagerStatic()
+    {
+        $pkg = Package::getByHandle("basic_table_package");
+        return $pkg->getEntityManager();
     }
 
-    public function getIdFieldName(){
+    public function setControllerFieldType($name, Field $field)
+    {
+        if (property_exists($this, $name)
+            && !in_array($name, $this->protect)
+            && !in_array($name, $this->protectWrite)
+            && !in_array($name, $this->fieldTypes)
+        ) {
+            $this->fieldTypes[$name] = $field;
+        }
+    }
+
+    public function getAsAssoc()
+    {
+        $returnArray = array();
+        foreach ($this->fieldTypes as $key => $value) {
+
+            $returnArray[$key] = $this->get($key);
+        }
+        return $returnArray;
+    }
+
+    public function getIdFieldName()
+    {
         return 'id';
     }
 
-    /**
-     * @throws \Doctrine\Common\Persistence\Mapping\MappingException
-     * @throws \Exception
-     */
-    public function setDefaultFieldTypes(){
-
-
-        $fieldFactory = new FieldTypeListFactory($this);
-        $this->fieldTypes = $fieldFactory->createFieldList();
-
-        if($this->getId()==null){
-            $this->setDefaultValues();
-        }
-
-    }
-
-    /**
-     * @return $this
-     */
-    public function setDefaultValues(){
-        return $this;
-    }
-
-
-
-    public function toTableAssoc(){
+    public function toTableAssoc()
+    {
         $jsonObj = new \stdClass();
-        if(count($this->fieldTypes)>0){
-            foreach ($this->fieldTypes as $sqlfieldname => $value){
+        if (count($this->fieldTypes) > 0) {
+            foreach ($this->fieldTypes as $sqlfieldname => $value) {
                 $sqlValue = $this->get($sqlfieldname);
-                if($sqlValue instanceof BaseEntity){
-                    $jsonObj->{$value->getPostname()}=$sqlValue->getId();
-                }else {
-                    if($sqlValue === true){
+                if ($sqlValue instanceof BaseEntity) {
+                    $jsonObj->{$value->getPostname()} = $sqlValue->getId();
+                } else {
+                    if ($sqlValue === true) {
                         $sqlValue = 1;
                     }
-                    if($sqlValue === false){
+                    if ($sqlValue === false) {
                         $sqlValue = 0;
                     }
                     $jsonObj->{$value->getPostname()} = $value->setSQLValue($sqlValue)->getTableView();
@@ -222,28 +180,34 @@ abstract class BaseEntity
         return $jsonObj;
     }
 
-    public function getTypeaheadTemplate(){
+    public function getId()
+    {
+        return $this->get('id');
+    }
+
+    public function getTypeaheadTemplate()
+    {
 
         $template = "<div>{{uniqueIdString}}</div>";
 
         return $template;
     }
 
-
-    public function getDefaultFormView($form, $clientSideValidationActivated = true){
-        if($this->defaultFormView !== false){
-            return $this->defaultFormView;
+    public function getDefaultSubFormView($form, $clientSideValidationActivated = true)
+    {
+        if ($this->defaultSubFormView !== false) {
+            return $this->defaultSubFormView->getFormView($form, $clientSideValidationActivated);
         }
-        return false;
+        return $this->getDefaultFormView($form, $clientSideValidationActivated);
 
     }
 
-
-    public function getDefaultSubFormView($form,$clientSideValidationActivated = true){
-        if($this->defaultSubFormView !== false){
-            return $this->defaultSubFormView->getFormView($form,$clientSideValidationActivated);
+    public function getDefaultFormView($form, $clientSideValidationActivated = true)
+    {
+        if ($this->defaultFormView !== false) {
+            return $this->defaultFormView;
         }
-        return $this->getDefaultFormView($form,$clientSideValidationActivated);
+        return false;
 
     }
 
@@ -252,8 +216,9 @@ abstract class BaseEntity
      * @return array
      * @throws ConsistencyCheckException
      */
-    public function checkConsistency(){
-        if($this->checkingConsistency){
+    public function checkConsistency()
+    {
+        if ($this->checkingConsistency) {
             throw new ConsistencyCheckException("Already checking Consistency of this Entity");
         }
         $this->checkingConsistency = true;
@@ -266,13 +231,52 @@ abstract class BaseEntity
      * @param bool $value
      * @throws \InvalidArgumentException if $sqlFieldname does not exist
      */
-    public function setFieldTypeIsNotSet($sqlFieldName, $value){
+    public function setFieldTypeIsNotSet($sqlFieldName, $value)
+    {
         $fieldTypes = $this->getFieldTypes();
-        if(isset($this->fieldTypes[$sqlFieldName])){
+        if (isset($this->fieldTypes[$sqlFieldName])) {
             $this->fieldTypes[$sqlFieldName]->setNotSet($value);
-        }else{
-            throw new \InvalidArgumentException(sprintf("Property / Fieldtype %s does not exist in class %s", $sqlFieldName, static::class));
+        } else {
+            throw new \InvalidArgumentException(sprintf("Property / Fieldtype %s does not exist in class %s",
+                $sqlFieldName, static::class));
         }
+    }
+
+    /**
+     * @return Field[]
+     */
+    public function getFieldTypes()
+    {
+        if (count($this->fieldTypes) == 0) {
+            $this->setDefaultFieldTypes();
+
+        }
+        return $this->fieldTypes;
+    }
+
+    /**
+     * @throws \Doctrine\Common\Persistence\Mapping\MappingException
+     * @throws \Exception
+     */
+    public function setDefaultFieldTypes()
+    {
+
+
+        $fieldFactory = new FieldTypeListFactory($this);
+        $this->fieldTypes = $fieldFactory->createFieldList();
+
+        if ($this->getId() == null) {
+            $this->setDefaultValues();
+        }
+
+    }
+
+    /**
+     * @return $this
+     */
+    public function setDefaultValues()
+    {
+        return $this;
     }
 
     /**
@@ -280,19 +284,15 @@ abstract class BaseEntity
      * @return bool
      * @throws \InvalidArgumentException if $sqlFieldName does not exist
      */
-    public function getFieldTypeIsNotSet($sqlFieldName){
+    public function getFieldTypeIsNotSet($sqlFieldName)
+    {
         $this->getFieldTypes();
-        if(isset($this->fieldTypes[$sqlFieldName])){
+        if (isset($this->fieldTypes[$sqlFieldName])) {
             return $this->fieldTypes[$sqlFieldName]->isNotSet();
-        }else{
-            throw new \InvalidArgumentException(sprintf("Property / Fieldtype %s does not exist in class %s", $sqlFieldName, static::class));
+        } else {
+            throw new \InvalidArgumentException(sprintf("Property / Fieldtype %s does not exist in class %s",
+                $sqlFieldName, static::class));
         }
-    }
-
-
-    public static function getEntityManagerStatic(){
-        $pkg = Package::getByHandle("basic_table_package");
-        return $pkg->getEntityManager();
     }
 
 
@@ -305,7 +305,7 @@ abstract class BaseEntity
  * if you want to change the defaultFilterFunction of an Entity, put this statement under your class,
  * but with your classname of course
  */
-BaseEntity::$staticEntityfilterfunction = function(QueryBuilder $query, array $queryConfig = array()){
+BaseEntity::$staticEntityfilterfunction = function (QueryBuilder $query, array $queryConfig = array()) {
     return $query;
 };
 
@@ -315,6 +315,6 @@ BaseEntity::$staticEntityfilterfunction = function(QueryBuilder $query, array $q
  * @return QueryBuilder
  * the filter funciton of base entity
  */
-BaseEntity::$baseEntityfilterFunction = function(QueryBuilder $query, array $queryConfig = array()){
+BaseEntity::$baseEntityfilterFunction = function (QueryBuilder $query, array $queryConfig = array()) {
     return $query;
 };

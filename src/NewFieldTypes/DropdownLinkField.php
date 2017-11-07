@@ -9,8 +9,6 @@
 namespace Concrete\Package\BasicTablePackage\Src\NewFieldTypes;
 
 
-use Concrete\Core\Block\View\BlockView;
-use Concrete\Package\BasicTablePackage\Src\FieldTypes\FieldTypeInterface;
 use Concrete\Package\BasicTablePackage\Src\NewFieldTypes\Strategy\DropDownLinkStrategy;
 
 class DropdownLinkField extends AbstractAssociationField

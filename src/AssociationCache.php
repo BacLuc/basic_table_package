@@ -9,9 +9,6 @@
 namespace Concrete\Package\BasicTablePackage\Src;
 
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\InheritanceType;
-use Doctrine\ORM\Mapping\DiscriminatorColumn;
-use Concrete\Package\BasicTablePackage\Src\DiscriminatorEntry\DiscriminatorEntry;
 use Doctrine\ORM\Mapping\Table;
 
 /**
@@ -37,7 +34,6 @@ class AssociationCache extends BaseEntity
     protected $association_from;
 
 
-
     /**
      * @var string
      * @Column(type="string")
@@ -45,17 +41,15 @@ class AssociationCache extends BaseEntity
     protected $association_to;
 
 
-    public function __construct(){
+    public function __construct()
+    {
         parent::__construct();
     }
 
-    public static function saveAssociationsOfModel(BaseEntity $model){
+    public static function saveAssociationsOfModel(BaseEntity $model)
+    {
 
     }
-
-
-
-
 
 
 }

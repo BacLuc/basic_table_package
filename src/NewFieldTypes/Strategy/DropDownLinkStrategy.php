@@ -12,9 +12,8 @@ namespace Concrete\Package\BasicTablePackage\Src\NewFieldTypes\Strategy;
 use Concrete\Package\BasicTablePackage\Src\BaseEntity;
 use Concrete\Package\BasicTablePackage\Src\BaseEntityRepository;
 use Concrete\Package\BasicTablePackage\Src\NewFieldTypes\AbstractAssociationField;
-use Concrete\Package\BasicTablePackage\Src\NewFieldTypes\AssociationFieldInterface;
 
-class DropDownLinkStrategy extends DropdownStrategy implements Validator,EditRepresentation,ViewRepresentation
+class DropDownLinkStrategy extends DropdownStrategy implements Validator, EditRepresentation, ViewRepresentation
 {
 
     /**
@@ -22,26 +21,27 @@ class DropDownLinkStrategy extends DropdownStrategy implements Validator,EditRep
      */
     protected $fieldType;
 
-    public function validatePost($value){
+    public function validatePost($value)
+    {
 
         $values = array_keys($this->getOptions());
-        if(count($values)==0){
+        if (count($values) == 0) {
             return true;
         }
-        if(in_array($value, $values)){
+        if (in_array($value, $values)) {
 
             //TODO check if is to refactor
             $model = BaseEntityRepository::getEntityById($this->fieldType->getTargetEntity(), $value);
 
-            if($model != null && $model!=false){
+            if ($model != null && $model != false) {
                 BaseEntity::getEntityManagerStatic()->persist($model);
                 $this->setSQLValue($model);
-            }else{
+            } else {
                 $this->setSQLValue(null);
             }
 
-        }else{
-            if($this->fieldType->getNullable() !== false && $value == null){
+        } else {
+            if ($this->fieldType->getNullable() !== false && $value == null) {
                 return true;
             }
             return false;
@@ -52,29 +52,48 @@ class DropDownLinkStrategy extends DropdownStrategy implements Validator,EditRep
         return true;
     }
 
-    public function getInputHtml($form, $clientSideValidationActivated=true)
+    public function getOptions()
+    {
+        return $this->fieldType->getOptions();
+    }
+
+    public function setSQLValue($value)
+    {
+        $targetEntity = $this->fieldType->getTargetEntity();
+        if ($value instanceof $targetEntity || is_null($value)) {
+            $this->value = $value;
+        } else {
+            throw new InvalidArgumentException("Parameter \$value is " . get_class($value) . ", should be "
+                                               . $this->targetEntity . " ");
+        }
+        return $this;
+    }
+
+    public function getInputHtml($form, $clientSideValidationActivated = true)
     {
         $value = $this->getSQLValue();
         $default = $this->fieldType->getDefault();
-        if($value == null && $default != null){
+        if ($value == null && $default != null) {
             $value = $default;
         }
-        if($this->value != null){
+        if ($this->value != null) {
             $setValue = $value->getId();
-        }else{
+        } else {
 
             $setValue = "";
 
         }
-        $html = static::select($this->fieldType->getHtmlId(), $this->fieldType->getPostName(), $this->getOptions(), $setValue);
+        $html = static::select($this->fieldType->getHtmlId(), $this->fieldType->getPostName(), $this->getOptions(),
+            $setValue);
 
         $html .= $this->fieldType->getHtmlErrorMsg();
         return $html;
     }
 
-    public function getTableView(){
+    public function getTableView()
+    {
         $value = $this->getSQLValue();
-        if(is_null($value)){
+        if (is_null($value)) {
             return "";
         }
         /**
@@ -84,30 +103,16 @@ class DropDownLinkStrategy extends DropdownStrategy implements Validator,EditRep
         return $displayStringFunction($value);
     }
 
-    public function setSQLValue($value){
-        $targetEntity = $this->fieldType->getTargetEntity();
-        if($value instanceof $targetEntity || is_null($value)){
-            $this->value = $value;
-        }else{
-            throw new InvalidArgumentException("Parameter \$value is ".get_class($value).", should be ".$this->targetEntity." ");
-        }
-        return $this;
-    }
-
     public function setValue($value)
     {
-       $this->setSQLValue($value);
-       return $this;
+        $this->setSQLValue($value);
+        return $this;
     }
 
     public function getViewRepresentation()
     {
         $options = $this->getOptions();
         return $options[$this->getSQLValue()->getId()];
-    }
-
-    public function getOptions(){
-        return $this->fieldType->getOptions();
     }
 
 }

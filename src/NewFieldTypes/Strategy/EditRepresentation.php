@@ -28,8 +28,8 @@ interface EditRepresentation
      * @param $clientSideValidationActivated
      * @return mixed
      */
-    public function getEditRepresentation( $form, $clientSideValidationActivated);
+    public function getEditRepresentation($form, $clientSideValidationActivated);
 
-   public function getInputHtml($form, $clientSideValidationActivated);
+    public function getInputHtml($form, $clientSideValidationActivated);
 
 }

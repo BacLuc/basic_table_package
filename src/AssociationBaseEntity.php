@@ -1,12 +1,13 @@
 <?php
+
 namespace Concrete\Package\BasicTablePackage\Src;
+
 /**
  * Created by PhpStorm.
  * User: lucius
  * Date: 28.07.16
  * Time: 10:53
  */
-use Concrete\Package\BasicTablePackage\Src\BaseEntity;
 
 /**
  * Class AssociationEntity
@@ -15,6 +16,7 @@ use Concrete\Package\BasicTablePackage\Src\BaseEntity;
  * @IgnoreAnnotation("package")\n*  Concrete\Package\BasicTablePackage\Src
  *
  */
-abstract class AssociationBaseEntity extends BaseEntity{
+abstract class AssociationBaseEntity extends BaseEntity
+{
 
 }

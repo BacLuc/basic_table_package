@@ -37,10 +37,11 @@ class DropdownField extends Field
      * @param array $options array of the options like array('dbvalue' => 'displayvalue')
      * @return $this
      */
-    public function setOptions ($options){
+    public function setOptions($options)
+    {
         $this->validator->setOptions($options);
         /**
-         * @var DropdownStrategy $this->editRepresentation;
+         * @var DropdownStrategy $this ->editRepresentation;
          */
         $this->editRepresentation->setOptions($options);
         $this->viewRepresentation->setOptions($options);
@@ -50,7 +51,8 @@ class DropdownField extends Field
     /**
      * @return array
      */
-    public function getOptions(){
+    public function getOptions()
+    {
         return $this->validator->getOptions();
     }
 

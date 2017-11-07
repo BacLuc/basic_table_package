@@ -11,30 +11,30 @@ $c = Page::getCurrentPage();
 
 $canAccessComposer = false;
 if (is_object($composer)) {
-	$ccp = new Permissions($composer);
-	if ($ccp->canAccessComposer()) {
-		$canAccessComposer = true;
-	}
+    $ccp = new Permissions($composer);
+    if ($ccp->canAccessComposer()) {
+        $canAccessComposer = true;
+    }
 }
-if(!$controller->isExecuted()){
-	if($controller->displayForm()){
-		include($controller->getBasicTablePath().'/views/form_view.php');
-	}else{
-		include($controller->getBasicTablePath().'/views/table_view.php');
-		$controller->setExecuted();
-	}
+if (!$controller->isExecuted()) {
+    if ($controller->displayForm()) {
+        include($controller->getBasicTablePath() . '/views/form_view.php');
+    } else {
+        include($controller->getBasicTablePath() . '/views/table_view.php');
+        $controller->setExecuted();
+    }
 }
 
 
 ?>
 
 <script type="text/javascript">
-	/*
+    /*
 //test the ajax funcitonality
-	$(document).ready(function(e){
-		$.ajax({
-		      type: "POST",
-		      url: "<?php echo $this->action('myAction') ?>",
+    $(document).ready(function(e){
+        $.ajax({
+              type: "POST",
+              url: "<?php echo $this->action('myAction') ?>",
 		      dataType: 'json',
 		      data:{test: 'test'
 			      },

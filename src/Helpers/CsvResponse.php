@@ -1,5 +1,7 @@
 <?php
+
 namespace Concrete\Package\BasicTablePackage\Src\Helpers;
+
 use Symfony\Component\HttpFoundation\Response;
 
 class CsvResponse extends Response
@@ -20,6 +22,7 @@ class CsvResponse extends Response
         $this->originalData = $data;
         $this->setData($data);
     }
+
     public function setData(array $data)
     {
         $this->originalData = $data;
@@ -29,18 +32,18 @@ class CsvResponse extends Response
 
         $first = true;
         foreach ($data as $row) {
-            if($first){
+            if ($first) {
                 $first = false;
                 $oneStringLabel = false;
                 $keys = array_keys($row);
                 //check if one of them is not a integer
-                foreach($keys as $num => $key){
-                    if(filter_var($key, FILTER_VALIDATE_INT) === false){
+                foreach ($keys as $num => $key) {
+                    if (filter_var($key, FILTER_VALIDATE_INT) === false) {
                         $oneStringLabel = true;
                         break;
                     }
                 }
-                if($oneStringLabel){
+                if ($oneStringLabel) {
                     fputcsv($output, $keys, $this->delimiter, $this->enclosure, $this->escapeChar);
                 }
             }
@@ -55,15 +58,7 @@ class CsvResponse extends Response
         $this->data .= fgets($output);
         return $this->update();
     }
-    public function getFilename()
-    {
-        return $this->filename;
-    }
-    public function setFilename($filename)
-    {
-        $this->filename = $filename;
-        return $this->update();
-    }
+
     protected function update()
     {
         $this->headers->set('Content-Disposition', sprintf('attachment; filename="%s"', $this->filename));
@@ -71,6 +66,17 @@ class CsvResponse extends Response
             $this->headers->set('Content-Type', 'text/csv');
         }
         return $this->setContent($this->data);
+    }
+
+    public function getFilename()
+    {
+        return $this->filename;
+    }
+
+    public function setFilename($filename)
+    {
+        $this->filename = $filename;
+        return $this->update();
     }
 
     /**

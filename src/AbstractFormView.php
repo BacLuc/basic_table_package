@@ -9,7 +9,6 @@
 namespace Concrete\Package\BasicTablePackage\Src;
 
 
-use Concrete\Core\Form\Service\Form;
 use Concrete\Package\BasicTablePackage\Src\FieldTypes\DirectEditAssociatedEntityMultipleField;
 use Concrete\Package\BasicTablePackage\Src\FieldTypes\Field;
 
@@ -22,8 +21,8 @@ abstract class AbstractFormView
 {
     protected $entity;
     protected $form;
-    protected $parentpostname = null;
-    protected $errorMsg = null;
+    protected $parentpostname                = null;
+    protected $errorMsg                      = null;
     protected $clientSideValidationActivated = true;
 
     public function __construct(BaseEntity $entity, $clientSideValidationActivated = true)
@@ -32,53 +31,57 @@ abstract class AbstractFormView
         $this->clientSideValidationActivated = $clientSideValidationActivated;
     }
 
-    public function setParentPostName($postname){
+    public function setParentPostName($postname)
+    {
         $this->parentpostname = $postname;
         return $this;
     }
 
-    public function setErrorMsg($errorMsg){
-        $this->errorMsg =$errorMsg;
+    public function setErrorMsg($errorMsg)
+    {
+        $this->errorMsg = $errorMsg;
         return $this;
     }
 
-    public function getFilledVariables($clientSideValidationActivated = true){
-        $fields =$this->entity->getFieldTypes();
-        $variables =array();
-        foreach ($fields as $field){
+    public function getFilledVariables($clientSideValidationActivated = true)
+    {
+        $fields = $this->entity->getFieldTypes();
+        $variables = array();
+        foreach ($fields as $field) {
             /**
              * @var Field $field
              */
             //if id or another directedit possibility, skip (because of possible circle)
-            if(($field instanceof DirectEditInterface && strlen($this->parentpostname)>0) || !$field->showInForm()){
+            if (($field instanceof DirectEditInterface && strlen($this->parentpostname) > 0) || !$field->showInForm()) {
                 continue;
             }
 
-            if(is_null($this->entity)){
+            if (is_null($this->entity)) {
                 $setValue = null;
-            }else{
+            } else {
                 $setValue = $this->entity->get($field->getSQLFieldName());
             }
             //set the value
             $field->setSQLValue($setValue);
 
-            if(isset($this->errorMsg[$field->getPostName()])){
+            if (isset($this->errorMsg[$field->getPostName()])) {
                 $field->setErrorMessage($this->errorMsg[$field->getPostName()]);
             }
-            if(strlen($this->parentpostname)>0) {
-                if($this->parentpostname == DirectEditAssociatedEntityMultipleField::PREPEND_BEFORE_REALNAME){
+            if (strlen($this->parentpostname) > 0) {
+                if ($this->parentpostname == DirectEditAssociatedEntityMultipleField::PREPEND_BEFORE_REALNAME) {
                     $field->setPostName($this->parentpostname . "" . $field->getPostName() . "");
-                }else{
+                } else {
                     $field->setPostName($this->parentpostname . "[" . $field->getPostName() . "]");
                 }
-                    //change the post name
+                //change the post name
 
             }
 
 
             //get the form view
-            $variables[$field->getSQLFieldName()]['input'] = $field->getInputHtml($this->form, $clientSideValidationActivated);
-            $variables[$field->getSQLFieldName()]['label']=$field->getLabel();
+            $variables[$field->getSQLFieldName()]['input'] =
+                $field->getInputHtml($this->form, $clientSideValidationActivated);
+            $variables[$field->getSQLFieldName()]['label'] = $field->getLabel();
             $field->setErrorMessage(null);
         }
 
@@ -86,5 +89,5 @@ abstract class AbstractFormView
 
     }
 
-    abstract public function getFormView($form, $clientSideValidationActivated=true);
+    abstract public function getFormView($form, $clientSideValidationActivated = true);
 }

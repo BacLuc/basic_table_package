@@ -1,24 +1,24 @@
 <?php
+
 namespace Concrete\Package\BasicTablePackage\Src\BlockOptions;
+
 defined('C5_EXECUTE') or die(_("Access Denied."));
 
-use Concrete\Core\Support\Facade\Log;
+use Concrete\Package\BasicTablePackage\Src\BaseEntity;
+use Concrete\Package\BasicTablePackage\Src\BlockOptions\CanEditOption;
+use Concrete\Package\BasicTablePackage\Src\DiscriminatorEntry\DiscriminatorEntry;
 use Concrete\Package\BasicTablePackage\Src\EntityGetterSetter;
 use Concrete\Package\BasicTablePackage\Src\Exceptions\InvalidBlockOptionException;
 use Concrete\Package\BasicTablePackage\Src\Exceptions\InvalidBlockOptionSetOrderException;
 use Concrete\Package\BasicTablePackage\Src\Exceptions\InvalidBlockOptionValueException;
-use Concrete\Package\BasicTablePackage\Src\BaseEntity;
-use Concrete\Package\BasicTablePackage\Src\BlockOptions\CanEditOption;
+use Doctrine\ORM\Mapping\DiscriminatorColumn;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\InheritanceType;
+use Doctrine\ORM\Mapping\Table;
 use OpenCloud\Common\Log\Logger;
-use Punic\Exception;
 
 /*because of the hack with @DiscriminatorEntry Annotation, all Doctrine Annotations need to be
 properly imported*/
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\InheritanceType;
-use Doctrine\ORM\Mapping\DiscriminatorColumn;
-use Concrete\Package\BasicTablePackage\Src\DiscriminatorEntry\DiscriminatorEntry;
-use Doctrine\ORM\Mapping\Table;
 
 /**
  * Abstract Entitty TableBlockOption that provides the link to BasicTableInstance for the subBlockOptions
@@ -28,7 +28,8 @@ use Doctrine\ORM\Mapping\Table;
  * @DiscriminatorEntry(value="Concrete\Package\BasicTablePackage\Src\BlockOptions\TableBlockOption")
  * @Table(name="TableBlockOption")
  */
-class TableBlockOption extends BaseEntity{
+class TableBlockOption extends BaseEntity
+{
     use EntityGetterSetter;
     /**
      * @var int
@@ -56,9 +57,6 @@ class TableBlockOption extends BaseEntity{
     protected $BasicTableInstance;
 
 
-
-
-
     protected $possibleValues = null;
 
     /**
@@ -70,14 +68,11 @@ class TableBlockOption extends BaseEntity{
     /**
      *
      */
-    public function __construct(){
+    public function __construct()
+    {
         $this->setDefaultFieldTypes();
         $this->optionType = self::getFullClassName();
     }
-
-
-
-
 
 
     public function set($name, $value)
@@ -87,7 +82,7 @@ class TableBlockOption extends BaseEntity{
         //\Log::debug(var_dump($this->optionTypes));
 
         //check if OptionType is valid
-        if($name == 'optionType'){
+        if ($name == 'optionType') {
 
             if (isset($this->optionValue)) {
                 if (!(new $value())->checkValue($this->optionValue)) {
@@ -98,67 +93,75 @@ class TableBlockOption extends BaseEntity{
         }
 
         //check if option value is valid
-        if($name == 'optionValue'){
-            if(!isset($this->optionType)) {
+        if ($name == 'optionValue') {
+            if (!isset($this->optionType)) {
                 throw new InvalidBlockOptionSetOrderException("You cannot set the option value without setting the option type");
             }
-            if(!(new $this->optionType())->checkValue($value)){
-                throw new InvalidBlockOptionValueException("The value $value is invalid for TableBlockOption ".$this->optionType);
+            if (!(new $this->optionType())->checkValue($value)) {
+                throw new InvalidBlockOptionValueException("The value $value is invalid for TableBlockOption "
+                                                           . $this->optionType);
             }
         }
         parent::set($name, $value);
 
 
-        if($name == 'optionName'){
+        if ($name == 'optionName') {
             $this->getFieldType()->setLabel($value);
         }
 
     }
 
-    protected function checkValue($value){
-        if($this->possibleValues != null) {
-            //option has to meet
-            return isset($this->possibleValues[$value]);
-        }else{
-            //free option
-            return true;
-        }
-    }
-
-    public function setPossibleValues( $possibleValues){
-        $this->possibleValues = $possibleValues;
-        //$this->fieldTypes['optionValue'] = new //when the values are restricted, use a dropdown
-    }
-
-    public function getPossibleValues(){
-        return $this->possibleValues;
-    }
-
     /**
      * @return Concrete\Package\BasicTablePackage\Src\FieldTypes\Field
      */
-    public function getFieldType(){
-        if($this->fieldTypes['optionValue']==null){
+    public function getFieldType()
+    {
+        if ($this->fieldTypes['optionValue'] == null) {
             $this->setDefaultFieldTypes();
         }
-        if($this->optionName != null){
+        if ($this->optionName != null) {
             $this->fieldTypes['optionValue']->setLabel($this->optionName);
             $this->fieldTypes['optionValue']->setPostName(str_replace(" ", "", $this->optionName));
         }
         return $this->fieldTypes['optionValue'];
     }
 
-    public function getValue(){
-        return $this->optionValue;
+    public function getPossibleValues()
+    {
+        return $this->possibleValues;
     }
 
-    public function setValue($value){
+    public function setPossibleValues($possibleValues)
+    {
+        $this->possibleValues = $possibleValues;
+        //$this->fieldTypes['optionValue'] = new //when the values are restricted, use a dropdown
+    }
+
+    public function setValue($value)
+    {
         $this->optionValue = $value;
     }
 
-    public function getFormView($form){
+    public function getFormView($form)
+    {
 
         $this->getFieldType()->setSQLValue($this->getValue());
         return $this->getFieldType()->getFormView($form);
+    }
+
+    public function getValue()
+    {
+        return $this->optionValue;
+    }
+
+    protected function checkValue($value)
+    {
+        if ($this->possibleValues != null) {
+            //option has to meet
+            return isset($this->possibleValues[$value]);
+        } else {
+            //free option
+            return true;
+        }
     }
 }

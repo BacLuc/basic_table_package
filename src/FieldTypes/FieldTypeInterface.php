@@ -5,8 +5,8 @@
  * Date: 21.04.17
  * Time: 10:18
  */
+
 namespace Concrete\Package\BasicTablePackage\Src\FieldTypes;
-use Concrete\Core\Block\View\BlockView;
 
 
 /**

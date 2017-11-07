@@ -14,53 +14,47 @@
     padding-bottom: 10px;
 }
 
-.btn.actionbutton.edit{
-	color: orange;
+.btn.actionbutton.edit {
+    color: orange;
 }
 
-.btn.actionbutton.delete{
-	color: red;
+.btn.actionbutton.delete {
+    color: red;
 }
 
-.btn.actionbutton.add{
-	color: green;
+.btn.actionbutton.add {
+    color: green;
 }
 
-
-
-.bootstrap-tagsinput{
-	display:block !important;
+.bootstrap-tagsinput {
+    display: block !important;
 }
 
-.basic_table_package input[type="text"]
-,  .basic_table_package input[type="email"]
-,  .basic_table_package input[type="tel"]
-,  .basic_table_package input[type="url"]
-, .basic_table_package .ccm-input-date {
+.basic_table_package input[type="text"], .basic_table_package input[type="email"], .basic_table_package input[type="tel"], .basic_table_package input[type="url"], .basic_table_package .ccm-input-date {
     float: none !important;
     margin: 0px !important;
     padding: 4px !important;
 }
 
-.basic_table_package .bootstrap-tagsinput input{
-    border:none !important;
+.basic_table_package .bootstrap-tagsinput input {
+    border: none !important;
 }
 
-.basic_table_package .twitter-typeahead{
+.basic_table_package .twitter-typeahead {
     display: block !important;
 }
-.basic_table_package .twitter-typeahead input{
+
+.basic_table_package .twitter-typeahead input {
     background-color: unset;
 }
 
-
 /*for subrow form*/
-div.hidden_form_row{
+div.hidden_form_row {
     display: none;
 }
 
-div.hiddenforminfo{
-    display:none;
+div.hiddenforminfo {
+    display: none;
 }
 
 .basic_table_package label {
@@ -74,8 +68,8 @@ div.hiddenforminfo{
     padding-right: 40px;
 }
 
-.basic_table_package div.csvimport{
-    display:inline;
+.basic_table_package div.csvimport {
+    display: inline;
 }
 
 .importrow div.acceptchange input {

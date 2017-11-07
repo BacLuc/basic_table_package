@@ -7,21 +7,21 @@
  */
 
 ?>
-<h1><?php echo t('Import View for %s', $controller->getHeader())?></h1>
-<form action="<?php echo $this->action("persistImport") ?>" method="post" >
-    <input type="hidden" name="ccm_token" value="<?php echo $token ?>" />
+<h1><?php echo t('Import View for %s', $controller->getHeader()) ?></h1>
+<form action="<?php echo $this->action("persistImport") ?>" method="post">
+    <input type="hidden" name="ccm_token" value="<?php echo $token ?>"/>
 
     <?php
-    if(strlen($errorMessage)>0){
+    if (strlen($errorMessage) > 0) {
         echo '<div class="errormessage alert-danger">
-                '.$errorMessage.'
+                ' . $errorMessage . '
                 </div>
             ';
     }
     ?>
     <?php
     $fields = $controller->getFields();
-    if(count($comparisondata)>0) {
+    if (count($comparisondata) > 0) {
 
         $classname = get_class($comparisondata[0]->getImportModel());
         $uniqueFunction = $classname::getDefaultGetDisplayStringFunction();
@@ -55,9 +55,9 @@
 
                             }
                         } ?>
-                    <!-- add column for unique string-->
+                        <!-- add column for unique string-->
                         <th data-column-id='uniquestring'
-                            data-formatter="text"><?php echo t("Unique String");?></th>
+                            data-formatter="text"><?php echo t("Unique String"); ?></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -72,11 +72,13 @@
                     $isnewEntry = false;
                     foreach ($comparisonset as $modeltype => $model) {
                         echo '<tr>';
-                        if($modeltype == \Concrete\Package\BasicTablePackage\Src\Import\ComparisonSet::KEY_CURRENT && is_null($model->get($model->getIdFieldName()))){
+                        if ($modeltype == \Concrete\Package\BasicTablePackage\Src\Import\ComparisonSet::KEY_CURRENT
+                            && is_null($model->get($model->getIdFieldName()))) {
                             $model = $comparisonset->getResultModel();
-                            echo '<th>' . \Concrete\Package\BasicTablePackage\Src\Import\ComparisonSet::KEY_NEWENTRY . '</th>';
+                            echo '<th>' . \Concrete\Package\BasicTablePackage\Src\Import\ComparisonSet::KEY_NEWENTRY
+                                 . '</th>';
                             $isnewEntry = true;
-                        }else{
+                        } else {
                             echo '<th>' . $modeltype . '</th>';
                         }
 
@@ -96,7 +98,7 @@
                         }
 
                         echo '<td>' . $uniqueFunction($model) . '</td>';
-                        if($isnewEntry){
+                        if ($isnewEntry) {
                             //if it is a new entry, we need only one row
                             break;
                         }
@@ -108,12 +110,13 @@
 
                     ?>
                     <div class="acceptchange">
-                        <label><?php echo t("Accept change");?></label><input type="checkbox" name="acceptImport[<?php echo $num;?>]"/>
+                        <label><?php echo t("Accept change"); ?></label><input type="checkbox"
+                                                                               name="acceptImport[<?php echo $num; ?>]"/>
                     </div>
             </div>
             <?php
         }
     }
-        ?>
-<input class='btn btn-primary' type="submit" value="<?php echo t("Submit selected changes");?>">
+    ?>
+    <input class='btn btn-primary' type="submit" value="<?php echo t("Submit selected changes"); ?>">
 </form>

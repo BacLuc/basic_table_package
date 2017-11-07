@@ -28,19 +28,21 @@ abstract class AbstractFieldStrategy
     }
 
     /**
-     * @param FieldType $fieldType
-     * @return $this
+     * @return FieldType
      */
-    public function setFieldType(FieldType $fieldType){
-        $this->fieldType = $fieldType;
-        return $this;
+    public function getFieldType()
+    {
+        return $this->fieldType;
     }
 
     /**
-     * @return FieldType
+     * @param FieldType $fieldType
+     * @return $this
      */
-    public function getFieldType(){
-        return $this->fieldType;
+    public function setFieldType(FieldType $fieldType)
+    {
+        $this->fieldType = $fieldType;
+        return $this;
     }
 
 }

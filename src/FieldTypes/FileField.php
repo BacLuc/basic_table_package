@@ -1,16 +1,13 @@
 <?php
+
 namespace Concrete\Package\BasicTablePackage\Src\FieldTypes;
 
 use Concrete\Core\Application\Service\FileManager;
-use Concrete\Core\Block\BlockController;
+use Concrete\Core\Block\View\BlockView as View;
 use Concrete\Package\BasicTablePackage\Src\FieldTypes\Field as Field;
+use File;
 use Loader;
 use Page;
-use User;
-use Core;
-use File;
-use Concrete\Controller\SinglePage\Dashboard\Blocks\Permissions as Permissions;
-use Concrete\Core\Block\View\BlockView as View;
 
 class FileField extends Field
 {
@@ -34,7 +31,9 @@ class FileField extends Field
                 $cID = $c->getCollectionID();
             }
 
-            $returnString = "<a href=\"" . View::url('/download_file', $this->getSQLValue(), $cID) . "\" target='_blank'>" . stripslashes($this->getLinkText()) . "</a>";
+            $returnString =
+                "<a href=\"" . View::url('/download_file', $this->getSQLValue(), $cID) . "\" target='_blank'>"
+                . stripslashes($this->getLinkText()) . "</a>";
 
         } else {
             $returnString = t("permission denied");
@@ -43,30 +42,6 @@ class FileField extends Field
         $returnString .= $this->getHtmlErrorMsg();
         return $returnString;
     }
-
-
-    public function getFormView($form, $clientSideValidationActivated = true)
-    {
-
-
-        $returnString = "
-		<div class=\"form-group\">
-		" . $form->label($this->getHtmlId(), t($this->getLabel())) ;
-        $returnString .= $this->getInputHtml($form, $clientSideValidationActivated);
-
-
-        return $returnString;
-    }
-
-
-
-
-    public function validatePost($value)
-    {
-        $this->value = $value;
-        return true;
-    }
-
 
     function getFileObject()
     {
@@ -87,11 +62,24 @@ class FileField extends Field
 
     }
 
+    public function getFormView($form, $clientSideValidationActivated = true)
+    {
+
+
+        $returnString = "
+		<div class=\"form-group\">
+		" . $form->label($this->getHtmlId(), t($this->getLabel()));
+        $returnString .= $this->getInputHtml($form, $clientSideValidationActivated);
+
+
+        return $returnString;
+    }
+
     /**
      * @param $returnString
      * @return string
      */
-    public function getInputHtml($form, $clientSideValidationActivated=true)
+    public function getInputHtml($form, $clientSideValidationActivated = true)
     {
         /**
          * @var FileManager $al
@@ -100,7 +88,7 @@ class FileField extends Field
         $bf = null;
         $value = $this->getSQLValue();
         $default = $this->getDefault();
-        if($value == null && $default != null){
+        if ($value == null && $default != null) {
             $this->setSQLValue($default);
         }
 
@@ -118,5 +106,11 @@ class FileField extends Field
         $returnString .= '<script type="text/javascript">var CCM_SECURITY_TOKEN = \'' . $token . '\';</script>';
         $returnString .= $this->getHtmlErrorMsg();
         return $returnString;
+    }
+
+    public function validatePost($value)
+    {
+        $this->value = $value;
+        return true;
     }
 }

@@ -18,18 +18,18 @@ class ExampleEntityFormView extends AbstractFormView
      * @param $clientSideValidationActivated
      * @return mixed
      */
-    public function getFormView($form, $clientSideValidationActivated=true)
+    public function getFormView($form, $clientSideValidationActivated = true)
     {
         $variables = $this->getFilledVariables($clientSideValidationActivated);
 
-        $html="
+        $html = "
         <div class='row'>
             <div class='col-xs-12 col-sm-6 col-md-2'>
-                <label>".$variables['value']['label'] ."</label>
+                <label>" . $variables['value']['label'] . "</label>
             
             </div>
             <div class='col-xs-12 col-sm-6 col-md-5'>
-                ".$variables['value']['input'] ."
+                " . $variables['value']['input'] . "
             
             </div>
         </div>

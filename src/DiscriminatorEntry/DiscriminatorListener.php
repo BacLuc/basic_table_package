@@ -1,10 +1,9 @@
 <?php
+
 namespace Concrete\Package\BasicTablePackage\Src\DiscriminatorEntry;
-use Concrete\Flysystem\Exception;
+
 use Concrete\Package\BasicTablePackage\Src\BaseEntity;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
-use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
 
 /**
  * This Listener listens to the loadClassMetadata event. Upon this event
@@ -15,185 +14,136 @@ use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
  * load metadata event to update the parent with a good discriminator map,
  * collecting all entries from the subclasses.
  */
-class DiscriminatorListener implements \Doctrine\Common\EventSubscriber {
+class DiscriminatorListener implements \Doctrine\Common\EventSubscriber
+{
 
     // The driver of Doctrine, can be used to find all loaded classes
-    private $driver;
+    const ENTRY_ANNOTATION = 'Concrete\Package\BasicTablePackage\Src\DiscriminatorEntry\DiscriminatorEntry';
 
     // The *temporary* map used for one run, when computing everything
-    private $map;
+    private $driver;
 
     // The cached map, this holds the results after a computation, also for other classes
+    private $map;
     private $cachedMap;
 
-    const ENTRY_ANNOTATION      = 'Concrete\Package\BasicTablePackage\Src\DiscriminatorEntry\DiscriminatorEntry';
-
-    public function getSubscribedEvents() {
-        return Array( \Doctrine\ORM\Events::loadClassMetadata );
+    public function __construct(\Doctrine\ORM\EntityManager $db)
+    {
+        $this->driver = $db->getConfiguration()->getMetadataDriverImpl();
+        $this->cachedMap = Array();
     }
 
-    public function __construct( \Doctrine\ORM\EntityManager $db ) {
-        $this->driver       = $db->getConfiguration()->getMetadataDriverImpl();
-        $this->cachedMap    = Array();
+    public function getSubscribedEvents()
+    {
+        return Array(\Doctrine\ORM\Events::loadClassMetadata);
     }
 
-    /**
-     *
-     * @param $class
-     * @return array
-     */
-    public static function getSubClasses($class){
-        $subclasses = array();
-
-        foreach(get_declared_classes() as $potentialSubclass)
-        {
-
-            $reflection = new \ReflectionClass($potentialSubclass);
-            if($reflection ->isSubclassOf($class)){
-                $subclasses[] = $potentialSubclass;
-            }
-
-        }
-        return $subclasses;
-    }
-
-    public function loadClassMetadata( \Doctrine\ORM\Event\LoadClassMetadataEventArgs $event ) {
+    public function loadClassMetadata(\Doctrine\ORM\Event\LoadClassMetadataEventArgs $event)
+    {
         // Reset the temporary calculation map and get the classname
-        $this->map  = Array();
-        $class      = $event->getClassMetadata()->name;
+        $this->map = Array();
+        $class = $event->getClassMetadata()->name;
 
         $reflection = new \ReflectionClass($class);
-        if(!$reflection->isSubclassOf("Concrete\\Package\\BasicTablePackage\\Src\\BaseEntity")){
+        if (!$reflection->isSubclassOf("Concrete\\Package\\BasicTablePackage\\Src\\BaseEntity")) {
             return;
         }
 
         // Did we already calculate the map for this element?
-        if( array_key_exists( $class, $this->cachedMap ) ) {
-            $this->overrideMetadata( $event, $class );
+        if (array_key_exists($class, $this->cachedMap)) {
+            $this->overrideMetadata($event, $class);
             return;
         }
-        $extractEntry = $this->extractEntry( $class );
+        $extractEntry = $this->extractEntry($class);
         $discriminatorMap = array_flip($event->getClassMetadata()->discriminatorMap);
         $discrCurrent = $discriminatorMap[$class];
         $shouldBeMapValue = $this->map;
         $discrShouldBe = $shouldBeMapValue[$class];
 
         // Do we have to process this class?
-        if( ($discrCurrent == null || $discrCurrent != $discrShouldBe)
+        if (($discrCurrent == null || $discrCurrent != $discrShouldBe)
 
-                && $extractEntry) {
+            && $extractEntry) {
             // Now build the whole map
-            $this->checkFamily( $class );
+            $this->checkFamily($class);
         } else {
             // Nothing to do…
             return;
         }
 
         // Create the lookup entries
-        $dMap = array_flip( $this->map );
-        foreach( $this->map as $cName => $discr ) {
-            $this->cachedMap[$cName]['map']     = $dMap;
-            $this->cachedMap[$cName]['discr']   = $this->map[$cName];
+        $dMap = array_flip($this->map);
+        foreach ($this->map as $cName => $discr) {
+            $this->cachedMap[$cName]['map'] = $dMap;
+            $this->cachedMap[$cName]['discr'] = $this->map[$cName];
         }
 
         // Override the data for this class
-        $this->overrideMetadata( $event, $class );
+        $this->overrideMetadata($event, $class);
     }
 
-    private function overrideMetadata( \Doctrine\ORM\Event\LoadClassMetadataEventArgs $event, $class,$recursive = false ) {
+    private function overrideMetadata(\Doctrine\ORM\Event\LoadClassMetadataEventArgs $event, $class, $recursive = false)
+    {
         // Set the discriminator map and value
-        $event->getClassMetadata()->discriminatorMap    = $this->cachedMap[$class]['map'];
-        $event->getClassMetadata()->discriminatorValue  = $this->cachedMap[$class]['discr'];
+        $event->getClassMetadata()->discriminatorMap = $this->cachedMap[$class]['map'];
+        $event->getClassMetadata()->discriminatorValue = $this->cachedMap[$class]['discr'];
 
         // If we are the top-most parent, set subclasses!
-        if( isset( $this->cachedMap[$class]['isParent'] ) && $this->cachedMap[$class]['isParent'] === true ) {
+        if (isset($this->cachedMap[$class]['isParent']) && $this->cachedMap[$class]['isParent'] === true) {
             $subclasses = $this->cachedMap[$class]['map'];
-            unset( $subclasses[$this->cachedMap[$class]['discr']] );
-            if(!is_array($subclasses)){
+            unset($subclasses[$this->cachedMap[$class]['discr']]);
+            if (!is_array($subclasses)) {
                 $subclasses = array();
             }
-            $event->getClassMetadata()->subClasses = array_values( $subclasses );
+            $event->getClassMetadata()->subClasses = array_values($subclasses);
         }
 
         //override metadata of parent too
-        $rc     = new \ReflectionClass( $class );
+        $rc = new \ReflectionClass($class);
         $parentClass = $rc->getParentClass();
 
-        if($parentClass!= false) {
+        if ($parentClass != false) {
             $parent = $parentClass->getName();
 
-                try {
-                    $cacheDriver = $event->getEntityManager()->getMetadataFactory()->getCacheDriver();
+            try {
+                $cacheDriver = $event->getEntityManager()->getMetadataFactory()->getCacheDriver();
 
-                    if($parent == BaseEntity::class){
+                if ($parent == BaseEntity::class) {
 
-                    }else {
-                        $PersistentMetadataParent = $event->getEntityManager()->getMetadataFactory()->getMetadataFor($parent);
-                        $eventArgs = new LoadClassMetadataEventArgs($PersistentMetadataParent, $event->getEntityManager());
-                        $this->overrideMetadata($eventArgs, $parent, true);
-                        $this->cachedMap[$parent]['map'] = $this->cachedMap[$class]['map'];
-                        $PersistentMetadataParent->discriminatorMap = $this->cachedMap[$class]['map'];
-                        $event->getEntityManager()->getMetadataFactory()->setMetadataFor($parent, $PersistentMetadataParent);
-                        //because doctrine caches before we refactor the discriminatorMap,
-                        //we override the cache
-                        $cacheDriver->save(
-                            $parent . '$CLASSMETADATA',
-                            $PersistentMetadataParent,
-                            null
-                        );
-                    }
-                    if($recursive === false) {
-                        $cacheDriver->save(
-                            $class . '$CLASSMETADATA',
-                            $event->getClassMetadata(),
-                            null
-                        );
-                    }
-                    //refresh cache
+                } else {
+                    $PersistentMetadataParent =
+                        $event->getEntityManager()->getMetadataFactory()->getMetadataFor($parent);
+                    $eventArgs = new LoadClassMetadataEventArgs($PersistentMetadataParent, $event->getEntityManager());
+                    $this->overrideMetadata($eventArgs, $parent, true);
+                    $this->cachedMap[$parent]['map'] = $this->cachedMap[$class]['map'];
+                    $PersistentMetadataParent->discriminatorMap = $this->cachedMap[$class]['map'];
+                    $event->getEntityManager()->getMetadataFactory()
+                          ->setMetadataFor($parent, $PersistentMetadataParent)
+                    ;
+                    //because doctrine caches before we refactor the discriminatorMap,
+                    //we override the cache
+                    $cacheDriver->save(
+                        $parent . '$CLASSMETADATA',
+                        $PersistentMetadataParent,
+                        null
+                    );
+                }
+                if ($recursive === false) {
+                    $cacheDriver->save(
+                        $class . '$CLASSMETADATA',
+                        $event->getClassMetadata(),
+                        null
+                    );
+                }
+                //refresh cache
 
-            }catch (\Exception $e){
+            } catch (\Exception $e) {
 
             }
         }
     }
 
-    private function checkFamily( $class ) {
-        $rc     = new \ReflectionClass( $class );
-        $parent = $rc->getParentClass()->name;
-
-        if( $parent !== null && $parent != BaseEntity::class) { //if no parent class is there, its null, not false
-            // Also check all the children of our parent
-            //but only if not BaseEntity
-            $this->checkFamily( $parent );
-
-
-        } else {
-            // This is the top-most parent, used in overrideMetadata
-            $this->cachedMap[$class]['isParent'] = true;
-
-            // Find all the children of this class
-            $this->checkChildren( $class );
-        }
-    }
-
-    private function checkChildren( $class ) {
-        /*
-        Because $this->driver->getAllClassNames() did not work, implemented own method to get subclasses
-        attention, getSubClasses returns all Child Classes, not only the direct Child classes
-        */
-        foreach( static::getSubClasses($class) as $name ) {
-            $cRc = new \ReflectionClass( $name );
-            $cParent = $cRc->getParentClass()->name;
-
-            // Haven't done this class yet? Go for it.
-            //removed the check if it is a direct child. It does not really matter (and didn't work somehow)
-            if( !array_key_exists( $name, $this->map )  && $this->extractEntry( $name ) ) {
-                $this->checkChildren( $name );
-            }
-        }
-    }
-
-    private function extractEntry( $class )
+    private function extractEntry($class)
     {
 
         $annotations = Annotation::getAnnotationsForClass($class);
@@ -228,8 +178,8 @@ class DiscriminatorListener implements \Doctrine\Common\EventSubscriber {
 
          * */
         $success = false;
-        foreach($annotations as $key => $annotation){
-            if(get_class($annotation) == self::ENTRY_ANNOTATION){
+        foreach ($annotations as $key => $annotation) {
+            if (get_class($annotation) == self::ENTRY_ANNOTATION) {
                 //TODO check for duplicates
                 $this->map[$class] = $annotation->getValue();
                 $success = true;
@@ -250,6 +200,64 @@ class DiscriminatorListener implements \Doctrine\Common\EventSubscriber {
 
         return $success;
 
+    }
+
+    private function checkFamily($class)
+    {
+        $rc = new \ReflectionClass($class);
+        $parent = $rc->getParentClass()->name;
+
+        if ($parent !== null && $parent != BaseEntity::class) { //if no parent class is there, its null, not false
+            // Also check all the children of our parent
+            //but only if not BaseEntity
+            $this->checkFamily($parent);
+
+
+        } else {
+            // This is the top-most parent, used in overrideMetadata
+            $this->cachedMap[$class]['isParent'] = true;
+
+            // Find all the children of this class
+            $this->checkChildren($class);
+        }
+    }
+
+    private function checkChildren($class)
+    {
+        /*
+        Because $this->driver->getAllClassNames() did not work, implemented own method to get subclasses
+        attention, getSubClasses returns all Child Classes, not only the direct Child classes
+        */
+        foreach (static::getSubClasses($class) as $name) {
+            $cRc = new \ReflectionClass($name);
+            $cParent = $cRc->getParentClass()->name;
+
+            // Haven't done this class yet? Go for it.
+            //removed the check if it is a direct child. It does not really matter (and didn't work somehow)
+            if (!array_key_exists($name, $this->map) && $this->extractEntry($name)) {
+                $this->checkChildren($name);
+            }
+        }
+    }
+
+    /**
+     *
+     * @param $class
+     * @return array
+     */
+    public static function getSubClasses($class)
+    {
+        $subclasses = array();
+
+        foreach (get_declared_classes() as $potentialSubclass) {
+
+            $reflection = new \ReflectionClass($potentialSubclass);
+            if ($reflection->isSubclassOf($class)) {
+                $subclasses[] = $potentialSubclass;
+            }
+
+        }
+        return $subclasses;
     }
 
 }

@@ -23,8 +23,8 @@ defined('C5_EXECUTE') or die("Access Denied."); ?>
 
     <?php
     $blockOptions = $controller->getBlockOptions();
-    $counter =0;
-    foreach($blockOptions as $optionnum => $OptionType){
+    $counter = 0;
+    foreach ($blockOptions as $optionnum => $OptionType) {
 
 
         echo $OptionType->getFormView($form);

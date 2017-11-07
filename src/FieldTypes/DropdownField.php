@@ -1,16 +1,9 @@
 <?php
+
 namespace Concrete\Package\BasicTablePackage\Src\FieldTypes;
 
-use Concrete\Core\Block\BlockController;
 use Concrete\Core\Form\Service\Form;
 use Concrete\Package\BasicTablePackage\Src\FieldTypes\Field as Field;
-use Loader;
-use Page;
-use User;
-use Core;
-use File;
-use Concrete\Controller\SinglePage\Dashboard\Blocks\Permissions as Permissions;
-use Concrete\Core\Block\View\BlockView as View;
 
 /**
  *
@@ -18,49 +11,68 @@ use Concrete\Core\Block\View\BlockView as View;
  * @IgnoreAnnotation("package")\n*  Concrete\Package\BasicTablePackage\Src\FieldTypes
  * A Normal Dropdownfield for a form
  */
-class DropdownField extends Field{
+class DropdownField extends Field
+{
 
-	protected $options = array();
+    protected $options = array();
 
-	public function __construct($sqlFieldname,$label, $postName){
-		parent::__construct($sqlFieldname, $label, $postName);
+    public function __construct($sqlFieldname, $label, $postName)
+    {
+        parent::__construct($sqlFieldname, $label, $postName);
 
-	}
+    }
 
-	/**
-	 * Set the possible Options to choose from.
-	 * @param array $options array of the options like array('dbvalue' => 'displayvalue')
-	 * @return void
-	 */
-	public function setOptions (array $options){
-		$this->options = $options;
+    public function getTableView()
+    {
+        $options = $this->getOptions();
+        return $options[$this->getSQLValue()];
+    }
+
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * Set the possible Options to choose from.
+     * @param array $options array of the options like array('dbvalue' => 'displayvalue')
+     * @return void
+     */
+    public function setOptions(array $options)
+    {
+        $this->options = $options;
         return $this;
-	}
-
-
-	public function getOptions(){
-		return $this->options;
-	}
-
-
-
-	public function getTableView(){
-		$options = $this->getOptions();
-		return $options[$this->getSQLValue()];
-	}
-
+    }
 
     /**
      * @param Form $form
      * @param bool $clientSideValidationActivated
      * @return string
      */
-	public function getFormView($form, $clientSideValidationActivated = true){
-		$html = "<label for='".$this->getHtmlId()."'>".$this->getLabel()."</label>";
+    public function getFormView($form, $clientSideValidationActivated = true)
+    {
+        $html = "<label for='" . $this->getHtmlId() . "'>" . $this->getLabel() . "</label>";
 
-        $html.= $this->getInputHtml($form, $clientSideValidationActivated);
-		return $html;
-	}
+        $html .= $this->getInputHtml($form, $clientSideValidationActivated);
+        return $html;
+    }
+
+    /**
+     * @param $html
+     * @return string
+     */
+    public function getInputHtml($form, $clientSideValidationActivated = true)
+    {
+        $value = $this->getSQLValue();
+        $default = $this->getDefault();
+        if ($value == null && $default != null) {
+            $value = $default;
+        }
+        $html = static::select($this->getHtmlId(), $this->getPostName(), $this->getOptions(), $value);
+
+        $html .= $this->getHtmlErrorMsg();
+        return $html;
+    }
 
     /**
      * Renders a select field.
@@ -70,10 +82,10 @@ class DropdownField extends Field{
      * @param array $optionValues An associative array of key => display.
      * @param string|array $valueOrMiscFields The value of the field to be selected or an array with additional fields appended to the element (a hash array of attributes name => value), possibly including 'class'.
      * @param array $miscFields (used if $valueOrMiscFields is not an array) Additional fields appended to the element (a hash array of attributes name => value), possibly including 'class'.
-     *@param Form $form
+     * @param Form $form
      * @return $html
      */
-    public static function select($id,$key, $optionValues, $valueOrMiscFields = '', $miscFields = array())
+    public static function select($id, $key, $optionValues, $valueOrMiscFields = '', $miscFields = array())
     {
         if (!is_array($optionValues)) {
             $optionValues = array();
@@ -82,17 +94,18 @@ class DropdownField extends Field{
             $selectedValue = '';
             $miscFields = $valueOrMiscFields;
         } else {
-            $selectedValue = (string) $valueOrMiscFields;
+            $selectedValue = (string)$valueOrMiscFields;
         }
         if ($selectedValue !== '') {
-           // $miscFields['ccm-passed-value'] = $selectedValue;
+            // $miscFields['ccm-passed-value'] = $selectedValue;
         }
 
 
-        $str = '<select id="' . $id . '" name="' . $key . '"' . static::parseMiscFields('form-control', $miscFields) . '>';
+        $str =
+            '<select id="' . $id . '" name="' . $key . '"' . static::parseMiscFields('form-control', $miscFields) . '>';
         foreach ($optionValues as $k => $text) {
             $str .= '<option value="' . $k . '"';
-            if ((string) $k === (string) $selectedValue) {
+            if ((string)$k === (string)$selectedValue) {
                 $str .= ' selected="true"';
             }
             $str .= '>' . $text . '</option>';
@@ -102,50 +115,27 @@ class DropdownField extends Field{
         return $str;
     }
 
-
-
-
-
-
-
-
-	public function validatePost($value){
-		$values = array_keys($this->getOptions());
-		//check if value is integer like
-        if(filter_var($value, FILTER_VALIDATE_INT) !== false){
+    public function validatePost($value)
+    {
+        $values = array_keys($this->getOptions());
+        //check if value is integer like
+        if (filter_var($value, FILTER_VALIDATE_INT) !== false) {
             //if it is integer like, convert to integer
             $value = intval($value);
         }
-		if(in_array($value, $values, true)){
-			return parent::validatePost($value);
-		}elseif (in_array($value, $this->getOptions(),true)){
+        if (in_array($value, $values, true)) {
+            return parent::validatePost($value);
+        } elseif (in_array($value, $this->getOptions(), true)) {
             $reversedOptions = array_flip($this->getOptions());
             $value = $reversedOptions[$value];
             return parent::validatePost($value);
-        }else{
-		    if($this->nullable !== false && $value == null){
-		        $this->value = $value;
-		        return true;
+        } else {
+            if ($this->nullable !== false && $value == null) {
+                $this->value = $value;
+                return true;
             }
-			return false;
-		}
-	}
-
-    /**
-     * @param $html
-     * @return string
-     */
-    public function getInputHtml($form, $clientSideValidationActivated=true)
-    {
-        $value = $this->getSQLValue();
-        $default = $this->getDefault();
-        if($value == null && $default != null){
-            $value = $default;
+            return false;
         }
-        $html = static::select($this->getHtmlId(), $this->getPostName(), $this->getOptions(), $value);
-
-        $html .= $this->getHtmlErrorMsg();
-        return $html;
     }
 
 
