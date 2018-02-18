@@ -11,7 +11,10 @@ namespace Concrete\Package\BasicTablePackage\Src;
 /*because of the hack with @DiscriminatorEntry Annotation, all Doctrine Annotations need to be
 properly imported*/
 use Concrete\Package\BasicTablePackage\Src\EntityViews\ExampleEntityFormView;
+use Doctrine\Common\Annotations\Annotation\IgnoreAnnotation;
+use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Table;
 
 /**

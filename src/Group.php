@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping\DiscriminatorColumn;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Index;
 use Doctrine\ORM\Mapping\InheritanceType;
+use Doctrine\ORM\Mapping\Table;
 
 /*because of the hack with @DiscriminatorEntry Annotation, all Doctrine Annotations need to be
 properly imported*/
@@ -24,7 +25,7 @@ properly imported*/
  * @InheritanceType("JOINED")
  * @DiscriminatorColumn(name="discr", type="string")
  * @DiscriminatorEntry( value = "Concrete\Package\BasicTablePackage\Src\Group" )
-@Table(name="Groups"
+ * @Table(name="Groups"
  * , indexes={
  * @Index(name="gName",
  * columns={"gName"}),
@@ -180,7 +181,6 @@ class Group extends BaseEntity
      */
     public function __toString()
     {
-        // TODO: Implement __toString() method.
         return $this->gName;
     }
 
