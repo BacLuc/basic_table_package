@@ -140,3 +140,6 @@ And finally the getEntityManager function. After parent::install() is called, th
 
 ## Package Icon icon.png
 icon.png can be any image. It is shown in extend Concrete5 left of the Package Name and Description. Use a small icon.
+
+## [ideaHelper](ideaHelper)
+Files to configure the remote interpreter and phpunit test framework for PhpStorm.

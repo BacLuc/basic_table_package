@@ -76,7 +76,7 @@ class TextStrategy extends AbstractEditRepresentation implements Validator, Edit
     public function validatePost($value)
     {
         if (!$this->fieldType->getNullable() && strlen($value) == 0) {
-            $this->errMsg = $this->fieldType->getLabel() . t(static::NULLERRORMSG);
+            $this->errMsg = $this->fieldType->getLabel() . $this->t(static::NULLERRORMSG);
             return false;
         }
 
@@ -92,6 +92,15 @@ class TextStrategy extends AbstractEditRepresentation implements Validator, Edit
     public function getViewRepresentation()
     {
         return $this->value;
+    }
+
+    /**
+     * @param $text
+     * @return string
+     */
+    protected function t ($text): string
+    {
+        return t($text);
     }
 
 
