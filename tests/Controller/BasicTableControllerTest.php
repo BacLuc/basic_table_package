@@ -1,4 +1,5 @@
 <?php
+/** @noinspection PhpParamsInspection */
 
 namespace BasicTablePackage\Controller;
 
@@ -18,19 +19,20 @@ class BasicTableControllerTest extends TestCase
     }
 
 
-    public function test_renders_table_view_when_created(){
+    public function test_renders_table_view_when_created ()
+    {
         $this->renderer->expects($this->once())->method('render')->with(BasicTableController::TABLE_VIEW);
 
         new BasicTableController(null, $this->renderer);
     }
 
-    public function test_renders_form_view_when_edit_action_called(){
+    public function test_renders_form_view_when_edit_action_called ()
+    {
         $this->renderer->expects($this->exactly(2))->method('render')
                        ->withConsecutive([ $this->equalTo(BasicTableController::TABLE_VIEW) ],
                                          [ $this->equalTo(BasicTableController::FORM_VIEW) ])
         ;
 
-        /** @noinspection PhpParamsInspection */
         $basicTableController = new BasicTableController(null, $this->renderer);
 
         $basicTableController->openForm(null);
