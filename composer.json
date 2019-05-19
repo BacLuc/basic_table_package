@@ -1,8 +1,7 @@
 {
   "require": {
     "portphp/csv": "1.1.*",
-    "portphp/excel": "1.1.*",
-    "portphp/doctrine": "1.0.*"
+    "portphp/excel": "1.1.*"
   },
   "autoload": {
     "psr-4": {
@@ -11,7 +10,6 @@
   },
   "require-dev" : {
     "php": ">=7",
-    "concrete5/core" : "dev-develop",
     "phpunit/phpunit" : "^7.5.9",
     "symfony/process": "3.*"
   }

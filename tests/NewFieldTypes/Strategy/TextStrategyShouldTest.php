@@ -2,7 +2,6 @@
 
 namespace NewFieldTypes\Strategy;
 
-use Concrete\Package\BasicTablePackage\Src\Group;
 use Concrete\Package\BasicTablePackage\Src\NewFieldTypes\FieldType;
 use Concrete\Package\BasicTablePackage\Src\NewFieldTypes\Strategy\TextStrategy;
 use PHPUnit\Framework\TestCase;
