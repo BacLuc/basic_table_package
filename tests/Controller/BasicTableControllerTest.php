@@ -2,12 +2,13 @@
 
 namespace BasicTablePackage\Controller;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class BasicTableControllerTest extends TestCase
 {
     /**
-     * @var Renderer
+     * @var MockObject
      */
     private $renderer;
 
@@ -21,6 +22,18 @@ class BasicTableControllerTest extends TestCase
         $this->renderer->expects($this->once())->method('render')->with(BasicTableController::TABLE_VIEW);
 
         new BasicTableController(null, $this->renderer);
+    }
+
+    public function test_renders_form_view_when_edit_action_called(){
+        $this->renderer->expects($this->exactly(2))->method('render')
+                       ->withConsecutive([ $this->equalTo(BasicTableController::TABLE_VIEW) ],
+                                         [ $this->equalTo(BasicTableController::FORM_VIEW) ])
+        ;
+
+        /** @noinspection PhpParamsInspection */
+        $basicTableController = new BasicTableController(null, $this->renderer);
+
+        $basicTableController->openForm(null);
     }
 
 }
