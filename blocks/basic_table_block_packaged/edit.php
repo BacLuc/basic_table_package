@@ -21,17 +21,6 @@ defined('C5_EXECUTE') or die("Access Denied."); ?>
 </style>
 <div class="ccm-ui basic-table-edit">
 
-    <?php
-    $blockOptions = $controller->getBlockOptions();
-    $counter = 0;
-    foreach ($blockOptions as $optionnum => $OptionType) {
-
-
-        echo $OptionType->getFormView($form);
-
-    }
-
-    ?>
 
 
 </div>

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="PhpInterpreters">
     <interpreters>
-      <interpreter id="aeb28985-0fc6-47b0-9867-b9e97b10d300" name="dockerdevconcrete5package_concrete5:latest" home="docker://DATA" debugger_id="php.debugger.XDebug">
+      <interpreter id="aeb28985-0fc6-47b0-9867-b9e97b10d300" name="dockerdevconcrete5package_concrete5:latest" home="docker://DATA" debugger_id="php.debugger.XDebug" debugger_extension="xdebug.so">
         <remote_data DOCKER_ACCOUNT_NAME="Docker" DOCKER_IMAGE_NAME="devbaclucpackages_concrete5:latest" DOCKER_REMOTE_PROJECT_PATH="/opt/project" INTERPRETER_PATH="php" HELPERS_PATH="/opt/.phpstorm_helpers" INITIALIZED="false" VALID="true" RUN_AS_ROOT_VIA_SUDO="false" />
       </interpreter>
     </interpreters>
@@ -60,7 +60,7 @@
   <component name="PhpProjectSharedConfiguration" php_language_level="7" />
   <component name="PhpUnit">
     <phpunit_settings>
-      <phpunit_by_interpreter interpreter_id="aeb28985-0fc6-47b0-9867-b9e97b10d300" load_method="PHPUNIT_PHAR" custom_loader_path="" phpunit_phar_path="/opt/project/concrete5/packages/basic_table_package/vendor/bin/phpunit" />
+      <phpunit_by_interpreter interpreter_id="aeb28985-0fc6-47b0-9867-b9e97b10d300" load_method="PHPUNIT_PHAR" configuration_file_path="/opt/project/concrete5/packages/basic_table_package/tests/phpunit.xml" custom_loader_path="" phpunit_phar_path="/opt/project/concrete5/packages/basic_table_package/vendor/bin/phpunit" use_configuration_file="true" />
     </phpunit_settings>
   </component>
 </project>
