@@ -23,7 +23,7 @@ class BasicTableControllerTest extends TestCase
     {
         $this->renderer->expects($this->once())->method('render')->with(BasicTableController::TABLE_VIEW);
 
-        new BasicTableController(null, $this->renderer);
+        $this->createController();
     }
 
     public function test_renders_form_view_when_edit_action_called ()
@@ -33,9 +33,18 @@ class BasicTableControllerTest extends TestCase
                                          [ $this->equalTo(BasicTableController::FORM_VIEW) ])
         ;
 
-        $basicTableController = new BasicTableController(null, $this->renderer);
+        $basicTableController = $this->createController();
 
         $basicTableController->openForm(null);
+    }
+
+    /**
+     * @return BasicTableController
+     */
+    protected function createController (): BasicTableController
+    {
+        $basicTableController = new BasicTableController(null, $this->renderer);
+        return $basicTableController;
     }
 
 }
