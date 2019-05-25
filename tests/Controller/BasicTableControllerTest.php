@@ -3,13 +3,13 @@
 
 namespace BasicTablePackage\Controller;
 
-use BasicTablePackage\Adapters\DefaultContext;
-use BasicTablePackage\Adapters\DefaultRenderer;
 use BasicTablePackage\TableViewService;
+use BasicTablePackage\Test\DIContainerFactory;
 use BasicTablePackage\View\TableView\Row;
 use BasicTablePackage\View\TableView\TableView;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use function DI\factory;
 
 class BasicTableControllerTest extends TestCase
 {
@@ -30,18 +30,14 @@ class BasicTableControllerTest extends TestCase
      */
 
     private $tableViewService;
-    private $defaultContext;
-    private $defaultRenderer;
     private $variableSetter;
+
 
     protected function setUp ()
     {
         $this->renderer = $this->createMock(Renderer::class);
         $this->tableViewService = $this->createMock(TableViewService::class);
         $this->variableSetter = $this->createMock(VariableSetter::class);
-
-        $this->defaultContext = new DefaultContext();
-        $this->defaultRenderer = new DefaultRenderer($this->defaultContext);
     }
 
 
@@ -69,10 +65,18 @@ class BasicTableControllerTest extends TestCase
         $row2 = new Row([ self::TEST_3, self::TEST_4 ]);
         $tableView = new TableView([ self::HEADER_1, self::HEADER_2 ], [ $row1, $row2]);
 
-        $this->tableViewService->expects($this->once())->method("getTableView")->willReturn($tableView);
+
+        /** @var Cont $container */
+        $container = DIContainerFactory::createContainer();
+        $container->set(TableViewService::class, factory(function () use (
+            $tableView
+        ) {
+            return new MockTableViewService($tableView);
+        }));
+
 
         ob_start();
-        $this->createController($this->defaultRenderer, $this->defaultContext);
+        $container->get(BasicTableController::class);
         $output = ob_get_clean();
 
         $this->assertThat($output, $this->stringContains(self::HEADER_1));
@@ -86,12 +90,33 @@ class BasicTableControllerTest extends TestCase
     /**
      * @return BasicTableController
      */
-    protected function createController (Renderer $renderer = null, VariableSetter $variableSetter = null): BasicTableController
+    protected function createController (): BasicTableController
     {
-        $renderer = $renderer ?: $this->renderer;
-        $variableSetter = $variableSetter ?: $this->variableSetter;
-        $basicTableController = new BasicTableController(null, $renderer, $this->tableViewService, $variableSetter);
-        return $basicTableController;
+        return new BasicTableController($this->renderer, $this->tableViewService, $this->variableSetter, null);
     }
+
+}
+
+class MockTableViewService extends TableViewService
+{
+    /**
+     * @var TableView
+     */
+    private $tableView;
+
+    /**
+     * MockTableViewService constructor.
+     * @param TableView $tableView
+     */
+    public function __construct (TableView $tableView)
+    {
+        $this->tableView = $tableView;
+    }
+
+    public function getTableView (): TableView
+    {
+        return $this->tableView;
+    }
+
 
 }

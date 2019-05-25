@@ -1,12 +1,16 @@
 {
   "require": {
     "portphp/csv": "1.1.*",
-    "portphp/excel": "1.1.*"
+    "portphp/excel": "1.1.*",
+    "php-di/php-di": "6.*"
   },
   "autoload": {
     "psr-4": {
       "BasicTablePackage\\": "src"
     }
+  },
+  "autoload-dev": {
+    "psr-4": { "BasicTablePackage\\Test\\": "tests" }
   },
   "require-dev" : {
     "php": ">=7",

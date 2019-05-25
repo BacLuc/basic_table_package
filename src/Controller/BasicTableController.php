@@ -23,7 +23,8 @@ class BasicTableController
      */
     private $variableSetter;
 
-    public function __construct ($obj = null, Renderer $renderer, TableViewService $tableViewService, VariableSetter $variableSetter)
+    public function __construct (Renderer $renderer, TableViewService $tableViewService, VariableSetter $variableSetter,
+                                 $obj = null)
     {
         $this->renderer = $renderer;
         $this->tableViewService = $tableViewService;

@@ -19,8 +19,8 @@ class Controller extends BlockController
     public function __construct ($obj = null)
     {
         $this->basicTableController =
-            new BasicTableController($obj, new Concrete5Renderer($this), new TableViewService(),
-                                     new Concrete5VariableSetter($this));
+            new BasicTableController(new Concrete5Renderer($this), new TableViewService(),
+                                     new Concrete5VariableSetter($this), $obj);
     }
 
     public function action_add_new_row_form ()
