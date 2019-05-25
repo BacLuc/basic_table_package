@@ -1,0 +1,26 @@
+<?php
+
+
+namespace BasicTablePackage\Adapters;
+
+
+use BasicTablePackage\Controller\VariableSetter;
+
+class DefaultContext implements VariableSetter
+{
+    /**
+     * @var array
+     */
+    private $context;
+
+    public function set (String $name, $value)
+    {
+        $this->context[$name] = $value;
+    }
+
+    public function getContext() : array {
+        return $this->context;
+    }
+
+
+}

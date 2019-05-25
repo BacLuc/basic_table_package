@@ -4,6 +4,8 @@
 namespace BasicTablePackage\Controller;
 
 
+use BasicTablePackage\TableViewService;
+
 class BasicTableController
 {
     const TABLE_VIEW = "View/table";
@@ -12,10 +14,24 @@ class BasicTableController
      * @var Renderer
      */
     private $renderer;
+    /**
+     * @var TableViewService
+     */
+    private $tableViewService;
+    /**
+     * @var VariableSetter
+     */
+    private $variableSetter;
 
-    public function __construct ($obj = null, Renderer $renderer)
+    public function __construct ($obj = null, Renderer $renderer, TableViewService $tableViewService, VariableSetter $variableSetter)
     {
         $this->renderer = $renderer;
+        $this->tableViewService = $tableViewService;
+        $this->variableSetter = $variableSetter;
+
+        $tableView = $this->tableViewService->getTableView();
+        $variableSetter->set("headers", $tableView->getHeaders());
+        $variableSetter->set("rows", $tableView->getRows());
         $renderer->render(self::TABLE_VIEW);
     }
 
