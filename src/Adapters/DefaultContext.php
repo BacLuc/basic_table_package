@@ -13,7 +13,7 @@ class DefaultContext implements VariableSetter
      */
     private $context;
 
-    public function set (String $name, $value)
+    public function set (string $name, $value)
     {
         $this->context[$name] = $value;
     }
