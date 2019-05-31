@@ -12,7 +12,6 @@ use DI\Container;
 use DI\ContainerBuilder;
 use function DI\autowire;
 use function DI\get;
-use const true;
 
 class DIContainerFactory
 {
