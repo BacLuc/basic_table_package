@@ -7,9 +7,10 @@ use BasicTablePackage\TableViewService;
 use BasicTablePackage\Test\DIContainerFactory;
 use BasicTablePackage\View\TableView\Row;
 use BasicTablePackage\View\TableView\TableView;
+use DI\Container;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use function DI\factory;
+use function DI\value;
 
 class BasicTableControllerTest extends TestCase
 {
@@ -35,6 +36,7 @@ class BasicTableControllerTest extends TestCase
      * @var BasicTableController
      */
     private $basicTableController;
+    private $container;
 
 
     protected function setUp ()
@@ -45,6 +47,9 @@ class BasicTableControllerTest extends TestCase
 
         $this->basicTableController =
             new BasicTableController($this->renderer, $this->tableViewService, $this->variableSetter, null);
+
+        /** @var Container $container */
+        $this->container = DIContainerFactory::createContainer();
     }
 
 
@@ -68,24 +73,19 @@ class BasicTableControllerTest extends TestCase
         $row2 = new Row([ self::TEST_3, self::TEST_4 ]);
         $tableView = new TableView([ self::HEADER_1, self::HEADER_2 ], [ $row1, $row2 ]);
 
+        $this->tableViewService->expects($this->once())->method('getTableView')->willReturn($tableView);
 
-        /** @var Cont $container */
-        $container = DIContainerFactory::createContainer();
-        $container->set(TableViewService::class, factory(function () use (
-            $tableView
-        ) {
-            return new MockTableViewService($tableView);
-        }));
+        $this->container->set(TableViewService::class, value($this->tableViewService));
 
 
         ob_start();
         /**
          * @var $basicTableController BasicTableController
          */
-        $basicTableController = $container->get(BasicTableController::class);
+        $basicTableController = $this->container->get(BasicTableController::class);
         $basicTableController->view();
-        $output = ob_get_clean();
 
+        $output = ob_get_clean();
         $this->assertThat($output, $this->stringContains(self::HEADER_1));
         $this->assertThat($output, $this->stringContains(self::HEADER_2));
         $this->assertThat($output, $this->stringContains(self::TEST_1));
@@ -95,24 +95,3 @@ class BasicTableControllerTest extends TestCase
     }
 }
 
-class MockTableViewService extends TableViewService
-{
-    /**
-     * @var TableView
-     */
-    private $tableView;
-
-    /**
-     * MockTableViewService constructor.
-     * @param TableView $tableView
-     */
-    public function __construct (TableView $tableView)
-    {
-        $this->tableView = $tableView;
-    }
-
-    public function getTableView (): TableView
-    {
-        return $this->tableView;
-    }
-}
