@@ -19,6 +19,14 @@ class Controller extends Package
     protected $appVersionRequired = '5.7.4';
     protected $pkgVersion         = '0.0.1';
 
+    /**
+     * Controller constructor.
+     */
+    public function __construct () {
+        $x=1;
+    }
+
+
     public static function getEntityManagerStatic()
     {
         $pkg = Package::getByHandle("basic_table_package");

@@ -29,11 +29,13 @@ class BasicTableController
         $this->renderer = $renderer;
         $this->tableViewService = $tableViewService;
         $this->variableSetter = $variableSetter;
+    }
 
+    public function view(){
         $tableView = $this->tableViewService->getTableView();
-        $variableSetter->set("headers", $tableView->getHeaders());
-        $variableSetter->set("rows", $tableView->getRows());
-        $renderer->render(self::TABLE_VIEW);
+        $this->variableSetter->set("headers", $tableView->getHeaders());
+        $this->variableSetter->set("rows", $tableView->getRows());
+        $this->renderer->render(self::TABLE_VIEW);
     }
 
     public function openForm (int $editId = null)

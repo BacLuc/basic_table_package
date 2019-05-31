@@ -10,7 +10,10 @@ use Concrete\Core\Block\BlockController;
 
 class Controller extends BlockController
 {
-    private $basicTableController;
+    /**
+     * @var null
+     */
+    private $obj;
 
     /**
      * Controller constructor.
@@ -18,14 +21,24 @@ class Controller extends BlockController
      */
     public function __construct ($obj = null)
     {
-        $this->basicTableController =
-            new BasicTableController(new Concrete5Renderer($this), new TableViewService(),
-                                     new Concrete5VariableSetter($this), $obj);
+    }
+
+    public function view(){
+        $this->createBasicTableController()->view();
     }
 
     public function action_add_new_row_form ()
     {
-        $this->basicTableController->openForm(null);
+        $this->createBasicTableController()->openForm(null);
+    }
+
+    /**
+     * @return BasicTableController
+     */
+    private function createBasicTableController (): BasicTableController
+    {
+        return new BasicTableController(new Concrete5Renderer($this), new TableViewService(),
+                                        new Concrete5VariableSetter($this), $this->obj);
     }
 
 }
