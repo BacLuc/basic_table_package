@@ -12,19 +12,6 @@ use Exception;
 class Controller extends BlockController
 {
     /**
-     * @var null
-     */
-    private $obj;
-
-    /**
-     * Controller constructor.
-     * @param null $obj
-     */
-    public function __construct ($obj = null)
-    {
-    }
-
-    /**
      * @throws DependencyException
      * @throws NotFoundException
      */
