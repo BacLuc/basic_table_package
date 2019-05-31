@@ -2,11 +2,12 @@
 
 namespace Concrete\Package\BasicTablePackage\Block\BasicTableBlockPackaged;
 
-use BasicTablePackage\Adapters\Concrete5\Concrete5Renderer;
-use BasicTablePackage\Adapters\Concrete5\Concrete5VariableSetter;
+use BasicTablePackage\Adapters\Concrete5\DIContainerFactory;
 use BasicTablePackage\Controller\BasicTableController;
-use BasicTablePackage\TableViewService;
 use Concrete\Core\Block\BlockController;
+use DI\DependencyException;
+use DI\NotFoundException;
+use Exception;
 
 class Controller extends BlockController
 {
@@ -23,10 +24,18 @@ class Controller extends BlockController
     {
     }
 
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
     public function view(){
         $this->createBasicTableController()->view();
     }
 
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
     public function action_add_new_row_form ()
     {
         $this->createBasicTableController()->openForm(null);
@@ -34,11 +43,14 @@ class Controller extends BlockController
 
     /**
      * @return BasicTableController
+     * @throws DependencyException
+     * @throws NotFoundException
+     * @throws Exception
      */
     private function createBasicTableController (): BasicTableController
     {
-        return new BasicTableController(new Concrete5Renderer($this), new TableViewService(),
-                                        new Concrete5VariableSetter($this), $this->obj);
+        $container = DIContainerFactory::createContainer($this);
+        return $container->get(BasicTableController::class);
     }
 
 }
