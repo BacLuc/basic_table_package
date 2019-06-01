@@ -5,6 +5,7 @@ namespace Concrete\Package\BasicTablePackage\Block\BasicTableBlockPackaged;
 use BasicTablePackage\Adapters\Concrete5\DIContainerFactory;
 use BasicTablePackage\Controller\BasicTableController;
 use Concrete\Core\Block\BlockController;
+use Concrete\Package\BasicTablePackage\Controller as PackageController;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Exception;
@@ -36,7 +37,8 @@ class Controller extends BlockController
      */
     private function createBasicTableController (): BasicTableController
     {
-        $container = DIContainerFactory::createContainer($this);
+        $entityManager = PackageController::getEntityManagerStatic();
+        $container = DIContainerFactory::createContainer($this, $entityManager);
         return $container->get(BasicTableController::class);
     }
 

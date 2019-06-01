@@ -4,15 +4,61 @@
 namespace BasicTablePackage;
 
 
+use BasicTablePackage\View\TableView\Field;
 use BasicTablePackage\View\TableView\Row;
 use BasicTablePackage\View\TableView\TableView;
+use BasicTablePackage\View\TableView\TableViewConfigurationFactory;
+use Doctrine\ORM\EntityManager;
 
 class TableViewService
 {
     const HEADER_2 = "header2";
-    public function getTableView() : TableView {
-        $row1 = new Row([ "test1", "test2" ]);
-        $row2 = new Row([ "test3", "test4" ]);
-        return new TableView([ "header1", "header1" ], [ $row1, $row2]);
+    /**
+     * @var EntityManager
+     */
+    private $entityManager;
+    private $tableViewConfigurationFactory;
+    private $configuration;
+
+    /**
+     * TableViewService constructor.
+     */
+    public function __construct (EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+        $this->tableViewConfigurationFactory = new TableViewConfigurationFactory();
+        $this->configuration = $this->tableViewConfigurationFactory->createConfiguration();
+    }
+
+
+    public function getTableView (): TableView
+    {
+        $query = $this->entityManager->createQuery(
+        /** @lang DQL */
+            "SELECT exampleEntity FROM BasicTablePackage\Persistence\ExampleEntity exampleEntity");
+
+        $result = $query->getResult();
+        $tableView = TableView::empty();
+        if ($result != null) {
+            $headers = [];
+            $rows = [];
+            $first = true;
+            foreach ($result as $entity) {
+                $values = [];
+                foreach ($this->configuration as $name => $fieldFactory) {
+                    if ($first) {
+                        $headers[] = $name;
+                    }
+                    /**
+                     * @var Field $field
+                     */
+                    $field = call_user_func($fieldFactory, $entity->{$name});
+                    $values[] = $field->getTableView();
+                }
+                $rows[] = new Row($values);
+            }
+            $tableView = new TableView($headers, $rows);
+        }
+        return $tableView;
     }
 }

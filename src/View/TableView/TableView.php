@@ -16,6 +16,12 @@ class TableView
      */
     private $rows;
 
+
+    public static function empty ()
+    {
+        return new TableView([], []);
+    }
+
     /**
      * TableView constructor.
      * @param String[] $headers
