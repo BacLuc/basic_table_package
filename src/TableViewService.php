@@ -35,7 +35,7 @@ class TableViewService
     {
         $query = $this->entityManager->createQuery(
         /** @lang DQL */
-            "SELECT exampleEntity FROM BasicTablePackage\Persistence\ExampleEntity exampleEntity");
+            "SELECT exampleEntity FROM BasicTablePackage\Entity\ExampleEntity exampleEntity");
 
         $result = $query->getResult();
         $tableView = TableView::empty();

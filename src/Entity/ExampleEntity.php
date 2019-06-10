@@ -1,7 +1,7 @@
 <?php
 
 
-namespace BasicTablePackage\Persistence;
+namespace BasicTablePackage\Entity;
 
 use Doctrine\Common\Annotations\Annotation\IgnoreAnnotation;
 use Doctrine\ORM\Mapping\Column;
@@ -30,6 +30,11 @@ class ExampleEntity
      * @Column(type="string")
      */
     private $value;
+
+    /**
+     * @Column(type="integer", nullable=true)
+     */
+    protected $intcolumn;
 
     public function __get ($name)
     {
