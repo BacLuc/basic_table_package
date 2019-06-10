@@ -36,7 +36,7 @@ class Controller extends Package
         return t("Package to provide a basic CRUD from DB to GUI");
     }
 
-    public function on_start()
+    public function getPackageAutoloaderRegistries ()
     {
         require $this->getPackagePath() . '/vendor/autoload.php';
     }
