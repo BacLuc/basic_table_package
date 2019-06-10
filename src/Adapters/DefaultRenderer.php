@@ -25,6 +25,6 @@ class DefaultRenderer implements Renderer
     public function render (string $path)
     {
         extract($this->defaultContext->getContext());
-        include __DIR__.'/../'.$path.'.php';
+        include __DIR__ . '/../../resources/' . $path . '.php';
     }
 }

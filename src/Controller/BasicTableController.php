@@ -8,8 +8,8 @@ use BasicTablePackage\TableViewService;
 
 class BasicTableController
 {
-    const TABLE_VIEW = "View/table";
-    const FORM_VIEW  = "View/form";
+    const TABLE_VIEW = "view/table";
+    const FORM_VIEW  = "view/form";
     /**
      * @var Renderer
      */

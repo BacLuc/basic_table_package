@@ -4,8 +4,8 @@
 namespace BasicTablePackage\Adapters\Concrete5;
 
 
-use Concrete\Core\Block\BlockController;
 use BasicTablePackage\Controller\Renderer;
+use Concrete\Core\Block\BlockController;
 
 class Concrete5Renderer implements Renderer
 {
@@ -23,6 +23,6 @@ class Concrete5Renderer implements Renderer
 
     public function render (string $path)
     {
-        $this->blockController->render("../../src/".$path);
+        $this->blockController->render("../../resources/" . $path);
     }
 }
