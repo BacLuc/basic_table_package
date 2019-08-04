@@ -4,10 +4,10 @@
 namespace BasicTablePackage\Test;
 
 
-use BasicTablePackage\Adapters\DefaultRenderer;
 use BasicTablePackage\Controller\Renderer;
 use BasicTablePackage\Controller\VariableSetter;
 use BasicTablePackage\Test\Adapters\DefaultContext;
+use BasicTablePackage\Test\Adapters\DefaultRenderer;
 use DI\Container;
 use DI\ContainerBuilder;
 use function DI\autowire;

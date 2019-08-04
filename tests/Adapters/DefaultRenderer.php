@@ -1,11 +1,10 @@
 <?php
 
 
-namespace BasicTablePackage\Adapters;
+namespace BasicTablePackage\Test\Adapters;
 
 
 use BasicTablePackage\Controller\Renderer;
-use BasicTablePackage\Test\Adapters\DefaultContext;
 
 class DefaultRenderer implements Renderer
 {
