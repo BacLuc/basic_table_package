@@ -2,6 +2,7 @@
 
 namespace BasicTablePackage\Adapters;
 
+use BasicTablePackage\Test\Adapters\DefaultContext;
 use PHPUnit\Framework\TestCase;
 
 class DefaultContextTest extends TestCase

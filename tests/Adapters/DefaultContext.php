@@ -1,7 +1,7 @@
 <?php
 
 
-namespace BasicTablePackage\Adapters;
+namespace BasicTablePackage\Test\Adapters;
 
 
 use BasicTablePackage\Controller\VariableSetter;
