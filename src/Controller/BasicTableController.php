@@ -4,6 +4,7 @@
 namespace BasicTablePackage\Controller;
 
 
+use BasicTablePackage\FormViewService;
 use BasicTablePackage\TableViewService;
 use BasicTablePackage\View\Action;
 
@@ -23,13 +24,19 @@ class BasicTableController
      * @var VariableSetter
      */
     private $variableSetter;
+    /**
+     * @var FormViewService
+     */
+    private $formViewService;
 
     public function __construct (Renderer $renderer, TableViewService $tableViewService, VariableSetter $variableSetter,
+                                 FormViewService $formViewService,
                                  $obj = null)
     {
         $this->renderer = $renderer;
         $this->tableViewService = $tableViewService;
         $this->variableSetter = $variableSetter;
+        $this->formViewService = $formViewService;
     }
 
     public function view(){
@@ -44,6 +51,8 @@ class BasicTableController
 
     public function openForm (int $editId = null)
     {
+        $formView = $this->formViewService->getFormView();
+        $this->variableSetter->set("fields", $formView->getFields());
         $this->renderer->render(self::FORM_VIEW);
     }
 

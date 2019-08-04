@@ -3,6 +3,7 @@
 
 namespace BasicTablePackage\Controller;
 
+use BasicTablePackage\FormViewService;
 use BasicTablePackage\TableViewService;
 use BasicTablePackage\Test\DIContainerFactory;
 use BasicTablePackage\View\TableView\Row;
@@ -37,6 +38,7 @@ class BasicTableControllerTest extends TestCase
      */
     private $basicTableController;
     private $container;
+    private $formViewService;
 
 
     protected function setUp ()
@@ -44,9 +46,11 @@ class BasicTableControllerTest extends TestCase
         $this->renderer = $this->createMock(Renderer::class);
         $this->tableViewService = $this->createMock(TableViewService::class);
         $this->variableSetter = $this->createMock(VariableSetter::class);
+        $this->formViewService = $this->createMock(FormViewService::class);
 
         $this->basicTableController =
-            new BasicTableController($this->renderer, $this->tableViewService, $this->variableSetter, null);
+            new BasicTableController($this->renderer, $this->tableViewService, $this->variableSetter,
+                                     $this->formViewService);
 
         /** @var Container $container */
         $this->container = DIContainerFactory::createContainer();
