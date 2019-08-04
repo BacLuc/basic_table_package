@@ -24,7 +24,13 @@ class DefaultRenderer implements Renderer
 
     public function render (string $path)
     {
+        require_once __DIR__ . '/../../tests/Concrete5Functions.php';
         extract($this->defaultContext->getContext());
         include __DIR__ . '/../../resources/' . $path . '.php';
+    }
+
+    public function action (string $action)
+    {
+        return $action;
     }
 }

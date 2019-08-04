@@ -5,6 +5,7 @@ namespace BasicTablePackage\Controller;
 
 
 use BasicTablePackage\TableViewService;
+use BasicTablePackage\View\Action;
 
 class BasicTableController
 {
@@ -35,6 +36,9 @@ class BasicTableController
         $tableView = $this->tableViewService->getTableView();
         $this->variableSetter->set("headers", $tableView->getHeaders());
         $this->variableSetter->set("rows", $tableView->getRows());
+        $actions = [];
+        $actions[] = new Action("add_new_row_form", "add", "new Entry", "new Entry", "fa-plus");
+        $this->variableSetter->set("actions", $actions);
         $this->renderer->render(self::TABLE_VIEW);
     }
 

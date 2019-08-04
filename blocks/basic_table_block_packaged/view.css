@@ -1,0 +1,11 @@
+.btn.actionbutton.edit {
+    color: orange;
+}
+
+.btn.actionbutton.delete {
+    color: red;
+}
+
+.btn.actionbutton.add {
+    color: green;
+}
