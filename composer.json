@@ -11,7 +11,12 @@
     }
   },
   "autoload-dev": {
-    "psr-4": { "BasicTablePackage\\Test\\": "tests" }
+    "psr-4": {
+      "BasicTablePackage\\Test\\": "tests"
+    },
+    "files": [
+      "src/Lib/CollectionHelper.php"
+    ]
   },
   "require-dev" : {
     "php": ">=7",

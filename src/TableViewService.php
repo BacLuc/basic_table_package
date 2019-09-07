@@ -9,6 +9,8 @@ use BasicTablePackage\View\TableView\Row;
 use BasicTablePackage\View\TableView\TableView;
 use BasicTablePackage\View\TableView\TableViewConfigurationFactory;
 use Doctrine\ORM\EntityManager;
+use Tightenco\Collect\Support\Collection;
+use function BasicTablePackage\Lib\collect as collect;
 
 class TableViewService
 {
@@ -38,27 +40,31 @@ class TableViewService
             "SELECT exampleEntity FROM BasicTablePackage\Entity\ExampleEntity exampleEntity");
 
         $result = $query->getResult();
-        $tableView = TableView::empty();
+
+        $headers = collect($this->configuration)->keys()->toArray();
+        $tableView = new TableView($headers, []);
         if ($result != null) {
-            $headers = [];
-            $rows = [];
-            $first = true;
-            foreach ($result as $entity) {
-                $values = [];
-                foreach ($this->configuration as $name => $fieldFactory) {
-                    if ($first) {
-                        $headers[] = $name;
-                    }
-                    /**
-                     * @var Field $field
-                     */
-                    $field = call_user_func($fieldFactory, $entity->{$name});
-                    $values[] = $field->getTableView();
-                }
-                $rows[] = new Row($values);
-            }
-            $tableView = new TableView($headers, $rows);
+            $rows = collect($result)
+                ->map(function ($entity) {
+                    return collect($this->configuration)
+                        ->map(function ($fieldFactory, $name) use ($entity) {
+                            return call_user_func($fieldFactory, $entity->{$name});
+                        })->map(function ($field) { return self::toTableView($field); });
+                })
+                ->map(function ($collection) { return self::asArray($collection); })
+                ->map(function ($field) { return new Row($field); });
+            $tableView = new TableView($headers, $rows->toArray());
         }
         return $tableView;
+    }
+
+    private static function toTableView (Field $field)
+    {
+        return $field->getTableView();
+    }
+
+    private static function asArray (Collection $collection)
+    {
+        return $collection->toArray();
     }
 }

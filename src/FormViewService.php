@@ -6,6 +6,7 @@ namespace BasicTablePackage;
 
 use BasicTablePackage\View\FormView\FormView;
 use BasicTablePackage\View\FormView\FormViewFieldConfiguration;
+use function BasicTablePackage\Lib\collect as collect;
 
 class FormViewService
 {
@@ -21,10 +22,10 @@ class FormViewService
 
     public function getFormView (): FormView
     {
-        $fields = [];
-        foreach ($this->formViewFieldConfiguration as $sqlFieldName => $fieldFactory) {
-            $fields[] = call_user_func($fieldFactory, null);
-        }
-        return new FormView($fields);
+        $fields =
+            collect($this->formViewFieldConfiguration)->map(function ($fieldFactory) {
+                return call_user_func($fieldFactory, null);
+            });
+        return new FormView($fields->toArray());
     }
 }
