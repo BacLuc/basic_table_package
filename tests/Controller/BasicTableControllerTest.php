@@ -6,9 +6,12 @@ namespace BasicTablePackage\Controller;
 use BasicTablePackage\FormViewService;
 use BasicTablePackage\TableViewService;
 use BasicTablePackage\Test\DIContainerFactory;
+use BasicTablePackage\View\FormView\FormView;
+use BasicTablePackage\View\FormView\TextField;
 use BasicTablePackage\View\TableView\Row;
 use BasicTablePackage\View\TableView\TableView;
 use DI\Container;
+use Doctrine\ORM\EntityManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use function DI\value;
@@ -39,6 +42,7 @@ class BasicTableControllerTest extends TestCase
     private $basicTableController;
     private $container;
     private $formViewService;
+    private $entityManager;
 
 
     protected function setUp ()
@@ -47,13 +51,14 @@ class BasicTableControllerTest extends TestCase
         $this->tableViewService = $this->createMock(TableViewService::class);
         $this->variableSetter = $this->createMock(VariableSetter::class);
         $this->formViewService = $this->createMock(FormViewService::class);
+        $this->entityManager = $this->createMock(EntityManager::class);
 
         $this->basicTableController =
             new BasicTableController($this->renderer, $this->tableViewService, $this->variableSetter,
                                      $this->formViewService);
 
         /** @var Container $container */
-        $this->container = DIContainerFactory::createContainer();
+        $this->container = DIContainerFactory::createContainer($this->entityManager);
     }
 
 
@@ -96,6 +101,30 @@ class BasicTableControllerTest extends TestCase
         $this->assertThat($output, $this->stringContains(self::TEST_2));
         $this->assertThat($output, $this->stringContains(self::TEST_3));
         $this->assertThat($output, $this->stringContains(self::TEST_4));
+    }
+
+    public function test_show_form_view ()
+    {
+        $formView =
+            new FormView([ new TextField(self::HEADER_1, self::TEST_1), new TextField(self::HEADER_2, self::TEST_2) ]);
+
+        $this->formViewService->expects($this->once())->method('getFormView')->willReturn($formView);
+
+        $this->container->set(FormViewService::class, value($this->formViewService));
+
+
+        ob_start();
+        /**
+         * @var $basicTableController BasicTableController
+         */
+        $basicTableController = $this->container->get(BasicTableController::class);
+        $basicTableController->openForm();
+
+        $output = ob_get_clean();
+        $this->assertThat($output, $this->stringContains(self::HEADER_1));
+        $this->assertThat($output, $this->stringContains(self::HEADER_2));
+        $this->assertThat($output, $this->stringContains(self::TEST_1));
+        $this->assertThat($output, $this->stringContains(self::TEST_2));
     }
 }
 
