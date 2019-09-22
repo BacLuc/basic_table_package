@@ -30,6 +30,24 @@ class Controller extends BlockController
     }
 
     /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function action_post_form ()
+    {
+        $this->createBasicTableController()->view();
+    }
+
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function action_cancel_form ()
+    {
+        $this->createBasicTableController()->view();
+    }
+
+    /**
      * @return BasicTableController
      * @throws DependencyException
      * @throws NotFoundException
