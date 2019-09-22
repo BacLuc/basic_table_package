@@ -3,13 +3,13 @@
     <div class="tablecontrols">
         <?php foreach ($actions as $action) { ?>
             <?php /** @var $action \BasicTablePackage\View\Action */ ?>
-            <form method="post" action="<?= $this->action($action->getAction()) ?>">
+            <a href="<?= $this->action($action->getAction()) ?>">
                 <button type="submit" class="btn inlinebtn actionbutton <?= $action->getButtonClass() ?>"
                         aria-label="<?= t($action->getAriaLabel()) ?>"
                         title="<?= t($action->getTitle()) ?>">
                     <i class="fa <?= $action->getIconClass() ?>" aria-hidden="true"> </i>
                 </button>
-            </form>
+            </a>
         <?php } ?>
     </div>
     <table class="table table-striped table-bordered table-hover">
