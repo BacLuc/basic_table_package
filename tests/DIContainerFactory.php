@@ -4,12 +4,16 @@
 namespace BasicTablePackage\Test;
 
 
+use BasicTablePackage\Controller\ActionRegistry;
+use BasicTablePackage\Controller\ActionRegistryFactory;
 use BasicTablePackage\Controller\Renderer;
 use BasicTablePackage\Controller\VariableSetter;
 use BasicTablePackage\Test\Adapters\DefaultContext;
 use BasicTablePackage\Test\Adapters\DefaultRenderer;
 use BasicTablePackage\View\FormView\FormViewConfigurationFactory;
 use BasicTablePackage\View\FormView\FormViewFieldConfiguration;
+use BasicTablePackage\View\ViewActionRegistry;
+use BasicTablePackage\View\ViewActionRegistryFactory;
 use DI\Container;
 use DI\ContainerBuilder;
 use Doctrine\ORM\EntityManager;
@@ -27,6 +31,12 @@ class DIContainerFactory
             VariableSetter::class             => autowire(DefaultContext::class),
             DefaultContext::class             => get(VariableSetter::class),
             Renderer::class                   => autowire(DefaultRenderer::class),
+            ViewActionRegistry::class         => factory(function (Container $container) {
+                return $container->get(ViewActionRegistryFactory::class)->createActionRegistry();
+            }),
+            ActionRegistry::class             => factory(function (Container $container) {
+                return $container->get(ActionRegistryFactory::class)->createActionRegistry();
+            }),
             FormViewFieldConfiguration::class => factory(function (Container $container) {
                 return $container->get(FormViewConfigurationFactory::class)->createConfiguration();
             }),

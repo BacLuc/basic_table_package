@@ -47,33 +47,12 @@ class BasicTableControllerTest extends TestCase
 
     protected function setUp ()
     {
-        $this->renderer = $this->createMock(Renderer::class);
         $this->tableViewService = $this->createMock(TableViewService::class);
-        $this->variableSetter = $this->createMock(VariableSetter::class);
         $this->formViewService = $this->createMock(FormViewService::class);
         $this->entityManager = $this->createMock(EntityManager::class);
 
-        $this->basicTableController =
-            new BasicTableController($this->renderer, $this->tableViewService, $this->variableSetter,
-                                     $this->formViewService);
-
         /** @var Container $container */
         $this->container = DIContainerFactory::createContainer($this->entityManager);
-    }
-
-
-    public function test_renders_table_view_when_view_called ()
-    {
-        $this->renderer->expects($this->once())->method('render')->with(BasicTableController::TABLE_VIEW);
-
-        $this->basicTableController->view();
-    }
-
-    public function test_renders_form_view_when_edit_action_called ()
-    {
-        $this->renderer->expects($this->once())->method('render')->with(BasicTableController::FORM_VIEW);
-
-        $this->basicTableController->openForm(null);
     }
 
     public function test_sets_headers_and_rows_to_TableView_retrieved_from_TableViewService ()

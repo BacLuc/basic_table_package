@@ -3,6 +3,7 @@
 namespace Concrete\Package\BasicTablePackage\Block\BasicTableBlockPackaged;
 
 use BasicTablePackage\Adapters\Concrete5\DIContainerFactory;
+use BasicTablePackage\Controller\ActionRegistryFactory;
 use BasicTablePackage\Controller\BasicTableController;
 use Concrete\Core\Block\BlockController;
 use Concrete\Package\BasicTablePackage\Controller as PackageController;
@@ -16,7 +17,8 @@ class Controller extends BlockController
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function view(){
+    public function view ()
+    {
         $this->createBasicTableController()->view();
     }
 
@@ -35,7 +37,10 @@ class Controller extends BlockController
      */
     public function action_post_form ()
     {
-        $this->createBasicTableController()->view();
+        $basicTableController = $this->createBasicTableController();
+        $basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
+                             ->process($this->request->get(null) ? : [],
+                                       $this->request->post(null) ? : []);
     }
 
     /**

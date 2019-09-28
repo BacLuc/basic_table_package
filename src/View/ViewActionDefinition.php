@@ -4,7 +4,7 @@
 namespace BasicTablePackage\View;
 
 
-class Action
+class ViewActionDefinition
 {
     /**
      * @var string
@@ -31,7 +31,10 @@ class Action
     /**
      * Action constructor.
      */
-    public function __construct (string $action, string $buttonClass, string $ariaLabel, string $title,
+    public function __construct (string $action,
+                                 string $buttonClass,
+                                 string $ariaLabel,
+                                 string $title,
                                  string $iconClass)
     {
         $this->action = $action;
@@ -80,6 +83,4 @@ class Action
     {
         return $this->iconClass;
     }
-
-
 }

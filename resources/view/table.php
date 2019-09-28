@@ -2,7 +2,7 @@
 <div class="table-responsive basic_table_package">
     <div class="tablecontrols">
         <?php foreach ($actions as $action) { ?>
-            <?php /** @var $action \BasicTablePackage\View\Action */ ?>
+            <?php /** @var $action \BasicTablePackage\View\ViewActionDefinition */ ?>
             <a href="<?= $this->action($action->getAction()) ?>">
                 <button type="submit" class="btn inlinebtn actionbutton <?= $action->getButtonClass() ?>"
                         aria-label="<?= t($action->getAriaLabel()) ?>"
