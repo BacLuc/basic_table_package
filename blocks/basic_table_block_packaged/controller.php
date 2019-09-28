@@ -3,6 +3,7 @@
 namespace Concrete\Package\BasicTablePackage\Block\BasicTableBlockPackaged;
 
 use BasicTablePackage\Adapters\Concrete5\DIContainerFactory;
+use BasicTablePackage\Controller\ActionProcessor;
 use BasicTablePackage\Controller\ActionRegistryFactory;
 use BasicTablePackage\Controller\BasicTableController;
 use Concrete\Core\Block\BlockController;
@@ -19,7 +20,7 @@ class Controller extends BlockController
      */
     public function view ()
     {
-        $this->createBasicTableController()->view();
+        $this->processAction($this->createBasicTableController()->getActionFor(ActionRegistryFactory::SHOW_TABLE));
     }
 
     /**
@@ -28,7 +29,8 @@ class Controller extends BlockController
      */
     public function action_add_new_row_form ()
     {
-        $this->createBasicTableController()->openForm(null);
+        $this->processAction($this->createBasicTableController()
+                                  ->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM));
     }
 
     /**
@@ -37,10 +39,7 @@ class Controller extends BlockController
      */
     public function action_post_form ()
     {
-        $basicTableController = $this->createBasicTableController();
-        $basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
-                             ->process($this->request->get(null) ? : [],
-                                       $this->request->post(null) ? : []);
+        $this->processAction($this->createBasicTableController()->getActionFor(ActionRegistryFactory::POST_FORM));
     }
 
     /**
@@ -49,7 +48,7 @@ class Controller extends BlockController
      */
     public function action_cancel_form ()
     {
-        $this->createBasicTableController()->view();
+        $this->processAction($this->createBasicTableController()->getActionFor(ActionRegistryFactory::SHOW_TABLE));
     }
 
     /**
@@ -63,6 +62,12 @@ class Controller extends BlockController
         $entityManager = PackageController::getEntityManagerStatic();
         $container = DIContainerFactory::createContainer($this, $entityManager);
         return $container->get(BasicTableController::class);
+    }
+
+    private function processAction (ActionProcessor $actionProcessor)
+    {
+        $actionProcessor->process($this->request->get(null) ? : [],
+                                  $this->request->post(null) ? : []);
     }
 
 }

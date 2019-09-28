@@ -12,7 +12,6 @@ use BasicTablePackage\View\TableView\Row;
 use BasicTablePackage\View\TableView\TableView;
 use DI\Container;
 use Doctrine\ORM\EntityManager;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use function DI\value;
 
@@ -26,20 +25,7 @@ class BasicTableControllerTest extends TestCase
     const HEADER_2 = "header2";
 
 
-    /**
-     * @var MockObject
-     */
-    private $renderer;
-    /**
-     * @var MockObject
-     */
-
     private $tableViewService;
-    private $variableSetter;
-    /**
-     * @var BasicTableController
-     */
-    private $basicTableController;
     private $container;
     private $formViewService;
     private $entityManager;
@@ -71,7 +57,7 @@ class BasicTableControllerTest extends TestCase
          * @var $basicTableController BasicTableController
          */
         $basicTableController = $this->container->get(BasicTableController::class);
-        $basicTableController->view();
+        $basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);;
 
         $output = ob_get_clean();
         $this->assertThat($output, $this->stringContains(self::HEADER_1));
@@ -97,7 +83,7 @@ class BasicTableControllerTest extends TestCase
          * @var $basicTableController BasicTableController
          */
         $basicTableController = $this->container->get(BasicTableController::class);
-        $basicTableController->openForm();
+        $basicTableController->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM)->process([], []);
 
         $output = ob_get_clean();
         $this->assertThat($output, $this->stringContains(self::HEADER_1));
