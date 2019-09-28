@@ -4,6 +4,10 @@
 namespace BasicTablePackage\Controller;
 
 
+use BasicTablePackage\Controller\ActionProcessors\PostFormActionProcessor;
+use BasicTablePackage\Controller\ActionProcessors\ShowFormActionProcessor;
+use BasicTablePackage\Controller\ActionProcessors\ShowTableActionProcessor;
+
 class ActionRegistryFactory
 {
     const SHOW_TABLE       = "show_table";

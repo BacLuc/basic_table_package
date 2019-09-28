@@ -1,9 +1,13 @@
 <?php
 
 
-namespace BasicTablePackage\Controller;
+namespace BasicTablePackage\Controller\ActionProcessors;
 
 
+use BasicTablePackage\Controller\ActionProcessor;
+use BasicTablePackage\Controller\ActionRegistryFactory;
+use BasicTablePackage\Controller\Renderer;
+use BasicTablePackage\Controller\VariableSetter;
 use BasicTablePackage\TableViewService;
 use BasicTablePackage\View\ViewActionRegistry;
 

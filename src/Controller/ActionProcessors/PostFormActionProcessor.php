@@ -1,8 +1,11 @@
 <?php
 
 
-namespace BasicTablePackage\Controller;
+namespace BasicTablePackage\Controller\ActionProcessors;
 
+
+use BasicTablePackage\Controller\ActionProcessor;
+use BasicTablePackage\Controller\ActionRegistryFactory;
 
 class PostFormActionProcessor implements ActionProcessor
 {
