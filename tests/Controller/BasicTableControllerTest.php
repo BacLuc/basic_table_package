@@ -41,7 +41,10 @@ class BasicTableControllerTest extends TestCase
         $this->container = DIContainerFactory::createContainer($this->entityManager);
     }
 
-    public function test_sets_headers_and_rows_to_TableView_retrieved_from_TableViewService ()
+    /**
+     * @dataProvider createTableActionNames
+     */
+    public function test_sets_headers_and_rows_to_TableView_retrieved_from_TableViewService ($action)
     {
         $row1 = new Row([ self::TEST_1, self::TEST_2 ]);
         $row2 = new Row([ self::TEST_3, self::TEST_4 ]);
@@ -57,7 +60,7 @@ class BasicTableControllerTest extends TestCase
          * @var $basicTableController BasicTableController
          */
         $basicTableController = $this->container->get(BasicTableController::class);
-        $basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);;
+        $basicTableController->getActionFor($action)->process([], []);;
 
         $output = ob_get_clean();
         $this->assertThat($output, $this->stringContains(self::HEADER_1));
@@ -66,6 +69,14 @@ class BasicTableControllerTest extends TestCase
         $this->assertThat($output, $this->stringContains(self::TEST_2));
         $this->assertThat($output, $this->stringContains(self::TEST_3));
         $this->assertThat($output, $this->stringContains(self::TEST_4));
+    }
+
+    public function createTableActionNames ()
+    {
+        return [
+            [ ActionRegistryFactory::SHOW_TABLE ],
+            [ ActionRegistryFactory::POST_FORM ],
+        ];
     }
 
     public function test_show_form_view ()
@@ -91,5 +102,6 @@ class BasicTableControllerTest extends TestCase
         $this->assertThat($output, $this->stringContains(self::TEST_1));
         $this->assertThat($output, $this->stringContains(self::TEST_2));
     }
+
 }
 
