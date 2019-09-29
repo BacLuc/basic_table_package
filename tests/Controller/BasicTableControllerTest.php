@@ -82,7 +82,9 @@ class BasicTableControllerTest extends TestCase
     public function test_show_form_view ()
     {
         $formView =
-            new FormView([ new TextField(self::HEADER_1, self::TEST_1), new TextField(self::HEADER_2, self::TEST_2) ]);
+            new FormView([ new TextField(self::HEADER_1, , self::TEST_1),
+                           new TextField(self::HEADER_2, , self::TEST_2),
+                         ]);
 
         $this->formViewService->expects($this->once())->method('getFormView')->willReturn($formView);
 

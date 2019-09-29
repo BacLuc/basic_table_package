@@ -4,26 +4,25 @@
 namespace BasicTablePackage\Controller\Validation;
 
 
+use BasicTablePackage\Lib\IteratorTrait;
+use Iterator;
 use function BasicTablePackage\Lib\collect as collect;
 
-class ValidationResult
+class ValidationResult implements Iterator
 {
-    /**
-     * @var array
-     */
-    private $validationItems;
+    use IteratorTrait;
 
     /**
      * ValidationResult constructor.
      */
     public function __construct (array $validationItems)
     {
-        $this->validationItems = $validationItems;
+        $this->initialize($validationItems);
     }
 
     public function isError ()
     {
-        return collect($this->validationItems)
+        return collect($this)
                    ->filter(function (ValidationResultItem $validationResultItem) { return $validationResultItem->isError(); })
                    ->count() > 0;
     }

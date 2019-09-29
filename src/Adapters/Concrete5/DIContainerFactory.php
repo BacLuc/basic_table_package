@@ -9,7 +9,12 @@ use BasicTablePackage\Controller\ActionRegistryFactory;
 use BasicTablePackage\Controller\Renderer;
 use BasicTablePackage\Controller\Validation\ValidationConfiguration;
 use BasicTablePackage\Controller\Validation\ValidationConfigurationFactory;
+use BasicTablePackage\Controller\ValuePersisters\PersistorConfiguration;
+use BasicTablePackage\Controller\ValuePersisters\PersistorConfigurationFactory;
 use BasicTablePackage\Controller\VariableSetter;
+use BasicTablePackage\Entity\EntityManagerRepository;
+use BasicTablePackage\Entity\ExampleEntity;
+use BasicTablePackage\Entity\Repository;
 use BasicTablePackage\View\FormView\FormViewConfigurationFactory;
 use BasicTablePackage\View\FormView\FormViewFieldConfiguration;
 use BasicTablePackage\View\ViewActionRegistry;
@@ -34,6 +39,8 @@ class DIContainerFactory
         $containerBuilder = new ContainerBuilder();
         $definitions = [
             EntityManager::class              => value($entityManager),
+            Repository::class                 => value(new EntityManagerRepository($entityManager,
+                                                                                   ExampleEntity::class)),
             BlockController::class            => value($controller),
             VariableSetter::class             => autowire(Concrete5VariableSetter::class),
             Renderer::class                   => autowire(Concrete5Renderer::class),
@@ -48,6 +55,9 @@ class DIContainerFactory
             }),
             FormViewFieldConfiguration::class => factory(function (Container $container) {
                 return $container->get(FormViewConfigurationFactory::class)->createConfiguration();
+            }),
+            PersistorConfiguration::class     => factory(function (Container $container) {
+                return $container->get(PersistorConfigurationFactory::class)->createConfiguration();
             }),
 
         ];

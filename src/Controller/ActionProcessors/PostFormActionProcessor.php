@@ -6,7 +6,12 @@ namespace BasicTablePackage\Controller\ActionProcessors;
 
 use BasicTablePackage\Controller\ActionProcessor;
 use BasicTablePackage\Controller\ActionRegistryFactory;
+use BasicTablePackage\Controller\Validation\ValidationResultItem;
 use BasicTablePackage\Controller\Validation\Validator;
+use BasicTablePackage\Controller\ValuePersisters\FieldPersistor;
+use BasicTablePackage\Controller\ValuePersisters\PersistorConfiguration;
+use BasicTablePackage\Entity\Repository;
+use function BasicTablePackage\Lib\collect as collect;
 
 class PostFormActionProcessor implements ActionProcessor
 {
@@ -22,17 +27,29 @@ class PostFormActionProcessor implements ActionProcessor
      * @var ShowFormActionProcessor
      */
     private $showFormActionProcessor;
+    /**
+     * @var Repository
+     */
+    private $repository;
+    /**
+     * @var PersistorConfiguration
+     */
+    private $peristorConfiguration;
 
     /**
      * PostFormActionProcessor constructor.
      */
     public function __construct (ShowTableActionProcessor $showTableActionProcessor,
                                  Validator $validator,
-                                 ShowFormActionProcessor $showFormActionProcessor)
+                                 ShowFormActionProcessor $showFormActionProcessor,
+                                 Repository $repository,
+                                 PersistorConfiguration $peristorConfiguration)
     {
         $this->showTableActionProcessor = $showTableActionProcessor;
         $this->validator = $validator;
         $this->showFormActionProcessor = $showFormActionProcessor;
+        $this->repository = $repository;
+        $this->peristorConfiguration = $peristorConfiguration;
     }
 
     function getName (): string
@@ -44,6 +61,17 @@ class PostFormActionProcessor implements ActionProcessor
     {
         $validationResult = $this->validator->validate($post);
         if (!$validationResult->isError()) {
+            $postValues = collect($validationResult)
+                ->keyBy(function (ValidationResultItem $validationResultItem) { return $validationResultItem->getName(); })
+                ->map(function (ValidationResultItem $validationResultItem) { return $validationResultItem->getPostValue(); });
+            $entity = $this->repository->create();
+            /**
+             * @var FieldPersistor $persistor
+             */
+            foreach ($this->peristorConfiguration as $persistor) {
+                $persistor->persist($postValues, $entity);
+            }
+            $this->repository->persist($entity);
             $this->showTableActionProcessor->process($get, $post);
         }
         else {

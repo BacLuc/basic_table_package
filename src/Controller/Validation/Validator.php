@@ -4,7 +4,6 @@
 namespace BasicTablePackage\Controller\Validation;
 
 
-use BasicTablePackage\Controller\ActionProcessors\FieldValidator;
 use function BasicTablePackage\Lib\collect as collect;
 
 class Validator

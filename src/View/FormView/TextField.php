@@ -13,16 +13,23 @@ class TextField implements Field
     /**
      * @var string
      */
+    private $postname;
+    /**
+     * @var string
+     */
     private $sqlValue;
 
     /**
      * TextField constructor.
+     * @param string $label
+     * @param string $postname
      * @param string $sqlValue
      */
-    public function __construct (string $label, $sqlValue)
+    public function __construct (string $label, string $postname, $sqlValue)
     {
         $this->label = $label;
         $this->sqlValue = $sqlValue;
+        $this->postname = $postname;
     }
 
     /**
@@ -37,6 +44,7 @@ class TextField implements Field
     public function getFormView (): string
     {
         $variables = array(
+            "postname" => $this->postname,
             "sqlValue" => $this->sqlValue,
         );
         extract($variables);

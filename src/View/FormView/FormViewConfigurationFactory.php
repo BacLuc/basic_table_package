@@ -15,7 +15,7 @@ class FormViewConfigurationFactory
     public function createConfiguration (): FormViewFieldConfiguration
     {
         return new FormViewFieldConfiguration([ "value" => function ($value) {
-            return new TextField("value", $value);
+            return new TextField("value", "value", $value);
         },
                                               ]);
     }
