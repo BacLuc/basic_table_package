@@ -4,11 +4,11 @@
 namespace BasicTablePackage\Test;
 
 
-use BasicTablePackage\Controller\ActionProcessors\ValidationConfiguration;
-use BasicTablePackage\Controller\ActionProcessors\ValidationConfigurationFactory;
 use BasicTablePackage\Controller\ActionRegistry;
 use BasicTablePackage\Controller\ActionRegistryFactory;
 use BasicTablePackage\Controller\Renderer;
+use BasicTablePackage\Controller\Validation\ValidationConfiguration;
+use BasicTablePackage\Controller\Validation\ValidationConfigurationFactory;
 use BasicTablePackage\Controller\VariableSetter;
 use BasicTablePackage\Test\Adapters\DefaultContext;
 use BasicTablePackage\Test\Adapters\DefaultRenderer;

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace BasicTablePackage\Controller\ActionProcessors;
+namespace BasicTablePackage\Controller\Validation;
 
 
 use function BasicTablePackage\Lib\collect as collect;

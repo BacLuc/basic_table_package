@@ -1,7 +1,7 @@
 <?php
 
 
-namespace BasicTablePackage\Controller\ActionProcessors;
+namespace BasicTablePackage\Controller\Validation;
 
 
 class TextFieldValidator implements FieldValidator
