@@ -4,6 +4,8 @@
 namespace BasicTablePackage\Adapters\Concrete5;
 
 
+use BasicTablePackage\Controller\ActionProcessors\ValidationConfiguration;
+use BasicTablePackage\Controller\ActionProcessors\ValidationConfigurationFactory;
 use BasicTablePackage\Controller\ActionRegistry;
 use BasicTablePackage\Controller\ActionRegistryFactory;
 use BasicTablePackage\Controller\Renderer;
@@ -40,6 +42,9 @@ class DIContainerFactory
             }),
             ActionRegistry::class             => factory(function (Container $container) {
                 return $container->get(ActionRegistryFactory::class)->createActionRegistry();
+            }),
+            ValidationConfiguration::class    => factory(function (Container $container) {
+                return $container->get(ValidationConfigurationFactory::class)->createConfiguration();
             }),
             FormViewFieldConfiguration::class => factory(function (Container $container) {
                 return $container->get(FormViewConfigurationFactory::class)->createConfiguration();

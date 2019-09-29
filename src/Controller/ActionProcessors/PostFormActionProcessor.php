@@ -13,13 +13,25 @@ class PostFormActionProcessor implements ActionProcessor
      * @var ShowTableActionProcessor
      */
     private $showTableActionProcessor;
+    /**
+     * @var Validator
+     */
+    private $validator;
+    /**
+     * @var ShowFormActionProcessor
+     */
+    private $showFormActionProcessor;
 
     /**
      * PostFormActionProcessor constructor.
      */
-    public function __construct (ShowTableActionProcessor $showTableActionProcessor)
+    public function __construct (ShowTableActionProcessor $showTableActionProcessor,
+                                 Validator $validator,
+                                 ShowFormActionProcessor $showFormActionProcessor)
     {
         $this->showTableActionProcessor = $showTableActionProcessor;
+        $this->validator = $validator;
+        $this->showFormActionProcessor = $showFormActionProcessor;
     }
 
     function getName (): string
@@ -29,7 +41,13 @@ class PostFormActionProcessor implements ActionProcessor
 
     function process (array $get, array $post)
     {
-        $this->showTableActionProcessor->process($get, $post);
+        $validationResult = $this->validator->validate($post);
+        if (!$validationResult->isError()) {
+            $this->showTableActionProcessor->process($get, $post);
+        }
+        else {
+            $this->showFormActionProcessor->process($get, $post);
+        }
     }
 
 }
