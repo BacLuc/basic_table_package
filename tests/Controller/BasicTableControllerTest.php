@@ -82,8 +82,8 @@ class BasicTableControllerTest extends TestCase
     public function test_show_form_view ()
     {
         $formView =
-            new FormView([ new TextField(self::HEADER_1, , self::TEST_1),
-                           new TextField(self::HEADER_2, , self::TEST_2),
+            new FormView([ new TextField(self::HEADER_1, self::HEADER_1, self::TEST_1),
+                           new TextField(self::HEADER_2, self::HEADER_1, self::TEST_2),
                          ]);
 
         $this->formViewService->expects($this->once())->method('getFormView')->willReturn($formView);
@@ -103,6 +103,23 @@ class BasicTableControllerTest extends TestCase
         $this->assertThat($output, $this->stringContains(self::HEADER_2));
         $this->assertThat($output, $this->stringContains(self::TEST_1));
         $this->assertThat($output, $this->stringContains(self::TEST_2));
+    }
+
+    public function testSubmitForm ()
+    {
+        $row1 = new Row([ self::TEST_1, self::TEST_2 ]);
+        $row2 = new Row([ self::TEST_3, self::TEST_4 ]);
+        $tableView = new TableView([ self::HEADER_1, self::HEADER_2 ], [ $row1, $row2 ]);
+
+        $this->tableViewService->expects($this->once())->method('getTableView')->willReturn($tableView);
+
+        $this->container->set(TableViewService::class, value($this->tableViewService));
+
+        /**
+         * @var $basicTableController BasicTableController
+         */
+        $basicTableController = $this->container->get(BasicTableController::class);
+        $basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], [ "value" => "test" ]);
     }
 
 }

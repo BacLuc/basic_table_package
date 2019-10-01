@@ -12,8 +12,11 @@ use BasicTablePackage\Controller\Validation\ValidationConfigurationFactory;
 use BasicTablePackage\Controller\ValuePersisters\PersistorConfiguration;
 use BasicTablePackage\Controller\ValuePersisters\PersistorConfigurationFactory;
 use BasicTablePackage\Controller\VariableSetter;
+use BasicTablePackage\Entity\ExampleEntity;
+use BasicTablePackage\Entity\Repository;
 use BasicTablePackage\Test\Adapters\DefaultContext;
 use BasicTablePackage\Test\Adapters\DefaultRenderer;
+use BasicTablePackage\Test\Entity\InMemoryRepository;
 use BasicTablePackage\View\FormView\FormViewConfigurationFactory;
 use BasicTablePackage\View\FormView\FormViewFieldConfiguration;
 use BasicTablePackage\View\ViewActionRegistry;
@@ -31,17 +34,18 @@ class DIContainerFactory
     {
         $containerBuilder = new ContainerBuilder();
         $definitions = [
-            EntityManager::class              => value($entityManager),
-            VariableSetter::class             => autowire(DefaultContext::class),
-            DefaultContext::class             => get(VariableSetter::class),
-            Renderer::class                   => autowire(DefaultRenderer::class),
-            ViewActionRegistry::class         => factory(function (Container $container) {
+            EntityManager::class           => value($entityManager),
+            VariableSetter::class          => autowire(DefaultContext::class),
+            DefaultContext::class          => get(VariableSetter::class),
+            Renderer::class                => autowire(DefaultRenderer::class),
+            Repository::class              => value(new InMemoryRepository(ExampleEntity::class)),
+            ViewActionRegistry::class      => factory(function (Container $container) {
                 return $container->get(ViewActionRegistryFactory::class)->createActionRegistry();
             }),
-            ActionRegistry::class             => factory(function (Container $container) {
+            ActionRegistry::class          => factory(function (Container $container) {
                 return $container->get(ActionRegistryFactory::class)->createActionRegistry();
             }),
-            ValidationConfiguration::class    => factory(function (Container $container) {
+            ValidationConfiguration::class => factory(function (Container $container) {
                 return $container->get(ValidationConfigurationFactory::class)->createConfiguration();
             }),
             FormViewFieldConfiguration::class => factory(function (Container $container) {
