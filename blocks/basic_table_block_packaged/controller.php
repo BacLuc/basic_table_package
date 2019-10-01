@@ -7,6 +7,8 @@ use BasicTablePackage\Controller\ActionProcessor;
 use BasicTablePackage\Controller\ActionRegistryFactory;
 use BasicTablePackage\Controller\BasicTableController;
 use Concrete\Core\Block\BlockController;
+use Concrete\Core\Page\Page;
+use Concrete\Core\Routing\Redirect;
 use Concrete\Package\BasicTablePackage\Controller as PackageController;
 use DI\DependencyException;
 use DI\NotFoundException;
@@ -34,12 +36,16 @@ class Controller extends BlockController
     }
 
     /**
+     * Attention: all action method are called twice.
+     * Because this is a form submission, we stop after the function is executed
      * @throws DependencyException
      * @throws NotFoundException
      */
     public function action_post_form ()
     {
         $this->processAction($this->createBasicTableController()->getActionFor(ActionRegistryFactory::POST_FORM));
+        Redirect::page(Page::getCurrentPage())->send();
+        exit();
     }
 
     /**
