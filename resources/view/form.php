@@ -15,11 +15,12 @@
                     value="save"><?= t("save") ?></button>
         </div>
         <div class="col-xs-6 col-sm-2">
-            <button class="btn ccm-input-submit btn-block">
-                <a href="<?php echo $this->action('cancel_form') ?>">
+            <a href="<?php echo $this->action('cancel_form') ?>">
+                <button type="button" class="btn ccm-input-submit ccm-button btn-block">
                     <?= t("cancel") ?>
-                </a>
-            </button>
+                </button>
+            </a>
+
         </div>
     </div>
 </form>
