@@ -19,6 +19,8 @@ use BasicTablePackage\Test\Adapters\DefaultRenderer;
 use BasicTablePackage\Test\Entity\InMemoryRepository;
 use BasicTablePackage\View\FormView\FormViewConfigurationFactory;
 use BasicTablePackage\View\FormView\FormViewFieldConfiguration;
+use BasicTablePackage\View\TableView\TableViewConfigurationFactory;
+use BasicTablePackage\View\TableView\TableViewFieldConfiguration;
 use BasicTablePackage\View\ViewActionRegistry;
 use BasicTablePackage\View\ViewActionRegistryFactory;
 use DI\Container;
@@ -34,24 +36,27 @@ class DIContainerFactory
     {
         $containerBuilder = new ContainerBuilder();
         $definitions = [
-            EntityManager::class           => value($entityManager),
+            EntityManager::class               => value($entityManager),
             VariableSetter::class          => autowire(DefaultContext::class),
             DefaultContext::class          => get(VariableSetter::class),
             Renderer::class                => autowire(DefaultRenderer::class),
-            Repository::class              => value(new InMemoryRepository(ExampleEntity::class)),
-            ViewActionRegistry::class      => factory(function (Container $container) {
+            Repository::class                  => value(new InMemoryRepository(ExampleEntity::class)),
+            ViewActionRegistry::class          => factory(function (Container $container) {
                 return $container->get(ViewActionRegistryFactory::class)->createActionRegistry();
             }),
-            ActionRegistry::class          => factory(function (Container $container) {
+            ActionRegistry::class              => factory(function (Container $container) {
                 return $container->get(ActionRegistryFactory::class)->createActionRegistry();
             }),
-            ValidationConfiguration::class => factory(function (Container $container) {
+            TableViewFieldConfiguration::class => factory(function (Container $container) {
+                return $container->get(TableViewConfigurationFactory::class)->createConfiguration();
+            }),
+            ValidationConfiguration::class     => factory(function (Container $container) {
                 return $container->get(ValidationConfigurationFactory::class)->createConfiguration();
             }),
-            FormViewFieldConfiguration::class => factory(function (Container $container) {
+            FormViewFieldConfiguration::class  => factory(function (Container $container) {
                 return $container->get(FormViewConfigurationFactory::class)->createConfiguration();
             }),
-            PersistorConfiguration::class     => factory(function (Container $container) {
+            PersistorConfiguration::class      => factory(function (Container $container) {
                 return $container->get(PersistorConfigurationFactory::class)->createConfiguration();
             }),
         ];

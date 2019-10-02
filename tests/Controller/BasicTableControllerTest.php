@@ -122,5 +122,29 @@ class BasicTableControllerTest extends TestCase
         $basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], [ "value" => "test" ]);
     }
 
+    public function test_when_form_is_submitted_then_new_entry_is_available ()
+    {
+        /**
+         * @var BasicTableController $basicTableController
+         */
+        $basicTableController = $this->container->get(BasicTableController::class);
+
+        ob_start();
+        $basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
+
+        $output = ob_get_clean();
+        $this->assertThat($output, $this->stringContains("value"));
+        $this->assertStringNotContainsString(self::TEST_1, $output);
+
+        ob_start();
+        $basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], [ "value" => self::TEST_1 ]);
+        $basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
+
+        $output = ob_get_clean();
+        $this->assertThat($output, $this->stringContains("value"));
+        $this->assertThat($output, $this->stringContains(self::TEST_1));
+
+    }
+
 }
 

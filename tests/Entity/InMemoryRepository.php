@@ -30,6 +30,13 @@ class InMemoryRepository implements Repository
 
     public function persist ($entity)
     {
-        // TODO: Implement persist() method.
+        $this->entites = $this->entites->add($entity);
     }
+
+    public function getAll ()
+    {
+        return $this->entites->toArray();
+    }
+
+
 }

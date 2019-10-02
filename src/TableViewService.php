@@ -4,49 +4,42 @@
 namespace BasicTablePackage;
 
 
+use BasicTablePackage\Entity\Repository;
 use BasicTablePackage\View\TableView\Field;
 use BasicTablePackage\View\TableView\Row;
 use BasicTablePackage\View\TableView\TableView;
-use BasicTablePackage\View\TableView\TableViewConfigurationFactory;
-use Doctrine\ORM\EntityManager;
+use BasicTablePackage\View\TableView\TableViewFieldConfiguration;
 use Tightenco\Collect\Support\Collection;
 use function BasicTablePackage\Lib\collect as collect;
 
 class TableViewService
 {
-    const HEADER_2 = "header2";
+
     /**
-     * @var EntityManager
+     * @var Repository
      */
-    private $entityManager;
-    private $tableViewConfigurationFactory;
-    private $configuration;
+    private $repository;
+    private $tableViewFieldConfiguration;
 
     /**
      * TableViewService constructor.
      */
-    public function __construct (EntityManager $entityManager)
+    public function __construct (Repository $repository, TableViewFieldConfiguration $tableViewFieldConfiguration)
     {
-        $this->entityManager = $entityManager;
-        $this->tableViewConfigurationFactory = new TableViewConfigurationFactory();
-        $this->configuration = $this->tableViewConfigurationFactory->createConfiguration();
+        $this->repository = $repository;
+        $this->tableViewFieldConfiguration = $tableViewFieldConfiguration;
     }
 
 
     public function getTableView (): TableView
     {
-        $query = $this->entityManager->createQuery(
-        /** @lang DQL */
-            "SELECT exampleEntity FROM BasicTablePackage\Entity\ExampleEntity exampleEntity");
-
-        $result = $query->getResult();
-
-        $headers = collect($this->configuration)->keys()->toArray();
+        $result = $this->repository->getAll();
+        $headers = collect($this->tableViewFieldConfiguration)->keys()->toArray();
         $tableView = new TableView($headers, []);
         if ($result != null) {
             $rows = collect($result)
                 ->map(function ($entity) {
-                    return collect($this->configuration)
+                    return collect($this->tableViewFieldConfiguration)
                         ->map(function ($fieldFactory, $name) use ($entity) {
                             return call_user_func($fieldFactory, $entity->{$name});
                         })->map(function ($field) { return self::toTableView($field); });
