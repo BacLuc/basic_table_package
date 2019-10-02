@@ -37,4 +37,12 @@ class EntityManagerRepository implements Repository
             $em->persist($entity);
         });
     }
+
+    public function getAll ()
+    {
+        $query = $this->entityManager->createQuery(
+        /** @lang DQL */
+            "SELECT entity FROM $this->className entity");
+        return $query->getResult();
+    }
 }

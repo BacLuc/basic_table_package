@@ -17,6 +17,8 @@ use BasicTablePackage\Entity\ExampleEntity;
 use BasicTablePackage\Entity\Repository;
 use BasicTablePackage\View\FormView\FormViewConfigurationFactory;
 use BasicTablePackage\View\FormView\FormViewFieldConfiguration;
+use BasicTablePackage\View\TableView\TableViewConfigurationFactory;
+use BasicTablePackage\View\TableView\TableViewFieldConfiguration;
 use BasicTablePackage\View\ViewActionRegistry;
 use BasicTablePackage\View\ViewActionRegistryFactory;
 use Concrete\Core\Block\BlockController;
@@ -38,25 +40,28 @@ class DIContainerFactory
     {
         $containerBuilder = new ContainerBuilder();
         $definitions = [
-            EntityManager::class              => value($entityManager),
-            Repository::class                 => value(new EntityManagerRepository($entityManager,
-                                                                                   ExampleEntity::class)),
-            BlockController::class            => value($controller),
-            VariableSetter::class             => autowire(Concrete5VariableSetter::class),
-            Renderer::class                   => autowire(Concrete5Renderer::class),
-            ViewActionRegistry::class         => factory(function (Container $container) {
+            EntityManager::class               => value($entityManager),
+            Repository::class                  => value(new EntityManagerRepository($entityManager,
+                                                                                    ExampleEntity::class)),
+            BlockController::class             => value($controller),
+            VariableSetter::class              => autowire(Concrete5VariableSetter::class),
+            Renderer::class                    => autowire(Concrete5Renderer::class),
+            ViewActionRegistry::class          => factory(function (Container $container) {
                 return $container->get(ViewActionRegistryFactory::class)->createActionRegistry();
             }),
-            ActionRegistry::class             => factory(function (Container $container) {
+            ActionRegistry::class              => factory(function (Container $container) {
                 return $container->get(ActionRegistryFactory::class)->createActionRegistry();
             }),
-            ValidationConfiguration::class    => factory(function (Container $container) {
+            TableViewFieldConfiguration::class => factory(function (Container $container) {
+                return $container->get(TableViewConfigurationFactory::class)->createConfiguration();
+            }),
+            ValidationConfiguration::class     => factory(function (Container $container) {
                 return $container->get(ValidationConfigurationFactory::class)->createConfiguration();
             }),
-            FormViewFieldConfiguration::class => factory(function (Container $container) {
+            FormViewFieldConfiguration::class  => factory(function (Container $container) {
                 return $container->get(FormViewConfigurationFactory::class)->createConfiguration();
             }),
-            PersistorConfiguration::class     => factory(function (Container $container) {
+            PersistorConfiguration::class      => factory(function (Container $container) {
                 return $container->get(PersistorConfigurationFactory::class)->createConfiguration();
             }),
 
