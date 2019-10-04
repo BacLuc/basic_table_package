@@ -38,7 +38,7 @@ class Controller extends Package
 
     public function getPackageAutoloaderRegistries ()
     {
-        require $this->getPackagePath() . '/vendor/autoload.php';
+        return ["src" => "BasicTablePackage"];
     }
 
     public function install()

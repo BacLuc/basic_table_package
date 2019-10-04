@@ -5,6 +5,7 @@ namespace BasicTablePackage\Test\Entity;
 
 
 use BasicTablePackage\Entity\Repository;
+use function BasicTablePackage\Lib\collect as collect;
 
 class InMemoryRepository implements Repository
 {
