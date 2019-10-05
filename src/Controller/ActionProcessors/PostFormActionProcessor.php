@@ -16,10 +16,6 @@ use function BasicTablePackage\Lib\collect as collect;
 class PostFormActionProcessor implements ActionProcessor
 {
     /**
-     * @var ShowTableActionProcessor
-     */
-    private $showTableActionProcessor;
-    /**
      * @var Validator
      */
     private $validator;
@@ -39,13 +35,11 @@ class PostFormActionProcessor implements ActionProcessor
     /**
      * PostFormActionProcessor constructor.
      */
-    public function __construct (ShowTableActionProcessor $showTableActionProcessor,
-                                 Validator $validator,
+    public function __construct (Validator $validator,
                                  ShowNewEntryFormActionProcessor $showFormActionProcessor,
                                  Repository $repository,
                                  PersistorConfiguration $peristorConfiguration)
     {
-        $this->showTableActionProcessor = $showTableActionProcessor;
         $this->validator = $validator;
         $this->showFormActionProcessor = $showFormActionProcessor;
         $this->repository = $repository;
@@ -77,7 +71,6 @@ class PostFormActionProcessor implements ActionProcessor
                 $persistor->persist($postValues, $entity);
             }
             $this->repository->persist($entity);
-            $this->showTableActionProcessor->process($get, $post);
         }
         else {
             $this->showFormActionProcessor->process($get, $post);

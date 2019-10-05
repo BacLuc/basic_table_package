@@ -41,10 +41,7 @@ class BasicTableControllerTest extends TestCase
         $this->container = DIContainerFactory::createContainer($this->entityManager);
     }
 
-    /**
-     * @dataProvider createTableActionNames
-     */
-    public function test_sets_headers_and_rows_to_TableView_retrieved_from_TableViewService ($action)
+    public function test_sets_headers_and_rows_to_TableView_retrieved_from_TableViewService ()
     {
         $row1 = new Row(1, [ self::TEST_1, self::TEST_2 ]);
         $row2 = new Row(2, [ self::TEST_3, self::TEST_4 ]);
@@ -60,7 +57,7 @@ class BasicTableControllerTest extends TestCase
          * @var $basicTableController BasicTableController
          */
         $basicTableController = $this->container->get(BasicTableController::class);
-        $basicTableController->getActionFor($action)->process([], []);;
+        $basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);;
 
         $output = ob_get_clean();
         $this->assertThat($output, $this->stringContains(self::HEADER_1));
@@ -69,14 +66,6 @@ class BasicTableControllerTest extends TestCase
         $this->assertThat($output, $this->stringContains(self::TEST_2));
         $this->assertThat($output, $this->stringContains(self::TEST_3));
         $this->assertThat($output, $this->stringContains(self::TEST_4));
-    }
-
-    public function createTableActionNames ()
-    {
-        return [
-            [ ActionRegistryFactory::SHOW_TABLE ],
-            [ ActionRegistryFactory::POST_FORM ],
-        ];
     }
 
     public function test_show_form_view ()
@@ -103,23 +92,6 @@ class BasicTableControllerTest extends TestCase
         $this->assertThat($output, $this->stringContains(self::HEADER_2));
         $this->assertThat($output, $this->stringContains(self::TEST_1));
         $this->assertThat($output, $this->stringContains(self::TEST_2));
-    }
-
-    public function testSubmitForm ()
-    {
-        $row1 = new Row(1, [ self::TEST_1, self::TEST_2 ]);
-        $row2 = new Row(2, [ self::TEST_3, self::TEST_4 ]);
-        $tableView = new TableView([ self::HEADER_1, self::HEADER_2 ], [ $row1, $row2 ]);
-
-        $this->tableViewService->expects($this->once())->method('getTableView')->willReturn($tableView);
-
-        $this->container->set(TableViewService::class, value($this->tableViewService));
-
-        /**
-         * @var $basicTableController BasicTableController
-         */
-        $basicTableController = $this->container->get(BasicTableController::class);
-        $basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], [ "value" => "test" ]);
     }
 
     public function test_when_form_is_submitted_then_new_entry_is_available ()
@@ -189,13 +161,13 @@ class BasicTableControllerTest extends TestCase
         $this->assertThat($output, $this->stringContains(self::TEST_1));
         $this->assertThat($output, $this->stringContains("/1"));
 
+        ob_start();
         $changed_value = "changed_value";
         $basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
                              ->process([], [ "value" => $changed_value ], 1);
 
-
-        ob_start();
         $basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
+
         $output = ob_get_clean();
         $this->assertStringNotContainsString(self::TEST_1, $output);
         $this->assertThat($output, $this->stringContains("value"));
