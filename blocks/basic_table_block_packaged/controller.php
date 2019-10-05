@@ -36,14 +36,26 @@ class Controller extends BlockController
     }
 
     /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function action_edit_row_form ($ignored, $editId)
+    {
+        $this->processAction($this->createBasicTableController()
+                                  ->getActionFor(ActionRegistryFactory::EDIT_ROW_FORM),
+                             $editId);
+    }
+
+    /**
      * Attention: all action method are called twice.
      * Because this is a form submission, we stop after the function is executed
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function action_post_form ($blockId, $editId)
+    public function action_post_form ($ignored, $editId = null)
     {
-        $this->processAction($this->createBasicTableController()->getActionFor(ActionRegistryFactory::POST_FORM));
+        $this->processAction($this->createBasicTableController()->getActionFor(ActionRegistryFactory::POST_FORM),
+                             $editId);
         Redirect::page(Page::getCurrentPage())->send();
         exit();
     }
@@ -70,10 +82,11 @@ class Controller extends BlockController
         return $container->get(BasicTableController::class);
     }
 
-    private function processAction (ActionProcessor $actionProcessor)
+    private function processAction (ActionProcessor $actionProcessor, ...$additionalParams)
     {
         $actionProcessor->process($this->request->get(null) ? : [],
-                                  $this->request->post(null) ? : []);
+                                  $this->request->post(null) ? : [],
+                                  array_key_exists(0, $additionalParams) ? $additionalParams[0] : null);
     }
 
 }
