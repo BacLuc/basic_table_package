@@ -22,6 +22,9 @@ class ActionRegistryFactory
 
     /**
      * ActionRegistryFactory constructor.
+     * @param ShowTableActionProcessor $showTableActionProcessor
+     * @param ShowFormActionProcessor $showFormActionProcessor
+     * @param PostFormActionProcessor $postFormActionProcessor
      */
     public function __construct (ShowTableActionProcessor $showTableActionProcessor,
                                  ShowFormActionProcessor $showFormActionProcessor,
