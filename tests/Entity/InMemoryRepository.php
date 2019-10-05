@@ -35,6 +35,13 @@ class InMemoryRepository implements Repository
 
     public function persist ($entity)
     {
+        $foundEntity = $this->entites->first(function ($persistedEntity) use ($entity) {
+            return $persistedEntity->id === $entity->id;
+        });
+        if ($foundEntity != null) {
+            return;
+        }
+
         if ($entity->id == null) {
             $entity->id = ++ $this->autoIncrement;
         }

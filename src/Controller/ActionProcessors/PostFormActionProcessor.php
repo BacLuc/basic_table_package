@@ -64,7 +64,12 @@ class PostFormActionProcessor implements ActionProcessor
             $postValues = collect($validationResult)
                 ->keyBy(function (ValidationResultItem $validationResultItem) { return $validationResultItem->getName(); })
                 ->map(function (ValidationResultItem $validationResultItem) { return $validationResultItem->getPostValue(); });
-            $entity = $this->repository->create();
+            if (count($additionalParameters) == 1) {
+                $entity = $this->repository->getById($additionalParameters[0]);
+            }
+            else {
+                $entity = $this->repository->create();
+            }
             /**
              * @var FieldPersistor $persistor
              */
