@@ -12,6 +12,7 @@ class ActionRegistryFactory
 {
     const SHOW_TABLE       = "show_table";
     const ADD_NEW_ROW_FORM = "add_new_row_form";
+    const EDIT_ROW_FORM    = "edit_row_form";
     const POST_FORM        = "post_form";
     const CANCEL_FORM      = "cancel_form";
 

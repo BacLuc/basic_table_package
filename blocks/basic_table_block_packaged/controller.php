@@ -41,7 +41,7 @@ class Controller extends BlockController
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function action_post_form ()
+    public function action_post_form ($blockId, $editId)
     {
         $this->processAction($this->createBasicTableController()->getActionFor(ActionRegistryFactory::POST_FORM));
         Redirect::page(Page::getCurrentPage())->send();

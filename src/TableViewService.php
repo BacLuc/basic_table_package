@@ -38,6 +38,7 @@ class TableViewService
         $tableView = new TableView($headers, []);
         if ($result != null) {
             $rows = collect($result)
+                ->keyBy(function ($entity) { return $entity->id; })
                 ->map(function ($entity) {
                     return collect($this->tableViewFieldConfiguration)
                         ->map(function ($fieldFactory, $name) use ($entity) {
@@ -45,7 +46,7 @@ class TableViewService
                         })->map(function ($field) { return self::toTableView($field); });
                 })
                 ->map(function ($collection) { return self::asArray($collection); })
-                ->map(function ($field) { return new Row($field); });
+                ->map(function ($fields, $id) { return new Row($id, $fields); });
             $tableView = new TableView($headers, $rows->toArray());
         }
         return $tableView;

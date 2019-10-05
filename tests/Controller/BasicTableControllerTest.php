@@ -46,8 +46,8 @@ class BasicTableControllerTest extends TestCase
      */
     public function test_sets_headers_and_rows_to_TableView_retrieved_from_TableViewService ($action)
     {
-        $row1 = new Row([ self::TEST_1, self::TEST_2 ]);
-        $row2 = new Row([ self::TEST_3, self::TEST_4 ]);
+        $row1 = new Row(1, [ self::TEST_1, self::TEST_2 ]);
+        $row2 = new Row(2, [ self::TEST_3, self::TEST_4 ]);
         $tableView = new TableView([ self::HEADER_1, self::HEADER_2 ], [ $row1, $row2 ]);
 
         $this->tableViewService->expects($this->once())->method('getTableView')->willReturn($tableView);
@@ -107,8 +107,8 @@ class BasicTableControllerTest extends TestCase
 
     public function testSubmitForm ()
     {
-        $row1 = new Row([ self::TEST_1, self::TEST_2 ]);
-        $row2 = new Row([ self::TEST_3, self::TEST_4 ]);
+        $row1 = new Row(1, [ self::TEST_1, self::TEST_2 ]);
+        $row2 = new Row(2, [ self::TEST_3, self::TEST_4 ]);
         $tableView = new TableView([ self::HEADER_1, self::HEADER_2 ], [ $row1, $row2 ]);
 
         $this->tableViewService->expects($this->once())->method('getTableView')->willReturn($tableView);

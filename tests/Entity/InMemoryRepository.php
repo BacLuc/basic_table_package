@@ -10,6 +10,10 @@ use function BasicTablePackage\Lib\collect as collect;
 class InMemoryRepository implements Repository
 {
     /**
+     * @var int
+     */
+    private $autoIncrement = 0;
+    /**
      * @var string
      */
     private $classname;
@@ -31,6 +35,9 @@ class InMemoryRepository implements Repository
 
     public function persist ($entity)
     {
+        if ($entity->id == null) {
+            $entity->id = ++ $this->autoIncrement;
+        }
         $this->entites = $this->entites->add($entity);
     }
 
