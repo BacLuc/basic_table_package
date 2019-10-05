@@ -58,4 +58,12 @@ class EntityManagerRepository implements Repository
         return $result != null && is_array($result) && array_key_exists(0, $result) ? $result[0] : null;
     }
 
+    public function delete ($toDeleteEntity)
+    {
+        $this->entityManager->transactional(function (EntityManager $em) use ($toDeleteEntity) {
+            $em->remove($toDeleteEntity);
+        });
+    }
+
+
 }

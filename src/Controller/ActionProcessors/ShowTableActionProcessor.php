@@ -56,7 +56,9 @@ class ShowTableActionProcessor implements ActionProcessor
         $this->variableSetter->set("actions",
                                    [ $this->viewActionRegistry->getByName(ActionRegistryFactory::ADD_NEW_ROW_FORM) ]);
         $this->variableSetter->set("rowactions",
-                                   [ $this->viewActionRegistry->getByName(ActionRegistryFactory::EDIT_ROW_FORM) ]);
+                                   [ $this->viewActionRegistry->getByName(ActionRegistryFactory::EDIT_ROW_FORM),
+                                     $this->viewActionRegistry->getByName(ActionRegistryFactory::DELETE_ENTRY),
+                                   ]);
         $this->renderer->render(self::TABLE_VIEW);
     }
 

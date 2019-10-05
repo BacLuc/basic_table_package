@@ -61,6 +61,20 @@ class Controller extends BlockController
     }
 
     /**
+     * @param $ignored
+     * @param $toDeleteId
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function action_delete_entry ($ignored, $toDeleteId)
+    {
+        $this->processAction($this->createBasicTableController()->getActionFor(ActionRegistryFactory::DELETE_ENTRY),
+                             $toDeleteId);
+        Redirect::page(Page::getCurrentPage())->send();
+        exit();
+    }
+
+    /**
      * @throws DependencyException
      * @throws NotFoundException
      */

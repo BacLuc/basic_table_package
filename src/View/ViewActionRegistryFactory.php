@@ -24,6 +24,11 @@ class ViewActionRegistryFactory
                                      "Edit Entry",
                                      "Edit Entry",
                                      "fa fa-pencil"),
+            new ViewActionDefinition(ActionRegistryFactory::DELETE_ENTRY,
+                                     "delete",
+                                     "Delete Entry",
+                                     "Delete Entry",
+                                     "fa fa-trash"),
         ];
         return new ViewActionRegistry($actions);
     }
