@@ -146,5 +146,31 @@ class BasicTableControllerTest extends TestCase
 
     }
 
+    public function test_edit_form_shows_value_of_existing_entry ()
+    {
+        /**
+         * @var BasicTableController $basicTableController
+         */
+        $basicTableController = $this->container->get(BasicTableController::class);
+
+        ob_start();
+        $basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], [ "value" => self::TEST_1 ]);
+        $basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
+
+        $output = ob_get_clean();
+        $this->assertThat($output, $this->stringContains("value"));
+        $this->assertThat($output, $this->stringContains(self::TEST_1));
+        $this->assertThat($output, $this->stringContains("/1"));
+
+        ob_start();
+        $basicTableController->getActionFor(ActionRegistryFactory::EDIT_ROW_FORM)
+                             ->process([], [], 1);
+
+        $output = ob_get_clean();
+        $this->assertThat($output, $this->stringContains("value"));
+        $this->assertThat($output, $this->stringContains(self::TEST_1));
+        $this->assertThat($output, $this->stringContains("action=post_form/1"));
+    }
+
 }
 

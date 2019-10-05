@@ -10,7 +10,7 @@ use BasicTablePackage\Controller\Renderer;
 use BasicTablePackage\Controller\VariableSetter;
 use BasicTablePackage\FormViewService;
 
-class ShowFormActionProcessor implements ActionProcessor
+class ShowEditEntryFormActionProcessor implements ActionProcessor
 {
     const FORM_VIEW = "view/form";
     /**
@@ -42,13 +42,18 @@ class ShowFormActionProcessor implements ActionProcessor
 
     function getName (): string
     {
-        return ActionRegistryFactory::ADD_NEW_ROW_FORM;
+        return ActionRegistryFactory::EDIT_ROW_FORM;
     }
 
-    function process (array $get, array $post)
+    function process (array $get, array $post, ...$additionalParameters)
     {
-        $formView = $this->formViewService->getFormView();
+        $editId = null;
+        if (count($additionalParameters) == 1) {
+            $editId = $additionalParameters[0];
+        }
+        $formView = $this->formViewService->getFormView($editId);
         $this->variableSetter->set("fields", $formView->getFields());
+        $this->variableSetter->set("editId", $editId);
         $this->renderer->render(self::FORM_VIEW);
     }
 

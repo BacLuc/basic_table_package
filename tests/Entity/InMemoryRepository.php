@@ -46,5 +46,10 @@ class InMemoryRepository implements Repository
         return $this->entites->toArray();
     }
 
+    public function getById (int $id)
+    {
+        return $this->entites->first(function ($entity) use ($id) { return $entity->id === $id; });
+    }
+
 
 }

@@ -24,7 +24,7 @@ class PostFormActionProcessor implements ActionProcessor
      */
     private $validator;
     /**
-     * @var ShowFormActionProcessor
+     * @var ShowNewEntryFormActionProcessor
      */
     private $showFormActionProcessor;
     /**
@@ -41,7 +41,7 @@ class PostFormActionProcessor implements ActionProcessor
      */
     public function __construct (ShowTableActionProcessor $showTableActionProcessor,
                                  Validator $validator,
-                                 ShowFormActionProcessor $showFormActionProcessor,
+                                 ShowNewEntryFormActionProcessor $showFormActionProcessor,
                                  Repository $repository,
                                  PersistorConfiguration $peristorConfiguration)
     {
@@ -57,7 +57,7 @@ class PostFormActionProcessor implements ActionProcessor
         return ActionRegistryFactory::POST_FORM;
     }
 
-    function process (array $get, array $post)
+    function process (array $get, array $post, ...$additionalParameters)
     {
         $validationResult = $this->validator->validate($post);
         if (!$validationResult->isError()) {

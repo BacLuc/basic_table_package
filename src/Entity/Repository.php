@@ -14,4 +14,6 @@ interface Repository
      * @return array of entities or null
      */
     public function getAll ();
+
+    public function getById (int $id);
 }

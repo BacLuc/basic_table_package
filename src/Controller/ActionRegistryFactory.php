@@ -5,7 +5,8 @@ namespace BasicTablePackage\Controller;
 
 
 use BasicTablePackage\Controller\ActionProcessors\PostFormActionProcessor;
-use BasicTablePackage\Controller\ActionProcessors\ShowFormActionProcessor;
+use BasicTablePackage\Controller\ActionProcessors\ShowEditEntryFormActionProcessor;
+use BasicTablePackage\Controller\ActionProcessors\ShowNewEntryFormActionProcessor;
 use BasicTablePackage\Controller\ActionProcessors\ShowTableActionProcessor;
 
 class ActionRegistryFactory
@@ -24,15 +25,18 @@ class ActionRegistryFactory
     /**
      * ActionRegistryFactory constructor.
      * @param ShowTableActionProcessor $showTableActionProcessor
-     * @param ShowFormActionProcessor $showFormActionProcessor
+     * @param ShowNewEntryFormActionProcessor $showFormActionProcessor
      * @param PostFormActionProcessor $postFormActionProcessor
+     * @param ShowEditEntryFormActionProcessor $showEditEntryFormActionProcessor
      */
     public function __construct (ShowTableActionProcessor $showTableActionProcessor,
-                                 ShowFormActionProcessor $showFormActionProcessor,
-                                 PostFormActionProcessor $postFormActionProcessor)
+                                 ShowNewEntryFormActionProcessor $showFormActionProcessor,
+                                 PostFormActionProcessor $postFormActionProcessor,
+                                 ShowEditEntryFormActionProcessor $showEditEntryFormActionProcessor)
     {
         $this->actions = [
             $showTableActionProcessor, $showFormActionProcessor, $postFormActionProcessor,
+            $showEditEntryFormActionProcessor,
         ];
     }
 

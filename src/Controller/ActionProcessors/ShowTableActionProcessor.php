@@ -48,7 +48,7 @@ class ShowTableActionProcessor implements ActionProcessor
     }
 
 
-    function process (array $get, array $post)
+    function process (array $get, array $post, ...$additionalParameters)
     {
         $tableView = $this->tableViewService->getTableView();
         $this->variableSetter->set("headers", $tableView->getHeaders());
