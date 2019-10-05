@@ -16,4 +16,6 @@ interface Repository
     public function getAll ();
 
     public function getById (int $id);
+
+    public function delete ($toDeleteEntity);
 }

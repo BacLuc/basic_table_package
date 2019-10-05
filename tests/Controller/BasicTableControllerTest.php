@@ -203,5 +203,31 @@ class BasicTableControllerTest extends TestCase
         $this->assertThat($output, $this->stringContains("/1"));
     }
 
+    public function test_delete_entry ()
+    {
+        /**
+         * @var BasicTableController $basicTableController
+         */
+        $basicTableController = $this->container->get(BasicTableController::class);
+
+        ob_start();
+        $basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], [ "value" => self::TEST_1 ]);
+        $basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
+
+        $output = ob_get_clean();
+        $this->assertThat($output, $this->stringContains("value"));
+        $this->assertThat($output, $this->stringContains(self::TEST_1));
+        $this->assertThat($output, $this->stringContains("/1"));
+
+        ob_start();
+        $basicTableController->getActionFor(ActionRegistryFactory::DELETE_ENTRY)
+                             ->process([], [], 1);
+
+        $basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
+        $output = ob_get_clean();
+        $this->assertThat($output, $this->stringContains("value"));
+        $this->assertStringNotContainsString(self::TEST_1, $output);
+    }
+
 }
 

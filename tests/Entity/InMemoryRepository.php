@@ -58,5 +58,11 @@ class InMemoryRepository implements Repository
         return $this->entites->first(function ($entity) use ($id) { return $entity->id === $id; });
     }
 
+    public function delete ($toDeleteEntity)
+    {
+        $this->entites = $this->entites->filter(function ($entity) use ($toDeleteEntity) {
+            return $entity->id !== $toDeleteEntity->id;
+        });
+    }
 
 }

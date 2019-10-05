@@ -4,6 +4,7 @@
 namespace BasicTablePackage\Controller;
 
 
+use BasicTablePackage\Controller\ActionProcessors\DeleteEntryActionProcessor;
 use BasicTablePackage\Controller\ActionProcessors\PostFormActionProcessor;
 use BasicTablePackage\Controller\ActionProcessors\ShowEditEntryFormActionProcessor;
 use BasicTablePackage\Controller\ActionProcessors\ShowNewEntryFormActionProcessor;
@@ -15,6 +16,7 @@ class ActionRegistryFactory
     const ADD_NEW_ROW_FORM = "add_new_row_form";
     const EDIT_ROW_FORM    = "edit_row_form";
     const POST_FORM        = "post_form";
+    const DELETE_ENTRY     = "delete_entry";
     const CANCEL_FORM      = "cancel_form";
 
     /**
@@ -32,11 +34,12 @@ class ActionRegistryFactory
     public function __construct (ShowTableActionProcessor $showTableActionProcessor,
                                  ShowNewEntryFormActionProcessor $showFormActionProcessor,
                                  PostFormActionProcessor $postFormActionProcessor,
-                                 ShowEditEntryFormActionProcessor $showEditEntryFormActionProcessor)
+                                 ShowEditEntryFormActionProcessor $showEditEntryFormActionProcessor,
+                                 DeleteEntryActionProcessor $deleteEntryActionProcessor)
     {
         $this->actions = [
             $showTableActionProcessor, $showFormActionProcessor, $postFormActionProcessor,
-            $showEditEntryFormActionProcessor,
+            $showEditEntryFormActionProcessor, $deleteEntryActionProcessor,
         ];
     }
 
