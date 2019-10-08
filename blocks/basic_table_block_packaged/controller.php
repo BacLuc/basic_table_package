@@ -84,6 +84,17 @@ class Controller extends BlockController
     }
 
     /**
+     * @param $ignored
+     * @param $toShowId
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function action_show_details($ignored, $toShowId)
+    {
+        $this->processAction($this->createBasicTableController()->getActionFor(ActionRegistryFactory::SHOW_ENTRY_DETAILS), $toShowId);
+    }
+
+    /**
      * @return BasicTableController
      * @throws DependencyException
      * @throws NotFoundException

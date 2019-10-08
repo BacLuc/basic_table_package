@@ -29,6 +29,11 @@ class ViewActionRegistryFactory
                                      "Delete Entry",
                                      "Delete Entry",
                                      "fa fa-trash"),
+            new ViewActionDefinition(ActionRegistryFactory::SHOW_ENTRY_DETAILS,
+                "details",
+                "Show Entry Details",
+                "Show Entry Details",
+                "fa fa-search-plus"),
         ];
         return new ViewActionRegistry($actions);
     }
