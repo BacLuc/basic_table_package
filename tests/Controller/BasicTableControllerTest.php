@@ -94,30 +94,6 @@ class BasicTableControllerTest extends TestCase
         $this->assertThat($output, $this->stringContains(self::TEST_2));
     }
 
-    public function test_when_form_is_submitted_then_new_entry_is_available ()
-    {
-        /**
-         * @var BasicTableController $basicTableController
-         */
-        $basicTableController = $this->container->get(BasicTableController::class);
-
-        ob_start();
-        $basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
-
-        $output = ob_get_clean();
-        $this->assertThat($output, $this->stringContains("value"));
-        $this->assertStringNotContainsString(self::TEST_1, $output);
-
-        ob_start();
-        $basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], [ "value" => self::TEST_1 ]);
-        $basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
-
-        $output = ob_get_clean();
-        $this->assertThat($output, $this->stringContains("value"));
-        $this->assertThat($output, $this->stringContains(self::TEST_1));
-
-    }
-
     public function test_edit_form_shows_value_of_existing_entry ()
     {
         /**
@@ -142,37 +118,6 @@ class BasicTableControllerTest extends TestCase
         $this->assertThat($output, $this->stringContains("value"));
         $this->assertThat($output, $this->stringContains(self::TEST_1));
         $this->assertThat($output, $this->stringContains("action=\"post_form/1\""));
-    }
-
-
-    public function test_editing_an_entry_changes_entry_in_repositry ()
-    {
-        /**
-         * @var BasicTableController $basicTableController
-         */
-        $basicTableController = $this->container->get(BasicTableController::class);
-
-        ob_start();
-        $basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], [ "value" => self::TEST_1 ]);
-        $basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
-
-        $output = ob_get_clean();
-        $this->assertThat($output, $this->stringContains("value"));
-        $this->assertThat($output, $this->stringContains(self::TEST_1));
-        $this->assertThat($output, $this->stringContains("/1"));
-
-        ob_start();
-        $changed_value = "changed_value";
-        $basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
-                             ->process([], [ "value" => $changed_value ], 1);
-
-        $basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
-
-        $output = ob_get_clean();
-        $this->assertStringNotContainsString(self::TEST_1, $output);
-        $this->assertThat($output, $this->stringContains("value"));
-        $this->assertThat($output, $this->stringContains($changed_value));
-        $this->assertThat($output, $this->stringContains("/1"));
     }
 
     public function test_show_details()
