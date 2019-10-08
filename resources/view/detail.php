@@ -12,7 +12,7 @@
     <div class="col-xs-6 col-sm-2">
         <a href="<?php echo $this->action('cancel_form') ?>">
             <button type="button" class="btn ccm-input-submit ccm-button btn-block">
-                <?= t("cancel") ?>
+                <?= t("back") ?>
             </button>
         </a>
 
