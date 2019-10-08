@@ -6,8 +6,6 @@ namespace BasicTablePackage\Controller;
 use BasicTablePackage\FormViewService;
 use BasicTablePackage\TableViewService;
 use BasicTablePackage\Test\DIContainerFactory;
-use BasicTablePackage\View\FormView\FormView;
-use BasicTablePackage\View\FormView\TextField;
 use BasicTablePackage\View\TableView\Row;
 use BasicTablePackage\View\TableView\TableView;
 use DI\Container;
@@ -66,32 +64,6 @@ class BasicTableControllerTest extends TestCase
         $this->assertThat($output, $this->stringContains(self::TEST_2));
         $this->assertThat($output, $this->stringContains(self::TEST_3));
         $this->assertThat($output, $this->stringContains(self::TEST_4));
-    }
-
-    public function test_show_form_view ()
-    {
-        $formView =
-            new FormView([ new TextField(self::HEADER_1, self::HEADER_1, self::TEST_1),
-                           new TextField(self::HEADER_2, self::HEADER_1, self::TEST_2),
-                         ]);
-
-        $this->formViewService->expects($this->once())->method('getFormView')->willReturn($formView);
-
-        $this->container->set(FormViewService::class, value($this->formViewService));
-
-
-        ob_start();
-        /**
-         * @var $basicTableController BasicTableController
-         */
-        $basicTableController = $this->container->get(BasicTableController::class);
-        $basicTableController->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM)->process([], []);
-
-        $output = ob_get_clean();
-        $this->assertThat($output, $this->stringContains(self::HEADER_1));
-        $this->assertThat($output, $this->stringContains(self::HEADER_2));
-        $this->assertThat($output, $this->stringContains(self::TEST_1));
-        $this->assertThat($output, $this->stringContains(self::TEST_2));
     }
 }
 

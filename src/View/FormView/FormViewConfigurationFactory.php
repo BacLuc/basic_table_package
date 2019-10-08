@@ -12,11 +12,12 @@ class FormViewConfigurationFactory
      */
     public function __construct () { }
 
-    public function createConfiguration (): FormViewFieldConfiguration
+    public function createConfiguration(): FormViewFieldConfiguration
     {
-        return new FormViewFieldConfiguration([ "value" => function ($entity) {
-            return new TextField("value", "value", $entity->value);
+        return new FormViewFieldConfiguration(["value" => function ($entity) {
+            $fieldName = "value";
+            return new TextField("value", "value", property_exists($entity, $fieldName) ? $entity->{$fieldName} : null);
         },
-                                              ]);
+        ]);
     }
 }

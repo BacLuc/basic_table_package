@@ -7,6 +7,7 @@ namespace BasicTablePackage;
 use BasicTablePackage\Entity\Repository;
 use BasicTablePackage\View\FormView\FormView;
 use BasicTablePackage\View\FormView\FormViewFieldConfiguration;
+use stdClass;
 use function BasicTablePackage\Lib\collect as collect;
 
 class FormViewService
@@ -28,7 +29,7 @@ class FormViewService
 
     public function getFormView ($editId = null): FormView
     {
-        $entity = null;
+        $entity = new stdClass();
         if ($editId != null) {
             $entity = $this->repository->getById($editId);
         }
