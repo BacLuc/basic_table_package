@@ -14,6 +14,13 @@ class TableViewConfigurationFactory
 
     public function createConfiguration (): TableViewFieldConfiguration
     {
-        return new TableViewFieldConfiguration([ "value" => function ($value) { return new TextField($value); } ]);
+        return new TableViewFieldConfiguration([
+            "value" => function ($value) {
+                return new TextField($value);
+            },
+            "intcolumn" => function ($value) {
+                return new TextField($value);
+            }
+        ]);
     }
 }

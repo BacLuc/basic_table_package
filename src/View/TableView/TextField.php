@@ -14,14 +14,14 @@ class TextField implements Field
     /**
      * TextField constructor.
      */
-    public function __construct (string $sqlValue)
+    public function __construct($sqlValue)
     {
         $this->sqlValue = $sqlValue;
     }
 
     public function getTableView (): string
     {
-        return $this->sqlValue;
+        return $this->sqlValue ?: "";
     }
 
 

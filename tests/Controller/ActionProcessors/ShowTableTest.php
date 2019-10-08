@@ -40,6 +40,7 @@ class ShowTableTest extends TestCase
 
         $output = ob_get_clean();
         $this->assertThat($output, $this->stringContains("value"));
+        $this->assertThat($output, $this->stringContains("intcolumn"));
         $this->assertThat($output, $this->stringContains(self::TEST_1));
         $this->assertThat($output, $this->stringContains(self::TEST_2));
         $this->assertThat($output, $this->stringContains(self::TEST_3));
