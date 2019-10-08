@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 class ShowEntryDetailsTest extends TestCase
 {
     const TEST_1 = "test_value";
+    const INT_VAL = 42;
     /**
      * @var BasicTableController
      */
@@ -24,7 +25,7 @@ class ShowEntryDetailsTest extends TestCase
         $entityManager = $this->createMock(EntityManager::class);
         /** @var Container $container */
         $this->basicTableController = DIContainerFactory::createContainer($entityManager)->get(BasicTableController::class);
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ["value" => self::TEST_1]);
+        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ["value" => self::TEST_1, "intcolumn" => self::INT_VAL]);
     }
 
     public function test_show_details()
@@ -36,6 +37,8 @@ class ShowEntryDetailsTest extends TestCase
         $output = ob_get_clean();
         $this->assertThat($output, $this->stringContains("value"));
         $this->assertThat($output, $this->stringContains(self::TEST_1));
+        $this->assertThat($output, $this->stringContains("intcolumn"));
+        $this->assertThat($output, $this->stringContains(self::INT_VAL));
         $this->assertStringNotContainsString("<form", $output);
     }
 

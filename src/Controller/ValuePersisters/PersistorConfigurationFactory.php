@@ -12,6 +12,7 @@ class PersistorConfigurationFactory
     {
         return new PersistorConfiguration([
                                               new TextFieldPersistor("value"),
+            new TextFieldPersistor("intcolumn")
                                           ]);
     }
 }

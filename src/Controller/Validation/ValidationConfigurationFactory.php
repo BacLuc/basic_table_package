@@ -12,6 +12,7 @@ class ValidationConfigurationFactory
     {
         return new ValidationConfiguration([
                                                new TextFieldValidator("value"),
+            new IntegerFieldValidator("intcolumn")
                                            ]);
     }
 }

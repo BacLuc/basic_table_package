@@ -29,21 +29,25 @@ class PostFormTest extends TestCase
     public function test_post_form_new_entry()
     {
         ob_start();
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ["value" => self::TEST_1]);
+        $intcolvalue = 549864;
+        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ["value" => self::TEST_1, "intcolumn" => $intcolvalue]);
         $this->basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
 
         $output = ob_get_clean();
         $this->assertThat($output, $this->stringContains("value"));
         $this->assertThat($output, $this->stringContains(self::TEST_1));
+        $this->assertThat($output, $this->stringContains("intcolumn"));
+        $this->assertThat($output, $this->stringContains($intcolvalue));
     }
 
     public function test_post_form_existing_entry()
     {
         ob_start();
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ["value" => self::TEST_1]);
+        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ["value" => self::TEST_1, "intcolumn" => 65498]);
         $changed_value = "changed_value";
+        $changed_int_value = 203498;
         $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
-            ->process([], ["value" => $changed_value], 1);
+            ->process([], ["value" => $changed_value, "intcolumn" => $changed_int_value], 1);
 
         $this->basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
 
@@ -51,6 +55,8 @@ class PostFormTest extends TestCase
         $this->assertStringNotContainsString(self::TEST_1, $output);
         $this->assertThat($output, $this->stringContains("value"));
         $this->assertThat($output, $this->stringContains($changed_value));
+        $this->assertThat($output, $this->stringContains("intcolumn"));
+        $this->assertThat($output, $this->stringContains($changed_int_value));
         $this->assertThat($output, $this->stringContains("/1"));
     }
 }

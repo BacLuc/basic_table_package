@@ -14,10 +14,15 @@ class FormViewConfigurationFactory
 
     public function createConfiguration(): FormViewFieldConfiguration
     {
-        return new FormViewFieldConfiguration(["value" => function ($entity) {
+        return new FormViewFieldConfiguration([
+            "value" => function ($entity) {
             $fieldName = "value";
             return new TextField("value", "value", property_exists($entity, $fieldName) ? $entity->{$fieldName} : null);
-        },
+            },
+            "intcolumn" => function ($entity) {
+                $fieldName = "intcolumn";
+                return new IntegerField($fieldName, $fieldName, property_exists($entity, $fieldName) ? $entity->{$fieldName} : null);
+            }
         ]);
     }
 }
