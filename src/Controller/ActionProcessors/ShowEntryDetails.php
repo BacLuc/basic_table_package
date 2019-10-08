@@ -13,7 +13,7 @@ use BasicTablePackage\TableViewService;
 use BasicTablePackage\View\TableView\Row;
 use function BasicTablePackage\Lib\collect as collect;
 
-class ShowEntryDetailsActionProcessor implements ActionProcessor
+class ShowEntryDetails implements ActionProcessor
 {
     const DETAIL_VIEW = "view/detail";
     /**

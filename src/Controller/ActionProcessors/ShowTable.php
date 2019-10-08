@@ -11,7 +11,7 @@ use BasicTablePackage\Controller\VariableSetter;
 use BasicTablePackage\TableViewService;
 use BasicTablePackage\View\ViewActionRegistry;
 
-class ShowTableActionProcessor implements ActionProcessor
+class ShowTable implements ActionProcessor
 {
     const TABLE_VIEW = "view/table";
     /**

@@ -4,12 +4,12 @@
 namespace BasicTablePackage\Controller;
 
 
-use BasicTablePackage\Controller\ActionProcessors\DeleteEntryActionProcessor;
-use BasicTablePackage\Controller\ActionProcessors\PostFormActionProcessor;
-use BasicTablePackage\Controller\ActionProcessors\ShowEditEntryFormActionProcessor;
-use BasicTablePackage\Controller\ActionProcessors\ShowEntryDetailsActionProcessor;
-use BasicTablePackage\Controller\ActionProcessors\ShowNewEntryFormActionProcessor;
-use BasicTablePackage\Controller\ActionProcessors\ShowTableActionProcessor;
+use BasicTablePackage\Controller\ActionProcessors\DeleteEntry;
+use BasicTablePackage\Controller\ActionProcessors\PostForm;
+use BasicTablePackage\Controller\ActionProcessors\ShowEditEntryForm;
+use BasicTablePackage\Controller\ActionProcessors\ShowEntryDetails;
+use BasicTablePackage\Controller\ActionProcessors\ShowNewEntryForm;
+use BasicTablePackage\Controller\ActionProcessors\ShowTable;
 
 class ActionRegistryFactory
 {
@@ -28,18 +28,18 @@ class ActionRegistryFactory
 
     /**
      * ActionRegistryFactory constructor.
-     * @param ShowTableActionProcessor $showTableActionProcessor
-     * @param ShowNewEntryFormActionProcessor $showFormActionProcessor
-     * @param PostFormActionProcessor $postFormActionProcessor
-     * @param ShowEditEntryFormActionProcessor $showEditEntryFormActionProcessor
-     * @param ShowEntryDetailsActionProcessor $showEntryDetailsActionProcessor
+     * @param ShowTable $showTableActionProcessor
+     * @param ShowNewEntryForm $showFormActionProcessor
+     * @param PostForm $postFormActionProcessor
+     * @param ShowEditEntryForm $showEditEntryFormActionProcessor
+     * @param ShowEntryDetails $showEntryDetailsActionProcessor
      */
-    public function __construct(ShowTableActionProcessor $showTableActionProcessor,
-                                ShowNewEntryFormActionProcessor $showFormActionProcessor,
-                                PostFormActionProcessor $postFormActionProcessor,
-                                ShowEditEntryFormActionProcessor $showEditEntryFormActionProcessor,
-                                DeleteEntryActionProcessor $deleteEntryActionProcessor,
-                                ShowEntryDetailsActionProcessor $showEntryDetailsActionProcessor)
+    public function __construct(ShowTable $showTableActionProcessor,
+                                ShowNewEntryForm $showFormActionProcessor,
+                                PostForm $postFormActionProcessor,
+                                ShowEditEntryForm $showEditEntryFormActionProcessor,
+                                DeleteEntry $deleteEntryActionProcessor,
+                                ShowEntryDetails $showEntryDetailsActionProcessor)
     {
         $this->actions = [
             $showTableActionProcessor, $showFormActionProcessor, $postFormActionProcessor,

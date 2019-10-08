@@ -13,14 +13,14 @@ use BasicTablePackage\Controller\ValuePersisters\PersistorConfiguration;
 use BasicTablePackage\Entity\Repository;
 use function BasicTablePackage\Lib\collect as collect;
 
-class PostFormActionProcessor implements ActionProcessor
+class PostForm implements ActionProcessor
 {
     /**
      * @var Validator
      */
     private $validator;
     /**
-     * @var ShowNewEntryFormActionProcessor
+     * @var ShowNewEntryForm
      */
     private $showFormActionProcessor;
     /**
@@ -36,7 +36,7 @@ class PostFormActionProcessor implements ActionProcessor
      * PostFormActionProcessor constructor.
      */
     public function __construct (Validator $validator,
-                                 ShowNewEntryFormActionProcessor $showFormActionProcessor,
+                                 ShowNewEntryForm $showFormActionProcessor,
                                  Repository $repository,
                                  PersistorConfiguration $peristorConfiguration)
     {

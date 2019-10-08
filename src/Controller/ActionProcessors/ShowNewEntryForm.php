@@ -10,7 +10,7 @@ use BasicTablePackage\Controller\Renderer;
 use BasicTablePackage\Controller\VariableSetter;
 use BasicTablePackage\FormViewService;
 
-class ShowNewEntryFormActionProcessor implements ActionProcessor
+class ShowNewEntryForm implements ActionProcessor
 {
     const FORM_VIEW = "view/form";
     /**

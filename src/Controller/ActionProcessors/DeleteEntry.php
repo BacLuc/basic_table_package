@@ -8,7 +8,7 @@ use BasicTablePackage\Controller\ActionProcessor;
 use BasicTablePackage\Controller\ActionRegistryFactory;
 use BasicTablePackage\Entity\Repository;
 
-class DeleteEntryActionProcessor implements ActionProcessor
+class DeleteEntry implements ActionProcessor
 {
     /**
      * @var Repository
