@@ -3,12 +3,6 @@
 
 namespace BasicTablePackage\Entity;
 
-use Doctrine\Common\Annotations\Annotation\IgnoreAnnotation;
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\Table;
-
 /**
  * Class ExampleEntity
  * @IgnoreAnnotation("package")
@@ -35,6 +29,11 @@ class ExampleEntity
      * @Column(type="integer", nullable=true)
      */
     protected $intcolumn;
+
+    /**
+     * @Column(type="date", nullable=true)
+     */
+    private $datecolumn;
 
     public function __get ($name)
     {
