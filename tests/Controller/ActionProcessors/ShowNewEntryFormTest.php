@@ -25,7 +25,7 @@ class ShowNewEntryFormTest extends TestCase
         $entityManager = $this->createMock(EntityManager::class);
         /** @var Container $container */
         $this->basicTableController = DIContainerFactory::createContainer($entityManager)->get(BasicTableController::class);
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ["value" => self::TEST_1, "intcolumn" => self::INT_VAL]);
+        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ["value" => self::TEST_1, "intcolumn" => self::INT_VAL, "datecolumn" => date("d.m.Y")]);
     }
 
     public function test_new_row_form_has_empty_fields()
@@ -39,6 +39,7 @@ class ShowNewEntryFormTest extends TestCase
         $this->assertStringNotContainsString(self::INT_VAL, $output);
         $this->assertThat($output, $this->stringContains("value"));
         $this->assertThat($output, $this->stringContains("intcolumn"));
+        $this->assertThat($output, $this->stringContains("datecolumn"));
         $this->assertThat($output, $this->stringContains("action=\"post_form\""));
     }
 }
