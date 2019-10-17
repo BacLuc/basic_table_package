@@ -42,14 +42,16 @@ class DateValidatorTest extends TestCase
             ['05-31-80', false],
 
             ['bla', false],
-            [0, true],
-            [-1, true],
+            [0, false],
+            [-1, false],
+            [1.2, false],
             [null, true],
+            ["", true],
         ];
     }
 
     /**
-     * @dataProvider getFormats
+     * @dataProvider getRanges
      */
     public function test_date_ranges($date, $isValid)
     {
@@ -62,26 +64,12 @@ class DateValidatorTest extends TestCase
     public function getRanges()
     {
         return [
-            ['1980-05-31', true],
-            ['1980/05/31', true],
-            ['1980.05.31', true],
-            ['2030.05.31', false],
-            ['31-05-1980', true],
-            ['31.05.1980', true],
-            ['31/05/1980', false],
-            ['05/31/1980', true],
-            ['05.31.1980', false],
-            ['05-31-1980', false],
-
-            ['80-05-31', true],
-            ['80/05/31', false],
-            ['80.05.31', false],
-            ['31-05-80', false],
-            ['31.05.80', true],
-            ['31/05/80', false],
-            ['05/31/80', true],
-            ['05.31.80', false],
-            ['05-31-80', false],
+            ['01.01.1900', true],
+            ['31.12.2050', true],
+            ['32.12.2050', false],
+            ['31.13.2050', false],
+            ['31.11.2050', true],
+            ['31.02.2050', true],
         ];
     }
 }

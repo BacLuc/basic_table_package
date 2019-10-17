@@ -20,6 +20,9 @@ class TableViewConfigurationFactory
             },
             "intcolumn" => function ($value) {
                 return new TextField($value);
+            },
+            "datecolumn" => function ($value) {
+                return new DateField($value);
             }
         ]);
     }
