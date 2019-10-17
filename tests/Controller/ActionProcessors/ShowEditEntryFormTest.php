@@ -12,9 +12,6 @@ use PHPUnit\Framework\TestCase;
 
 class ShowEditEntryFormTest extends TestCase
 {
-    const TEST_1 = "test_value";
-    const INT_VAL = 42;
-    const DATE_VAL = '2020-12-12';
     /**
      * @var BasicTableController
      */
@@ -26,7 +23,7 @@ class ShowEditEntryFormTest extends TestCase
         $entityManager = $this->createMock(EntityManager::class);
         /** @var Container $container */
         $this->basicTableController = DIContainerFactory::createContainer($entityManager)->get(BasicTableController::class);
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ["value" => self::TEST_1, "intcolumn" => self::INT_VAL, "datecolumn" => self::DATE_VAL]);
+        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ExampleEntityConstants::ENTRY_1_POST);
     }
 
     public function test_edit_form_shows_value_of_existing_entry()
@@ -37,11 +34,11 @@ class ShowEditEntryFormTest extends TestCase
 
         $output = ob_get_clean();
         $this->assertThat($output, $this->stringContains("value"));
-        $this->assertThat($output, $this->stringContains(self::TEST_1));
+        $this->assertThat($output, $this->stringContains(ExampleEntityConstants::TEXT_VAL_1));
         $this->assertThat($output, $this->stringContains("intcolumn"));
-        $this->assertThat($output, $this->stringContains(self::INT_VAL));
+        $this->assertThat($output, $this->stringContains(ExampleEntityConstants::INT_VAL_1));
         $this->assertThat($output, $this->stringContains("datecolumn"));
-        $this->assertThat($output, $this->stringContains(self::DATE_VAL));
+        $this->assertThat($output, $this->stringContains(ExampleEntityConstants::DATE_VALUE_1));
         $this->assertThat($output, $this->stringContains("action=\"post_form/1\""));
     }
 }

@@ -12,8 +12,6 @@ use PHPUnit\Framework\TestCase;
 
 class PostFormTest extends TestCase
 {
-    const TEST_1 = "test_value";
-    const DATE_VALUE = '2020-12-12';
     /**
      * @var BasicTableController
      */
@@ -30,23 +28,22 @@ class PostFormTest extends TestCase
     public function test_post_form_new_entry()
     {
         ob_start();
-        $intcolvalue = 549864;
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ["value" => self::TEST_1, "intcolumn" => $intcolvalue, "datecolumn" => self::DATE_VALUE]);
+        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ExampleEntityConstants::ENTRY_1_POST);
         $this->basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
 
         $output = ob_get_clean();
         $this->assertThat($output, $this->stringContains("value"));
-        $this->assertThat($output, $this->stringContains(self::TEST_1));
+        $this->assertThat($output, $this->stringContains(ExampleEntityConstants::TEXT_VAL_1));
         $this->assertThat($output, $this->stringContains("intcolumn"));
-        $this->assertThat($output, $this->stringContains($intcolvalue));
+        $this->assertThat($output, $this->stringContains(ExampleEntityConstants::INT_VAL_1));
         $this->assertThat($output, $this->stringContains("datecolumn"));
-        $this->assertThat($output, $this->stringContains(self::DATE_VALUE));
+        $this->assertThat($output, $this->stringContains(ExampleEntityConstants::DATE_VALUE_1));
     }
 
     public function test_post_form_existing_entry()
     {
         ob_start();
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ["value" => self::TEST_1, "intcolumn" => 65498, "datecolumn" => self::DATE_VALUE]);
+        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ExampleEntityConstants::ENTRY_1_POST);
         $changed_value = "changed_value";
         $changed_int_value = 203498;
         $changed_date_value = '2020-12-13';
@@ -56,7 +53,7 @@ class PostFormTest extends TestCase
         $this->basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
 
         $output = ob_get_clean();
-        $this->assertStringNotContainsString(self::TEST_1, $output);
+        $this->assertStringNotContainsString(ExampleEntityConstants::TEXT_VAL_1, $output);
         $this->assertThat($output, $this->stringContains("value"));
         $this->assertThat($output, $this->stringContains($changed_value));
         $this->assertThat($output, $this->stringContains("intcolumn"));
