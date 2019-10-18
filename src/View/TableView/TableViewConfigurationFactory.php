@@ -23,6 +23,9 @@ class TableViewConfigurationFactory
             },
             "datecolumn" => function ($value) {
                 return new DateField($value);
+            },
+            "datetimecolumn" => function ($value) {
+                return new DateTimeField($value);
             }
         ]);
     }

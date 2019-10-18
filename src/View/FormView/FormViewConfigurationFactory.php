@@ -28,6 +28,10 @@ class FormViewConfigurationFactory
             "datecolumn" => function ($entity) {
                 $fieldName = "datecolumn";
                 return new DateField($fieldName, $fieldName, property_exists($entity, $fieldName) ? $entity->{$fieldName} : null);
+            },
+            "datetimecolumn" => function ($entity) {
+                $fieldName = "datetimecolumn";
+                return new DateTimeField($fieldName, $fieldName, property_exists($entity, $fieldName) ? $entity->{$fieldName} : null);
             }
         ]);
     }

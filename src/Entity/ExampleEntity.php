@@ -35,6 +35,11 @@ class ExampleEntity
      */
     private $datecolumn;
 
+    /**
+     * @Column(type="datetime", nullable=true)
+     */
+    private $datetimecolumn;
+
     public function __get ($name)
     {
         return $this->{$name};
