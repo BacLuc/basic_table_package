@@ -4,8 +4,6 @@
 namespace BasicTablePackage\View\FormView;
 
 
-use Concrete\Core\Form\Service\Widget\DateTime;
-
 class DateField implements Field
 {
     /**
@@ -17,7 +15,7 @@ class DateField implements Field
      */
     private $postname;
     /**
-     * @var DateTime
+     * @var ?\DateTime
      */
     private $sqlValue;
 
