@@ -36,6 +36,11 @@ class DateValidatorTest extends TestCase
             [ '05.31.1980 00:00', false ],
             [ '05.31.1980 25:00', false ],
 
+            [ '05.31.1980T14:34', false ],
+            [ '05.31.1980T23:59', false ],
+            [ '05.31.1980T00:00', false ],
+            [ '05.31.1980T25:00', false ],
+
             ['80-05-31', true],
             ['80/05/31', false],
             ['80.05.31', false],
