@@ -11,6 +11,7 @@ class DateValidatorTest extends TestCase
      */
     public function test_date_formats($date, $isValid)
     {
+        echo "Testing with input $date, " . ($isValid ? "valid" : "invalid");
         $fieldName = "test";
         $dateValidator = new DateValidator($fieldName);
         $postvalues[$fieldName] = $date;
@@ -65,6 +66,7 @@ class DateValidatorTest extends TestCase
      */
     public function test_date_ranges($date, $isValid)
     {
+        echo "Testing with input $date, " . ($isValid ? "valid" : "invalid");
         $fieldName = "test";
         $dateValidator = new DateValidator($fieldName);
         $postvalues[$fieldName] = $date;
