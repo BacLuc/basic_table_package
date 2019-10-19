@@ -3,6 +3,7 @@
 namespace BasicTablePackage\Controller\Validation;
 
 use PHPUnit\Framework\TestCase;
+use function BasicTablePackage\Lib\collect as collect;
 
 class DateValidatorTest extends TestCase
 {
@@ -11,7 +12,6 @@ class DateValidatorTest extends TestCase
      */
     public function test_date_formats($date, $isValid)
     {
-        echo "Testing with input $date, " . ($isValid ? "valid" : "invalid");
         $fieldName = "test";
         $dateValidator = new DateValidator($fieldName);
         $postvalues[$fieldName] = $date;
@@ -20,7 +20,7 @@ class DateValidatorTest extends TestCase
 
     public function getFormats()
     {
-        return [
+        return $this->describeDataSet([
             ['1980-05-31', true],
             ['1980/05/31', true],
             ['1980.05.31', true],
@@ -58,7 +58,7 @@ class DateValidatorTest extends TestCase
             [1.2, false],
             [null, true],
             ["", true],
-        ];
+        ]);
     }
 
     /**
@@ -66,7 +66,6 @@ class DateValidatorTest extends TestCase
      */
     public function test_date_ranges($date, $isValid)
     {
-        echo "Testing with input $date, " . ($isValid ? "valid" : "invalid");
         $fieldName = "test";
         $dateValidator = new DateValidator($fieldName);
         $postvalues[$fieldName] = $date;
@@ -75,13 +74,20 @@ class DateValidatorTest extends TestCase
 
     public function getRanges()
     {
-        return [
+        return $this->describeDataSet([
             ['01.01.1900', true],
             ['31.12.2050', true],
             ['32.12.2050', false],
             ['31.13.2050', false],
             ['31.11.2050', true],
             ['31.02.2050', true],
-        ];
+        ]);
+    }
+
+    private function describeDataSet(array $data)
+    {
+        return collect($data)->keyBy(function ($dataRow) {
+           return "[" . collect($dataRow)->join(", ") . "]";
+        });
     }
 }
