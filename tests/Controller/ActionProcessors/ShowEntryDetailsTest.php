@@ -5,6 +5,7 @@ namespace BasicTablePackage\Test\Controller\ActionProcessors;
 
 use BasicTablePackage\Controller\ActionRegistryFactory;
 use BasicTablePackage\Controller\BasicTableController;
+use BasicTablePackage\Entity\ExampleEntity;
 use BasicTablePackage\Test\Constraints\Matchers;
 use BasicTablePackage\Test\DIContainerFactory;
 use DI\Container;
@@ -23,7 +24,8 @@ class ShowEntryDetailsTest extends TestCase
         /** @var EntityManager $entityManager */
         $entityManager = $this->createMock(EntityManager::class);
         /** @var Container $container */
-        $this->basicTableController = DIContainerFactory::createContainer($entityManager)->get(BasicTableController::class);
+        $this->basicTableController =
+            DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(BasicTableController::class);
         $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ExampleEntityConstants::ENTRY_1_POST);
     }
 

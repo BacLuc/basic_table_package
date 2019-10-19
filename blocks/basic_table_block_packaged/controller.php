@@ -6,6 +6,7 @@ use BasicTablePackage\Adapters\Concrete5\DIContainerFactory;
 use BasicTablePackage\Controller\ActionProcessor;
 use BasicTablePackage\Controller\ActionRegistryFactory;
 use BasicTablePackage\Controller\BasicTableController;
+use BasicTablePackage\Entity\ExampleEntity;
 use Concrete\Core\Block\BlockController;
 use Concrete\Core\Page\Page;
 use Concrete\Core\Routing\Redirect;
@@ -103,7 +104,7 @@ class Controller extends BlockController
     private function createBasicTableController (): BasicTableController
     {
         $entityManager = PackageController::getEntityManagerStatic();
-        $container = DIContainerFactory::createContainer($this, $entityManager);
+        $container = DIContainerFactory::createContainer($this, $entityManager, ExampleEntity::class);
         return $container->get(BasicTableController::class);
     }
 

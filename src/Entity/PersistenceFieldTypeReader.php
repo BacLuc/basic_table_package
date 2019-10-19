@@ -4,9 +4,8 @@
 namespace BasicTablePackage\Entity;
 
 
-use BasicTablePackage\Test\Entity\SomeEntity;
+use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\ORM\Mapping\Column;
 use ReflectionClass;
 use ReflectionProperty;
@@ -27,18 +26,22 @@ class PersistenceFieldTypeReader
 
     /**
      * @return array
-     * @throws \Doctrine\Common\Annotations\AnnotationException
-     * @throws \ReflectionException
+     * @throws \RuntimeException
      */
     public function getPersistenceFieldTypes (): array
     {
-        $annotationReader = new AnnotationReader();
-        $someEntity = new SomeEntity();
-        $reflectionClass = new ReflectionClass($someEntity);
-        AnnotationRegistry::registerLoader("class_exists");
+        try {
+            $annotationReader = new AnnotationReader();
+            $entity = new $this->className();
+            $reflectionClass = new ReflectionClass($entity);
+        }
+        catch (\ReflectionException | AnnotationException $e) {
+            throw new \RuntimeException($e);
+        }
         return
             collect($reflectionClass->getProperties())
                 ->keyBy(function (ReflectionProperty $reflectionProperty) { return $reflectionProperty->getName(); })
+                ->filter(function ($__, $key) { return $key !== "id"; })
                 ->map(function (ReflectionProperty $reflectionProperty) use ($annotationReader) {
                     return $annotationReader->getPropertyAnnotations($reflectionProperty);
                 })

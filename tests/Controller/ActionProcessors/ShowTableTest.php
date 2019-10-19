@@ -5,6 +5,7 @@ namespace BasicTablePackage\Test\Controller\ActionProcessors;
 
 use BasicTablePackage\Controller\ActionRegistryFactory;
 use BasicTablePackage\Controller\BasicTableController;
+use BasicTablePackage\Entity\ExampleEntity;
 use BasicTablePackage\Test\DIContainerFactory;
 use DI\Container;
 use Doctrine\ORM\EntityManager;
@@ -27,7 +28,8 @@ class ShowTableTest extends TestCase
         $entityManager = $this->createMock(EntityManager::class);
 
         /** @var Container $container */
-        $this->basicTableController = DIContainerFactory::createContainer($entityManager)->get(BasicTableController::class);
+        $this->basicTableController =
+            DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(BasicTableController::class);
         collect([self::TEST_1, self::TEST_2, self::TEST_3, self::TEST_4])->each(function (string $value) {
             $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ["value" => $value]);
         });
