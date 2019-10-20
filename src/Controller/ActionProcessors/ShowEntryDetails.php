@@ -8,7 +8,6 @@ use BasicTablePackage\Controller\ActionProcessor;
 use BasicTablePackage\Controller\ActionRegistryFactory;
 use BasicTablePackage\Controller\Renderer;
 use BasicTablePackage\Controller\VariableSetter;
-use BasicTablePackage\FormViewService;
 use BasicTablePackage\TableViewService;
 use BasicTablePackage\View\TableView\Row;
 use function BasicTablePackage\Lib\collect as collect;
@@ -31,7 +30,7 @@ class ShowEntryDetails implements ActionProcessor
 
     /**
      * ShowFormActionProcessor constructor.
-     * @param FormViewService $tableViewService
+     * @param TableViewService $tableViewService
      * @param VariableSetter $variableSetter
      * @param Renderer $renderer
      */
