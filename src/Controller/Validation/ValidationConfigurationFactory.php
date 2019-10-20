@@ -16,7 +16,6 @@ class ValidationConfigurationFactory
     private $persistenceFieldTypeReader;
 
     /**
-     * TableViewConfigurationFactory constructor.
      * @param PersistenceFieldTypeReader $persistenceFieldTypeReader
      */
     public function __construct (PersistenceFieldTypeReader $persistenceFieldTypeReader)
