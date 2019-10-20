@@ -42,16 +42,29 @@ class DIContainerFactory
                                             EntityManager $entityManager,
                                             $entityClass): Container
     {
-        AnnotationRegistry::registerLoader("class_exists");
         $containerBuilder = new ContainerBuilder();
+        $definitions = self::createDefinition($entityManager, $entityClass);
+        $definitions[BlockController::class] = value($controller);
+        $containerBuilder->addDefinitions($definitions);
+        return $containerBuilder->build();
+    }
+
+    /**
+     * @param EntityManager $entityManager
+     * @param $entityClass
+     * @return array
+     */
+    public static function createDefinition (EntityManager $entityManager,
+                                             $entityClass): array
+    {
+        AnnotationRegistry::registerLoader("class_exists");
         $definitions = [
-            PersistenceFieldTypeReader::class => value(new PersistenceFieldTypeReader($entityClass)),
-            EntityManager::class              => value($entityManager),
-            Repository::class                 => value(new EntityManagerRepository($entityManager,
+            PersistenceFieldTypeReader::class  => value(new PersistenceFieldTypeReader($entityClass)),
+            EntityManager::class               => value($entityManager),
+            Repository::class                  => value(new EntityManagerRepository($entityManager,
                                                                                     ExampleEntity::class)),
-            BlockController::class            => value($controller),
-            VariableSetter::class             => autowire(Concrete5VariableSetter::class),
-            Renderer::class                   => autowire(Concrete5Renderer::class),
+            VariableSetter::class              => autowire(Concrete5VariableSetter::class),
+            Renderer::class                    => autowire(Concrete5Renderer::class),
             ViewActionRegistry::class          => factory(function (Container $container) {
                 return $container->get(ViewActionRegistryFactory::class)->createActionRegistry();
             }),
@@ -72,7 +85,6 @@ class DIContainerFactory
             }),
 
         ];
-        $containerBuilder->addDefinitions($definitions);
-        return $containerBuilder->build();
+        return $definitions;
     }
 }
