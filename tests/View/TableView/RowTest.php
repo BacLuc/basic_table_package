@@ -7,9 +7,9 @@ use function BasicTablePackage\Lib\collect as collect;
 
 class RowTest extends TestCase
 {
-    public function test_foreach_works ()
+    public function test_foreach_works()
     {
-        $values = [ 1, 2, 3 ];
+        $values = [1, 2, 3];
         $row = new Row(1, $values);
         foreach ($row as $value) {
             $key = $row->key();
@@ -17,9 +17,9 @@ class RowTest extends TestCase
         }
     }
 
-    public function test_collect_works ()
+    public function test_collect_works()
     {
-        $values = [ 1, 2, 3 ];
+        $values = [1, 2, 3];
         $row = new Row(1, $values);
 
         collect($row)->each(function ($value, $key) use ($values) {

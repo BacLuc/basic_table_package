@@ -25,7 +25,6 @@ class ExampleEntity
      * @GeneratedValue(strategy="AUTO")
      */
     private $id;
-
     /**
      * @var string
      * @Column(type="string")

@@ -19,16 +19,6 @@ class DeleteEntryTest extends TestCase
      */
     private $basicTableController;
 
-    protected function setUp()
-    {
-        /** @var EntityManager $entityManager */
-        $entityManager = $this->createMock(EntityManager::class);
-        /** @var Container $container */
-        $this->basicTableController =
-            DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(BasicTableController::class);
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ["value" => self::TEST_1]);
-    }
-
     public function test_delete_entry()
     {
         ob_start();
@@ -39,5 +29,15 @@ class DeleteEntryTest extends TestCase
         $output = ob_get_clean();
         $this->assertThat($output, $this->stringContains("value"));
         $this->assertStringNotContainsString(self::TEST_1, $output);
+    }
+
+    protected function setUp()
+    {
+        /** @var EntityManager $entityManager */
+        $entityManager = $this->createMock(EntityManager::class);
+        /** @var Container $container */
+        $this->basicTableController =
+            DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(BasicTableController::class);
+        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ["value" => self::TEST_1]);
     }
 }

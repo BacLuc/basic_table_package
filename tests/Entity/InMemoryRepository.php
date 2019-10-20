@@ -22,18 +22,18 @@ class InMemoryRepository implements Repository
      */
     private $entites;
 
-    public function __construct (string $classname)
+    public function __construct(string $classname)
     {
         $this->classname = $classname;
         $this->entites = collect([]);
     }
 
-    public function create ()
+    public function create()
     {
         return new $this->classname();
     }
 
-    public function persist ($entity)
+    public function persist($entity)
     {
         $foundEntity = $this->entites->first(function ($persistedEntity) use ($entity) {
             return $persistedEntity->id === $entity->id;
@@ -43,22 +43,24 @@ class InMemoryRepository implements Repository
         }
 
         if ($entity->id == null) {
-            $entity->id = ++ $this->autoIncrement;
+            $entity->id = ++$this->autoIncrement;
         }
         $this->entites = $this->entites->add($entity);
     }
 
-    public function getAll ()
+    public function getAll()
     {
         return $this->entites->toArray();
     }
 
-    public function getById (int $id)
+    public function getById(int $id)
     {
-        return $this->entites->first(function ($entity) use ($id) { return $entity->id === $id; });
+        return $this->entites->first(function ($entity) use ($id) {
+            return $entity->id === $id;
+        });
     }
 
-    public function delete ($toDeleteEntity)
+    public function delete($toDeleteEntity)
     {
         $this->entites = $this->entites->filter(function ($entity) use ($toDeleteEntity) {
             return $entity->id !== $toDeleteEntity->id;

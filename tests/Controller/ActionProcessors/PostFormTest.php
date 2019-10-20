@@ -19,15 +19,6 @@ class PostFormTest extends TestCase
      */
     private $basicTableController;
 
-    protected function setUp()
-    {
-        /** @var EntityManager $entityManager */
-        $entityManager = $this->createMock(EntityManager::class);
-        /** @var Container $container */
-        $this->basicTableController =
-            DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(BasicTableController::class);
-    }
-
     public function test_post_form_new_entry()
     {
         ob_start();
@@ -68,5 +59,14 @@ class PostFormTest extends TestCase
         $this->assertThat($output, $this->stringContains("datetimecolumn"));
         $this->assertThat($output, $this->stringContains($changed_date_time_value));
         $this->assertThat($output, $this->stringContains("/1"));
+    }
+
+    protected function setUp()
+    {
+        /** @var EntityManager $entityManager */
+        $entityManager = $this->createMock(EntityManager::class);
+        /** @var Container $container */
+        $this->basicTableController =
+            DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(BasicTableController::class);
     }
 }

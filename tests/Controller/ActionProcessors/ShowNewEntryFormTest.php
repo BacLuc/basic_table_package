@@ -19,16 +19,6 @@ class ShowNewEntryFormTest extends TestCase
      */
     private $basicTableController;
 
-    protected function setUp()
-    {
-        /** @var EntityManager $entityManager */
-        $entityManager = $this->createMock(EntityManager::class);
-        /** @var Container $container */
-        $this->basicTableController =
-            DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(BasicTableController::class);
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ExampleEntityConstants::ENTRY_1_POST);
-    }
-
     public function test_new_row_form_has_empty_fields()
     {
         ob_start();
@@ -42,5 +32,15 @@ class ShowNewEntryFormTest extends TestCase
         $this->assertStringNotContainsString(ExampleEntityConstants::DATETIME_VALUE_1, $output);
         $this->assertThat($output, Matchers::stringContainsAll(array_keys(ExampleEntityConstants::ENTRY_1_POST)));
         $this->assertThat($output, $this->stringContains("action=\"post_form\""));
+    }
+
+    protected function setUp()
+    {
+        /** @var EntityManager $entityManager */
+        $entityManager = $this->createMock(EntityManager::class);
+        /** @var Container $container */
+        $this->basicTableController =
+            DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(BasicTableController::class);
+        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ExampleEntityConstants::ENTRY_1_POST);
     }
 }

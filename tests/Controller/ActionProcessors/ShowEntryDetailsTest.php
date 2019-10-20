@@ -19,16 +19,6 @@ class ShowEntryDetailsTest extends TestCase
      */
     private $basicTableController;
 
-    protected function setUp()
-    {
-        /** @var EntityManager $entityManager */
-        $entityManager = $this->createMock(EntityManager::class);
-        /** @var Container $container */
-        $this->basicTableController =
-            DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(BasicTableController::class);
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ExampleEntityConstants::ENTRY_1_POST);
-    }
-
     public function test_show_details()
     {
         ob_start();
@@ -38,6 +28,16 @@ class ShowEntryDetailsTest extends TestCase
         $output = ob_get_clean();
         $this->assertThat($output, Matchers::stringContainsKeysAndValues(ExampleEntityConstants::ENTRY_1_POST));
         $this->assertStringNotContainsString("<form", $output);
+    }
+
+    protected function setUp()
+    {
+        /** @var EntityManager $entityManager */
+        $entityManager = $this->createMock(EntityManager::class);
+        /** @var Container $container */
+        $this->basicTableController =
+            DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(BasicTableController::class);
+        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ExampleEntityConstants::ENTRY_1_POST);
     }
 
 }

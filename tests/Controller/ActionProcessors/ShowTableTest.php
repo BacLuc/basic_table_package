@@ -21,20 +21,6 @@ class ShowTableTest extends TestCase
 
     private $basicTableController;
 
-
-    protected function setUp()
-    {
-        /** @var EntityManager $entityManager */
-        $entityManager = $this->createMock(EntityManager::class);
-
-        /** @var Container $container */
-        $this->basicTableController =
-            DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(BasicTableController::class);
-        collect([self::TEST_1, self::TEST_2, self::TEST_3, self::TEST_4])->each(function (string $value) {
-            $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ["value" => $value]);
-        });
-    }
-
     public function test_sets_headers_and_rows_to_TableView_retrieved_from_TableViewService()
     {
         ob_start();
@@ -47,5 +33,18 @@ class ShowTableTest extends TestCase
         $this->assertThat($output, $this->stringContains(self::TEST_2));
         $this->assertThat($output, $this->stringContains(self::TEST_3));
         $this->assertThat($output, $this->stringContains(self::TEST_4));
+    }
+
+    protected function setUp()
+    {
+        /** @var EntityManager $entityManager */
+        $entityManager = $this->createMock(EntityManager::class);
+
+        /** @var Container $container */
+        $this->basicTableController =
+            DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(BasicTableController::class);
+        collect([self::TEST_1, self::TEST_2, self::TEST_3, self::TEST_4])->each(function (string $value) {
+            $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ["value" => $value]);
+        });
     }
 }

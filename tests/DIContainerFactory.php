@@ -21,7 +21,7 @@ use function DI\get;
 
 class DIContainerFactory
 {
-    public static function createContainer (EntityManager $entityManager, string $entityClass): Container
+    public static function createContainer(EntityManager $entityManager, string $entityClass): Container
     {
         AnnotationRegistry::registerLoader("class_exists");
         $containerBuilder = new ContainerBuilder();

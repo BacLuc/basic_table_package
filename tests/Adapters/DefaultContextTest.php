@@ -9,7 +9,8 @@ class DefaultContextTest extends TestCase
 {
     const VAR_VALUE = "test";
 
-    public function test_export_variables(){
+    public function test_export_variables()
+    {
         $defaultContext = new DefaultContext();
         $defaultContext->set("test", self::VAR_VALUE);
         extract($defaultContext->getContext());

@@ -32,15 +32,15 @@ class DateValidatorTest extends TestCase
             ['05.31.1980', false],
             ['05-31-1980', false],
 
-            [ '05.31.1980 14:34', false ],
-            [ '05.31.1980 23:59', false ],
-            [ '05.31.1980 00:00', false ],
-            [ '05.31.1980 25:00', false ],
+            ['05.31.1980 14:34', false],
+            ['05.31.1980 23:59', false],
+            ['05.31.1980 00:00', false],
+            ['05.31.1980 25:00', false],
 
-            [ '05.31.1980T14:34', false ],
-            [ '05.31.1980T23:59', false ],
-            [ '05.31.1980T00:00', false ],
-            [ '05.31.1980T25:00', false ],
+            ['05.31.1980T14:34', false],
+            ['05.31.1980T23:59', false],
+            ['05.31.1980T00:00', false],
+            ['05.31.1980T25:00', false],
 
             ['80-05-31', true],
             ['80/05/31', false],
@@ -59,6 +59,13 @@ class DateValidatorTest extends TestCase
             [null, true],
             ["", true],
         ]);
+    }
+
+    private function describeDataSet(array $data)
+    {
+        return collect($data)->keyBy(function ($dataRow) {
+            return "[" . collect($dataRow)->join(", ") . "]";
+        });
     }
 
     /**
@@ -82,12 +89,5 @@ class DateValidatorTest extends TestCase
             ['31.11.2050', true],
             ['31.02.2050', true],
         ]);
-    }
-
-    private function describeDataSet(array $data)
-    {
-        return collect($data)->keyBy(function ($dataRow) {
-           return "[" . collect($dataRow)->join(", ") . "]";
-        });
     }
 }

@@ -13,12 +13,13 @@ class DefaultContext implements VariableSetter
      */
     private $context;
 
-    public function set (string $name, $value)
+    public function set(string $name, $value)
     {
         $this->context[$name] = $value;
     }
 
-    public function getContext() : array {
+    public function getContext(): array
+    {
         return $this->context;
     }
 

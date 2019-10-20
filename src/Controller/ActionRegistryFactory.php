@@ -43,7 +43,7 @@ class ActionRegistryFactory
     {
         $this->actions = [
             $showTableActionProcessor, $showFormActionProcessor, $postFormActionProcessor,
-            $showEditEntryFormActionProcessor, $deleteEntryActionProcessor, $showEntryDetailsActionProcessor
+            $showEditEntryFormActionProcessor, $deleteEntryActionProcessor, $showEntryDetailsActionProcessor,
         ];
     }
 

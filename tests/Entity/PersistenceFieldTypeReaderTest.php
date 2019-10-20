@@ -14,15 +14,15 @@ class PersistenceFieldTypeReaderTest extends TestCase
      * @throws \Doctrine\Common\Annotations\AnnotationException
      * @throws \ReflectionException
      */
-    public function test_read_property_types ()
+    public function test_read_property_types()
     {
         $persistenceFieldTypeReader = new PersistenceFieldTypeReader(SomeEntity::class);
         self::assertThat($persistenceFieldTypeReader->getPersistenceFieldTypes(),
-                         self::equalTo([ "value"          => PersistenceFieldTypes::STRING,
-                                         "intcolumn"      => PersistenceFieldTypes::INTEGER,
-                                         "datecolumn"     => PersistenceFieldTypes::DATE,
-                                         "datetimecolumn" => PersistenceFieldTypes::DATETIME,
-                                       ]));
+            self::equalTo(["value" => PersistenceFieldTypes::STRING,
+                "intcolumn" => PersistenceFieldTypes::INTEGER,
+                "datecolumn" => PersistenceFieldTypes::DATE,
+                "datetimecolumn" => PersistenceFieldTypes::DATETIME,
+            ]));
     }
 
 }

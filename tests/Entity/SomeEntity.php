@@ -25,7 +25,6 @@ class SomeEntity
      * @GeneratedValue(strategy="AUTO")
      */
     private $id;
-
     /**
      * @var string
      * @Column(type="string")
@@ -47,12 +46,12 @@ class SomeEntity
      */
     private $datetimecolumn;
 
-    public function __get ($name)
+    public function __get($name)
     {
         return $this->{$name};
     }
 
-    public function __set ($name, $value)
+    public function __set($name, $value)
     {
         $this->{$name} = $value;
     }
