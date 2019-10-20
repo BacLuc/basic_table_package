@@ -13,7 +13,6 @@ use BasicTablePackage\Controller\ValuePersisters\PersistorConfiguration;
 use BasicTablePackage\Controller\ValuePersisters\PersistorConfigurationFactory;
 use BasicTablePackage\Controller\VariableSetter;
 use BasicTablePackage\Entity\EntityManagerRepository;
-use BasicTablePackage\Entity\ExampleEntity;
 use BasicTablePackage\Entity\PersistenceFieldTypeReader;
 use BasicTablePackage\Entity\Repository;
 use BasicTablePackage\View\FormView\FormViewConfigurationFactory;
@@ -62,7 +61,7 @@ class DIContainerFactory
             PersistenceFieldTypeReader::class  => value(new PersistenceFieldTypeReader($entityClass)),
             EntityManager::class               => value($entityManager),
             Repository::class                  => value(new EntityManagerRepository($entityManager,
-                                                                                    ExampleEntity::class)),
+                                                                                    $entityClass)),
             VariableSetter::class              => autowire(Concrete5VariableSetter::class),
             Renderer::class                    => autowire(Concrete5Renderer::class),
             ViewActionRegistry::class          => factory(function (Container $container) {
