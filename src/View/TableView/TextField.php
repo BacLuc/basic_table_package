@@ -19,7 +19,7 @@ class TextField implements Field
         $this->sqlValue = $sqlValue;
     }
 
-    public function getTableView (): string
+    public function getTableView(): string
     {
         return $this->sqlValue ?: "";
     }

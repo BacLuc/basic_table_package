@@ -37,10 +37,11 @@ class DIContainerFactory
      * @return Container
      * @throws \Exception
      */
-    public static function createContainer (BlockController $controller,
-                                            EntityManager $entityManager,
-                                            $entityClass): Container
-    {
+    public static function createContainer(
+        BlockController $controller,
+        EntityManager $entityManager,
+        $entityClass
+    ): Container {
         $containerBuilder = new ContainerBuilder();
         $definitions = self::createDefinition($entityManager, $entityClass);
         $definitions[BlockController::class] = value($controller);
@@ -53,15 +54,16 @@ class DIContainerFactory
      * @param $entityClass
      * @return array
      */
-    public static function createDefinition (EntityManager $entityManager,
-                                             $entityClass): array
-    {
+    public static function createDefinition(
+        EntityManager $entityManager,
+        $entityClass
+    ): array {
         AnnotationRegistry::registerLoader("class_exists");
         $definitions = [
             PersistenceFieldTypeReader::class  => value(new PersistenceFieldTypeReader($entityClass)),
             EntityManager::class               => value($entityManager),
             Repository::class                  => value(new EntityManagerRepository($entityManager,
-                                                                                    $entityClass)),
+                $entityClass)),
             VariableSetter::class              => autowire(Concrete5VariableSetter::class),
             Renderer::class                    => autowire(Concrete5Renderer::class),
             ViewActionRegistry::class          => factory(function (Container $container) {

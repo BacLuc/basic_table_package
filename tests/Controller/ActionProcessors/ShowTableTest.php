@@ -44,7 +44,8 @@ class ShowTableTest extends TestCase
         $this->basicTableController =
             DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(BasicTableController::class);
         collect([self::TEST_1, self::TEST_2, self::TEST_3, self::TEST_4])->each(function (string $value) {
-            $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ["value" => $value]);
+            $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
+                                       ->process([], ["value" => $value]);
         });
     }
 }

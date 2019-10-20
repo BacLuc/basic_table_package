@@ -18,16 +18,18 @@ class ActionRegistry
      * ActionRegistry constructor.
      * @param ActionProcessor[] $actions
      */
-    public function __construct (array $actions)
+    public function __construct(array $actions)
     {
-        $this->actions = collect($actions)->keyBy(function (ActionProcessor $item) { return $item->getName(); });
+        $this->actions = collect($actions)->keyBy(function (ActionProcessor $item) {
+            return $item->getName();
+        });
     }
 
     /**
      * @param String $name
      * @return ActionProcessor|null
      */
-    public function getByName (String $name): ActionProcessor
+    public function getByName(String $name): ActionProcessor
     {
         return $this->actions->get($name);
     }

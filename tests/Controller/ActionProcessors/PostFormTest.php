@@ -22,7 +22,8 @@ class PostFormTest extends TestCase
     public function test_post_form_new_entry()
     {
         ob_start();
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ExampleEntityConstants::ENTRY_1_POST);
+        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
+                                   ->process([], ExampleEntityConstants::ENTRY_1_POST);
         $this->basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
 
         $output = ob_get_clean();
@@ -32,19 +33,20 @@ class PostFormTest extends TestCase
     public function test_post_form_existing_entry()
     {
         ob_start();
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ExampleEntityConstants::ENTRY_1_POST);
+        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
+                                   ->process([], ExampleEntityConstants::ENTRY_1_POST);
         $changed_value = "changed_value";
         $changed_int_value = 203498;
         $changed_date_value = '2020-12-13';
         $changed_date_time_value = '2020-12-13 18:43';
         $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
-            ->process([],
-                [
-                    "value" => $changed_value,
-                    "intcolumn" => $changed_int_value,
-                    "datecolumn" => $changed_date_value,
-                    "datetimecolumn" => $changed_date_time_value
-                ], 1);
+                                   ->process([],
+                                       [
+                                           "value"          => $changed_value,
+                                           "intcolumn"      => $changed_int_value,
+                                           "datecolumn"     => $changed_date_value,
+                                           "datetimecolumn" => $changed_date_time_value
+                                       ], 1);
 
         $this->basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
 

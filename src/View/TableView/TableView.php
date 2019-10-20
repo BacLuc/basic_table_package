@@ -21,7 +21,7 @@ class TableView
      * @param String[] $headers
      * @param Row[] $rows
      */
-    public function __construct (array $headers, array $rows)
+    public function __construct(array $headers, array $rows)
     {
         $this->headers = $headers;
         $this->rows = $rows;
@@ -35,7 +35,7 @@ class TableView
     /**
      * @return String[]
      */
-    public function getHeaders ()
+    public function getHeaders()
     {
         return $this->headers;
     }
@@ -43,7 +43,7 @@ class TableView
     /**
      * @return Row[]
      */
-    public function getRows ()
+    public function getRows()
     {
         return $this->rows;
     }

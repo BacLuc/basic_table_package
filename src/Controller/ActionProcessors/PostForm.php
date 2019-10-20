@@ -39,33 +39,37 @@ class PostForm implements ActionProcessor
      * @param Repository $repository
      * @param PersistorConfiguration $peristorConfiguration
      */
-    public function __construct (Validator $validator,
-                                 ShowNewEntryForm $showFormActionProcessor,
-                                 Repository $repository,
-                                 PersistorConfiguration $peristorConfiguration)
-    {
+    public function __construct(
+        Validator $validator,
+        ShowNewEntryForm $showFormActionProcessor,
+        Repository $repository,
+        PersistorConfiguration $peristorConfiguration
+    ) {
         $this->validator = $validator;
         $this->showFormActionProcessor = $showFormActionProcessor;
         $this->repository = $repository;
         $this->peristorConfiguration = $peristorConfiguration;
     }
 
-    function getName (): string
+    function getName(): string
     {
         return ActionRegistryFactory::POST_FORM;
     }
 
-    function process (array $get, array $post, ...$additionalParameters)
+    function process(array $get, array $post, ...$additionalParameters)
     {
         $validationResult = $this->validator->validate($post);
         if (!$validationResult->isError()) {
             $postValues = collect($validationResult)
-                ->keyBy(function (ValidationResultItem $validationResultItem) { return $validationResultItem->getName(); })
-                ->map(function (ValidationResultItem $validationResultItem) { return $validationResultItem->getPostValue(); });
+                ->keyBy(function (ValidationResultItem $validationResultItem) {
+                    return $validationResultItem->getName();
+                })
+                ->map(function (ValidationResultItem $validationResultItem) {
+                    return $validationResultItem->getPostValue();
+                });
             if (count($additionalParameters) == 1 && $additionalParameters[0] != null) {
                 $entity = $this->repository->getById($additionalParameters[0]);
-            }
-            else {
+            } else {
                 $entity = $this->repository->create();
             }
             /**
@@ -75,8 +79,7 @@ class PostForm implements ActionProcessor
                 $persistor->persist($postValues, $entity);
             }
             $this->repository->persist($entity);
-        }
-        else {
+        } else {
             $this->showFormActionProcessor->process($get, $post);
         }
     }

@@ -23,7 +23,7 @@ class DeleteEntryTest extends TestCase
     {
         ob_start();
         $this->basicTableController->getActionFor(ActionRegistryFactory::DELETE_ENTRY)
-            ->process([], [], 1);
+                                   ->process([], [], 1);
 
         $this->basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
         $output = ob_get_clean();
@@ -38,6 +38,7 @@ class DeleteEntryTest extends TestCase
         /** @var Container $container */
         $this->basicTableController =
             DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(BasicTableController::class);
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ["value" => self::TEST_1]);
+        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
+                                   ->process([], ["value" => self::TEST_1]);
     }
 }

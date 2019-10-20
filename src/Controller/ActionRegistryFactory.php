@@ -13,12 +13,12 @@ use BasicTablePackage\Controller\ActionProcessors\ShowTable;
 
 class ActionRegistryFactory
 {
-    const SHOW_TABLE = "show_table";
-    const ADD_NEW_ROW_FORM = "add_new_row_form";
-    const EDIT_ROW_FORM = "edit_row_form";
-    const POST_FORM = "post_form";
-    const DELETE_ENTRY = "delete_entry";
-    const CANCEL_FORM = "cancel_form";
+    const SHOW_TABLE         = "show_table";
+    const ADD_NEW_ROW_FORM   = "add_new_row_form";
+    const EDIT_ROW_FORM      = "edit_row_form";
+    const POST_FORM          = "post_form";
+    const DELETE_ENTRY       = "delete_entry";
+    const CANCEL_FORM        = "cancel_form";
     const SHOW_ENTRY_DETAILS = "show_details";
 
     /**
@@ -26,16 +26,21 @@ class ActionRegistryFactory
      */
     private $actions;
 
-    public function __construct(ShowTable $showTableActionProcessor,
-                                ShowNewEntryForm $showFormActionProcessor,
-                                PostForm $postFormActionProcessor,
-                                ShowEditEntryForm $showEditEntryFormActionProcessor,
-                                DeleteEntry $deleteEntryActionProcessor,
-                                ShowEntryDetails $showEntryDetailsActionProcessor)
-    {
+    public function __construct(
+        ShowTable $showTableActionProcessor,
+        ShowNewEntryForm $showFormActionProcessor,
+        PostForm $postFormActionProcessor,
+        ShowEditEntryForm $showEditEntryFormActionProcessor,
+        DeleteEntry $deleteEntryActionProcessor,
+        ShowEntryDetails $showEntryDetailsActionProcessor
+    ) {
         $this->actions = [
-            $showTableActionProcessor, $showFormActionProcessor, $postFormActionProcessor,
-            $showEditEntryFormActionProcessor, $deleteEntryActionProcessor, $showEntryDetailsActionProcessor,
+            $showTableActionProcessor,
+            $showFormActionProcessor,
+            $postFormActionProcessor,
+            $showEditEntryFormActionProcessor,
+            $deleteEntryActionProcessor,
+            $showEntryDetailsActionProcessor,
         ];
     }
 

@@ -17,7 +17,7 @@ class Row implements Iterator
      * @param int $id
      * @param String[] $values
      */
-    public function __construct (int $id, array $values)
+    public function __construct(int $id, array $values)
     {
         $this->id = $id;
         $this->initialize($values);
@@ -26,7 +26,7 @@ class Row implements Iterator
     /**
      * @return int
      */
-    public function getId ()
+    public function getId()
     {
         return $this->id;
     }

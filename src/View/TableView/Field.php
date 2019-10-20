@@ -6,5 +6,5 @@ namespace BasicTablePackage\View\TableView;
 
 interface Field
 {
-    public function getTableView (): string;
+    public function getTableView(): string;
 }

@@ -18,20 +18,22 @@ class TableViewConfigurationFactory
     /**
      * @param PersistenceFieldTypeReader $persistenceFieldTypeReader
      */
-    public function __construct (PersistenceFieldTypeReader $persistenceFieldTypeReader)
+    public function __construct(PersistenceFieldTypeReader $persistenceFieldTypeReader)
     {
         $this->persistenceFieldTypeReader = $persistenceFieldTypeReader;
     }
 
-    public function createConfiguration (): TableViewFieldConfiguration
+    public function createConfiguration(): TableViewFieldConfiguration
     {
         $fieldTypes =
             collect($this->persistenceFieldTypeReader->getPersistenceFieldTypes())
-                ->map(function ($persistenceFieldType) { return self::createFieldTypeOf($persistenceFieldType); });
+                ->map(function ($persistenceFieldType) {
+                    return self::createFieldTypeOf($persistenceFieldType);
+                });
         return new TableViewFieldConfiguration($fieldTypes->toArray());
     }
 
-    private function createFieldTypeOf (string $persistenceFieldType)
+    private function createFieldTypeOf(string $persistenceFieldType)
     {
         switch ($persistenceFieldType) {
             case PersistenceFieldTypes::STRING:

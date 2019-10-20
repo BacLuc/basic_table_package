@@ -37,9 +37,9 @@ class DateTimeField implements Field
         $output = $this->sqlValue ? $this->sqlValue->format("Y-m-d\TH:i") : "";
         $sqlValue = $this->sqlValue ? $this->sqlValue->format("Y-m-d H:i") : "";
         $variables = array(
-            "postname" => $this->postname,
+            "postname"             => $this->postname,
             "datetime_local_value" => $output,
-            "sqlValue" => $sqlValue,
+            "sqlValue"             => $sqlValue,
         );
         extract($variables);
         ob_start();

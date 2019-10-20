@@ -11,5 +11,5 @@ interface FieldPersistor
      * @param $toEntity
      * @return void
      */
-    public function persist ($valueMap, $toEntity);
+    public function persist($valueMap, $toEntity);
 }

@@ -14,7 +14,7 @@ class FormView
     /**
      * FormView constructor.
      */
-    public function __construct (array $fields)
+    public function __construct(array $fields)
     {
         $this->fields = $fields;
     }
@@ -22,7 +22,7 @@ class FormView
     /**
      * @return Field[]
      */
-    public function getFields ()
+    public function getFields()
     {
         return $this->fields;
     }

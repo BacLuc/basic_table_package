@@ -32,7 +32,7 @@ class ShowEditEntryForm implements ActionProcessor
      * @param VariableSetter $variableSetter
      * @param Renderer $renderer
      */
-    public function __construct (FormViewService $formViewService, VariableSetter $variableSetter, Renderer $renderer)
+    public function __construct(FormViewService $formViewService, VariableSetter $variableSetter, Renderer $renderer)
     {
         $this->formViewService = $formViewService;
         $this->variableSetter = $variableSetter;
@@ -40,12 +40,12 @@ class ShowEditEntryForm implements ActionProcessor
     }
 
 
-    function getName (): string
+    function getName(): string
     {
         return ActionRegistryFactory::EDIT_ROW_FORM;
     }
 
-    function process (array $get, array $post, ...$additionalParameters)
+    function process(array $get, array $post, ...$additionalParameters)
     {
         $editId = null;
         if (count($additionalParameters) == 1) {

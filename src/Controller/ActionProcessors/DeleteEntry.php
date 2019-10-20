@@ -19,17 +19,17 @@ class DeleteEntry implements ActionProcessor
      * PostFormActionProcessor constructor.
      * @param Repository $repository
      */
-    public function __construct (Repository $repository)
+    public function __construct(Repository $repository)
     {
         $this->repository = $repository;
     }
 
-    function getName (): string
+    function getName(): string
     {
         return ActionRegistryFactory::DELETE_ENTRY;
     }
 
-    function process (array $get, array $post, ...$additionalParameters)
+    function process(array $get, array $post, ...$additionalParameters)
     {
         if (count($additionalParameters) == 1 && $additionalParameters[0] != null) {
             $deleteId = $additionalParameters[0];

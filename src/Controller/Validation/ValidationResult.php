@@ -15,15 +15,17 @@ class ValidationResult implements Iterator
     /**
      * ValidationResult constructor.
      */
-    public function __construct (array $validationItems)
+    public function __construct(array $validationItems)
     {
         $this->initialize($validationItems);
     }
 
-    public function isError ()
+    public function isError()
     {
         return collect($this)
-                   ->filter(function (ValidationResultItem $validationResultItem) { return $validationResultItem->isError(); })
+                   ->filter(function (ValidationResultItem $validationResultItem) {
+                       return $validationResultItem->isError();
+                   })
                    ->count() > 0;
     }
 }

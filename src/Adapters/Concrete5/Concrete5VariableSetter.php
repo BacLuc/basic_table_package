@@ -18,10 +18,13 @@ class Concrete5VariableSetter implements VariableSetter
      * Concrete5VariableSetter constructor.
      * @param BlockController $blockController
      */
-    public function __construct (BlockController $blockController) { $this->blockController = $blockController; }
+    public function __construct(BlockController $blockController)
+    {
+        $this->blockController = $blockController;
+    }
 
 
-    public function set (String $name, $value)
+    public function set(String $name, $value)
     {
         $this->blockController->set($name, $value);
     }

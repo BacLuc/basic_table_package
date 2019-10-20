@@ -23,7 +23,7 @@ class ShowNewEntryFormTest extends TestCase
     {
         ob_start();
         $this->basicTableController->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM)
-            ->process([], []);
+                                   ->process([], []);
 
         $output = ob_get_clean();
         $this->assertStringNotContainsString(ExampleEntityConstants::TEXT_VAL_1, $output);
@@ -41,6 +41,7 @@ class ShowNewEntryFormTest extends TestCase
         /** @var Container $container */
         $this->basicTableController =
             DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(BasicTableController::class);
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ExampleEntityConstants::ENTRY_1_POST);
+        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
+                                   ->process([], ExampleEntityConstants::ENTRY_1_POST);
     }
 }

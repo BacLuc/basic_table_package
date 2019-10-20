@@ -18,23 +18,23 @@ class ValidationConfigurationFactory
     /**
      * @param PersistenceFieldTypeReader $persistenceFieldTypeReader
      */
-    public function __construct (PersistenceFieldTypeReader $persistenceFieldTypeReader)
+    public function __construct(PersistenceFieldTypeReader $persistenceFieldTypeReader)
     {
         $this->persistenceFieldTypeReader = $persistenceFieldTypeReader;
     }
 
-    public function createConfiguration (): ValidationConfiguration
+    public function createConfiguration(): ValidationConfiguration
     {
         $fieldTypes =
             collect($this->persistenceFieldTypeReader->getPersistenceFieldTypes())
                 ->map(function ($persistenceFieldType, $key) {
                     return self::createFieldTypeOf($persistenceFieldType,
-                                                   $key);
+                        $key);
                 });
         return new ValidationConfiguration($fieldTypes->toArray());
     }
 
-    private function createFieldTypeOf (string $persistenceFieldType, string $key)
+    private function createFieldTypeOf(string $persistenceFieldType, string $key)
     {
         switch ($persistenceFieldType) {
             case PersistenceFieldTypes::STRING:

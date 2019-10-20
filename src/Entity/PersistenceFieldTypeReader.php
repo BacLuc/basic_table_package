@@ -19,7 +19,7 @@ class PersistenceFieldTypeReader
      */
     private $className;
 
-    public function __construct (string $className)
+    public function __construct(string $className)
     {
         $this->className = $className;
     }
@@ -28,20 +28,23 @@ class PersistenceFieldTypeReader
      * @return array
      * @throws \RuntimeException
      */
-    public function getPersistenceFieldTypes (): array
+    public function getPersistenceFieldTypes(): array
     {
         try {
             $annotationReader = new AnnotationReader();
             $entity = new $this->className();
             $reflectionClass = new ReflectionClass($entity);
-        }
-        catch (\ReflectionException | AnnotationException $e) {
+        } catch (\ReflectionException | AnnotationException $e) {
             throw new \RuntimeException($e);
         }
         return
             collect($reflectionClass->getProperties())
-                ->keyBy(function (ReflectionProperty $reflectionProperty) { return $reflectionProperty->getName(); })
-                ->filter(function ($__, $key) { return $key !== "id"; })
+                ->keyBy(function (ReflectionProperty $reflectionProperty) {
+                    return $reflectionProperty->getName();
+                })
+                ->filter(function ($__, $key) {
+                    return $key !== "id";
+                })
                 ->map(function (ReflectionProperty $reflectionProperty) use ($annotationReader) {
                     return $annotationReader->getPropertyAnnotations($reflectionProperty);
                 })
@@ -52,7 +55,9 @@ class PersistenceFieldTypeReader
                 })
                 ->map(function (Collection $propertyAnnotations) {
                     return collect($propertyAnnotations)
-                        ->map(function (Column $column) { return $column->type; })->first();
+                        ->map(function (Column $column) {
+                            return $column->type;
+                        })->first();
                 })->toArray();
     }
 }

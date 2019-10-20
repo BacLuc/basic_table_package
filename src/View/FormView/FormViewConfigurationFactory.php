@@ -19,23 +19,23 @@ class FormViewConfigurationFactory
     /**
      * @param PersistenceFieldTypeReader $persistenceFieldTypeReader
      */
-    public function __construct (PersistenceFieldTypeReader $persistenceFieldTypeReader)
+    public function __construct(PersistenceFieldTypeReader $persistenceFieldTypeReader)
     {
         $this->persistenceFieldTypeReader = $persistenceFieldTypeReader;
     }
 
-    public function createConfiguration (): FormViewFieldConfiguration
+    public function createConfiguration(): FormViewFieldConfiguration
     {
         $fieldTypes =
             collect($this->persistenceFieldTypeReader->getPersistenceFieldTypes())
                 ->map(function ($persistenceFieldType, $key) {
                     return self::createFieldTypeOf($persistenceFieldType,
-                                                   $key);
+                        $key);
                 });
         return new FormViewFieldConfiguration($fieldTypes->toArray());
     }
 
-    private function createFieldTypeOf (string $persistenceFieldType, string $key)
+    private function createFieldTypeOf(string $persistenceFieldType, string $key)
     {
         switch ($persistenceFieldType) {
             case PersistenceFieldTypes::STRING:
@@ -59,7 +59,7 @@ class FormViewConfigurationFactory
         }
     }
 
-    private static function extractSqlValueOfEntity ($entity, string $key)
+    private static function extractSqlValueOfEntity($entity, string $key)
     {
         return property_exists($entity, $key) ? $entity->{$key} : null;
     }

@@ -23,7 +23,7 @@ class ShowEntryDetailsTest extends TestCase
     {
         ob_start();
         $this->basicTableController->getActionFor(ActionRegistryFactory::SHOW_ENTRY_DETAILS)
-            ->process([], [], 1);
+                                   ->process([], [], 1);
 
         $output = ob_get_clean();
         $this->assertThat($output, Matchers::stringContainsKeysAndValues(ExampleEntityConstants::ENTRY_1_POST));
@@ -37,7 +37,8 @@ class ShowEntryDetailsTest extends TestCase
         /** @var Container $container */
         $this->basicTableController =
             DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(BasicTableController::class);
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)->process([], ExampleEntityConstants::ENTRY_1_POST);
+        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
+                                   ->process([], ExampleEntityConstants::ENTRY_1_POST);
     }
 
 }

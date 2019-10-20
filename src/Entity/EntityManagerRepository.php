@@ -20,25 +20,25 @@ class EntityManagerRepository implements Repository
     /**
      * EntityManagerRepository constructor.
      */
-    public function __construct (EntityManager $entityManager, string $className)
+    public function __construct(EntityManager $entityManager, string $className)
     {
         $this->entityManager = $entityManager;
         $this->className = $className;
     }
 
-    public function create ()
+    public function create()
     {
         return new $this->className();
     }
 
-    public function persist ($entity)
+    public function persist($entity)
     {
         $this->entityManager->transactional(function (EntityManager $em) use ($entity) {
             $em->persist($entity);
         });
     }
 
-    public function getAll ()
+    public function getAll()
     {
         $query = $this->entityManager->createQuery(
         /** @lang DQL */
@@ -46,7 +46,7 @@ class EntityManagerRepository implements Repository
         return $query->getResult();
     }
 
-    public function getById (int $id)
+    public function getById(int $id)
     {
         $qb = $this->entityManager->createQueryBuilder();
         $result = $qb->select("e")
@@ -58,7 +58,7 @@ class EntityManagerRepository implements Repository
         return $result != null && is_array($result) && array_key_exists(0, $result) ? $result[0] : null;
     }
 
-    public function delete ($toDeleteEntity)
+    public function delete($toDeleteEntity)
     {
         $this->entityManager->transactional(function (EntityManager $em) use ($toDeleteEntity) {
             $em->remove($toDeleteEntity);

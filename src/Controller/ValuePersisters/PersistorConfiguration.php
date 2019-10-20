@@ -14,7 +14,7 @@ class PersistorConfiguration implements Iterator
     /**
      * ValidationConfiguration constructor.
      */
-    public function __construct (array $configuration)
+    public function __construct(array $configuration)
     {
         $this->initialize($configuration);
     }

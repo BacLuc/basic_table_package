@@ -6,7 +6,7 @@ namespace BasicTablePackage\Controller;
 
 interface Renderer
 {
-    public function render (string $path);
+    public function render(string $path);
 
-    public function action (string $action);
+    public function action(string $action);
 }

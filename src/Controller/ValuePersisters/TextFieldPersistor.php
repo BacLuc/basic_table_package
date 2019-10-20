@@ -14,12 +14,12 @@ class TextFieldPersistor implements FieldPersistor
     /**
      * TextFieldPersistor constructor.
      */
-    public function __construct (string $name)
+    public function __construct(string $name)
     {
         $this->name = $name;
     }
 
-    public function persist ($valueMap, $toEntity)
+    public function persist($valueMap, $toEntity)
     {
         $toEntity->{$this->name} = $valueMap[$this->name];
     }

@@ -21,13 +21,13 @@ class FormViewService
      */
     private $repository;
 
-    public function __construct (FormViewFieldConfiguration $formViewFieldConfiguration, Repository $repository)
+    public function __construct(FormViewFieldConfiguration $formViewFieldConfiguration, Repository $repository)
     {
         $this->formViewFieldConfiguration = $formViewFieldConfiguration;
         $this->repository = $repository;
     }
 
-    public function getFormView ($editId = null): FormView
+    public function getFormView($editId = null): FormView
     {
         $entity = new stdClass();
         if ($editId != null) {

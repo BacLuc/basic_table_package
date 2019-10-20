@@ -8,7 +8,7 @@ class CollectionHelper
 {
 }
 
-function collect ($value = null)
+function collect($value = null)
 {
     return new Collection($value);
 }

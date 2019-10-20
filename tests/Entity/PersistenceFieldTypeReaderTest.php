@@ -18,9 +18,10 @@ class PersistenceFieldTypeReaderTest extends TestCase
     {
         $persistenceFieldTypeReader = new PersistenceFieldTypeReader(SomeEntity::class);
         self::assertThat($persistenceFieldTypeReader->getPersistenceFieldTypes(),
-            self::equalTo(["value" => PersistenceFieldTypes::STRING,
-                "intcolumn" => PersistenceFieldTypes::INTEGER,
-                "datecolumn" => PersistenceFieldTypes::DATE,
+            self::equalTo([
+                "value"          => PersistenceFieldTypes::STRING,
+                "intcolumn"      => PersistenceFieldTypes::INTEGER,
+                "datecolumn"     => PersistenceFieldTypes::DATE,
                 "datetimecolumn" => PersistenceFieldTypes::DATETIME,
             ]));
     }

@@ -13,19 +13,19 @@ class Validator
      */
     private $validationConfiguration;
 
-    public function __construct (ValidationConfiguration $validationConfiguration)
+    public function __construct(ValidationConfiguration $validationConfiguration)
     {
         $this->validationConfiguration = $validationConfiguration;
     }
 
-    public function validate ($post): ValidationResult
+    public function validate($post): ValidationResult
     {
         return new ValidationResult(collect($this->validationConfiguration)
-                                        ->map(function (FieldValidator $fieldValidator) use ($post
-                                        ) {
-                                            return $fieldValidator->validate($post);
-                                        })
-                                        ->toArray());
+            ->map(function (FieldValidator $fieldValidator) use ($post
+            ) {
+                return $fieldValidator->validate($post);
+            })
+            ->toArray());
     }
 
 }

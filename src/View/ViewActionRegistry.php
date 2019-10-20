@@ -18,16 +18,18 @@ class ViewActionRegistry
      * ActionRegistry constructor.
      * @param ViewActionDefinition[] $actions
      */
-    public function __construct (array $actions)
+    public function __construct(array $actions)
     {
-        $this->actions = collect($actions)->keyBy(function (ViewActionDefinition $item) { return $item->getAction(); });
+        $this->actions = collect($actions)->keyBy(function (ViewActionDefinition $item) {
+            return $item->getAction();
+        });
     }
 
     /**
      * @param String $name
      * @return ViewActionDefinition|null
      */
-    public function getByName (String $name): ViewActionDefinition
+    public function getByName(String $name): ViewActionDefinition
     {
         return $this->actions->get($name);
     }

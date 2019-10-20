@@ -14,12 +14,12 @@ class TextFieldValidator implements FieldValidator
     /**
      * TextFieldValidator constructor.
      */
-    public function __construct (string $name)
+    public function __construct(string $name)
     {
         $this->name = $name;
     }
 
-    public function validate ($post): ValidationResultItem
+    public function validate($post): ValidationResultItem
     {
         return new ValidationResultItem($this->name, key_exists($this->name, $post) ? $post[$this->name] : null, []);
     }

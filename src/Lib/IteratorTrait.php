@@ -15,7 +15,7 @@ trait IteratorTrait
      * Row constructor.
      * @param String[] $values
      */
-    public function initialize (array $values)
+    public function initialize(array $values)
     {
         $this->values = $values;
     }
@@ -27,7 +27,7 @@ trait IteratorTrait
      * @return mixed Can return any type.
      * @since 5.0.0
      */
-    public function current ()
+    public function current()
     {
         return current($this->values);
     }
@@ -38,7 +38,7 @@ trait IteratorTrait
      * @return void Any returned value is ignored.
      * @since 5.0.0
      */
-    public function next ()
+    public function next()
     {
         next($this->values);
     }
@@ -49,7 +49,7 @@ trait IteratorTrait
      * @return mixed scalar on success, or null on failure.
      * @since 5.0.0
      */
-    public function key ()
+    public function key()
     {
         return key($this->values);
     }
@@ -61,7 +61,7 @@ trait IteratorTrait
      * Returns true on success or false on failure.
      * @since 5.0.0
      */
-    public function valid ()
+    public function valid()
     {
         return key($this->values) !== null;
     }
@@ -72,7 +72,7 @@ trait IteratorTrait
      * @return void Any returned value is ignored.
      * @since 5.0.0
      */
-    public function rewind ()
+    public function rewind()
     {
         reset($this->values);
     }

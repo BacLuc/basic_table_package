@@ -16,7 +16,7 @@ class PersistenceFieldTypes
     /**
      * @throws \ReflectionException
      */
-    public static function getTypes ()
+    public static function getTypes()
     {
         $reflectionClass = new ReflectionClass(new self());
         return $reflectionClass->getConstants();

@@ -19,7 +19,7 @@ class ValidationResultItem
     /**
      * ValidationResultItem constructor.
      */
-    public function __construct (string $name, $postValue, array $messages)
+    public function __construct(string $name, $postValue, array $messages)
     {
         $this->name = $name;
         $this->postValue = $postValue;
@@ -29,7 +29,7 @@ class ValidationResultItem
     /**
      * @return string
      */
-    public function getName ()
+    public function getName()
     {
         return $this->name;
     }
@@ -38,7 +38,7 @@ class ValidationResultItem
     /**
      * @return mixed
      */
-    public function getPostValue ()
+    public function getPostValue()
     {
         return $this->postValue;
     }
@@ -46,12 +46,12 @@ class ValidationResultItem
     /**
      * @return array
      */
-    public function getMessages ()
+    public function getMessages()
     {
         return $this->messages;
     }
 
-    public function isError (): bool
+    public function isError(): bool
     {
         return count($this->messages) != 0;
     }

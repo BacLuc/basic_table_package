@@ -21,16 +21,36 @@ class Controller extends BlockController
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function view ()
+    public function view()
     {
         $this->processAction($this->createBasicTableController()->getActionFor(ActionRegistryFactory::SHOW_TABLE));
+    }
+
+    private function processAction(ActionProcessor $actionProcessor, ...$additionalParams)
+    {
+        $actionProcessor->process($this->request->get(null) ?: [],
+            $this->request->post(null) ?: [],
+            array_key_exists(0, $additionalParams) ? $additionalParams[0] : null);
+    }
+
+    /**
+     * @return BasicTableController
+     * @throws DependencyException
+     * @throws NotFoundException
+     * @throws Exception
+     */
+    private function createBasicTableController(): BasicTableController
+    {
+        $entityManager = PackageController::getEntityManagerStatic();
+        $container = DIContainerFactory::createContainer($this, $entityManager, ExampleEntity::class);
+        return $container->get(BasicTableController::class);
     }
 
     /**
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function action_add_new_row_form ()
+    public function action_add_new_row_form()
     {
         $this->processAction($this->createBasicTableController()
                                   ->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM));
@@ -40,11 +60,11 @@ class Controller extends BlockController
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function action_edit_row_form ($ignored, $editId)
+    public function action_edit_row_form($ignored, $editId)
     {
         $this->processAction($this->createBasicTableController()
                                   ->getActionFor(ActionRegistryFactory::EDIT_ROW_FORM),
-                             $editId);
+            $editId);
     }
 
     /**
@@ -53,10 +73,10 @@ class Controller extends BlockController
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function action_post_form ($ignored, $editId = null)
+    public function action_post_form($ignored, $editId = null)
     {
         $this->processAction($this->createBasicTableController()->getActionFor(ActionRegistryFactory::POST_FORM),
-                             $editId);
+            $editId);
         Redirect::page(Page::getCurrentPage())->send();
         exit();
     }
@@ -67,10 +87,10 @@ class Controller extends BlockController
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function action_delete_entry ($ignored, $toDeleteId)
+    public function action_delete_entry($ignored, $toDeleteId)
     {
         $this->processAction($this->createBasicTableController()->getActionFor(ActionRegistryFactory::DELETE_ENTRY),
-                             $toDeleteId);
+            $toDeleteId);
         Redirect::page(Page::getCurrentPage())->send();
         exit();
     }
@@ -79,7 +99,7 @@ class Controller extends BlockController
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function action_cancel_form ()
+    public function action_cancel_form()
     {
         $this->processAction($this->createBasicTableController()->getActionFor(ActionRegistryFactory::SHOW_TABLE));
     }
@@ -92,27 +112,9 @@ class Controller extends BlockController
      */
     public function action_show_details($ignored, $toShowId)
     {
-        $this->processAction($this->createBasicTableController()->getActionFor(ActionRegistryFactory::SHOW_ENTRY_DETAILS), $toShowId);
-    }
-
-    /**
-     * @return BasicTableController
-     * @throws DependencyException
-     * @throws NotFoundException
-     * @throws Exception
-     */
-    private function createBasicTableController (): BasicTableController
-    {
-        $entityManager = PackageController::getEntityManagerStatic();
-        $container = DIContainerFactory::createContainer($this, $entityManager, ExampleEntity::class);
-        return $container->get(BasicTableController::class);
-    }
-
-    private function processAction (ActionProcessor $actionProcessor, ...$additionalParams)
-    {
-        $actionProcessor->process($this->request->get(null) ? : [],
-                                  $this->request->post(null) ? : [],
-                                  array_key_exists(0, $additionalParams) ? $additionalParams[0] : null);
+        $this->processAction($this->createBasicTableController()
+                                  ->getActionFor(ActionRegistryFactory::SHOW_ENTRY_DETAILS),
+            $toShowId);
     }
 
 }

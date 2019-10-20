@@ -31,12 +31,13 @@ class ViewActionDefinition
     /**
      * Action constructor.
      */
-    public function __construct (string $action,
-                                 string $buttonClass,
-                                 string $ariaLabel,
-                                 string $title,
-                                 string $iconClass)
-    {
+    public function __construct(
+        string $action,
+        string $buttonClass,
+        string $ariaLabel,
+        string $title,
+        string $iconClass
+    ) {
         $this->action = $action;
         $this->buttonClass = $buttonClass;
         $this->ariaLabel = $ariaLabel;
@@ -47,7 +48,7 @@ class ViewActionDefinition
     /**
      * @return string
      */
-    public function getAction ()
+    public function getAction()
     {
         return $this->action;
     }
@@ -55,7 +56,7 @@ class ViewActionDefinition
     /**
      * @return string
      */
-    public function getButtonClass ()
+    public function getButtonClass()
     {
         return $this->buttonClass;
     }
@@ -63,7 +64,7 @@ class ViewActionDefinition
     /**
      * @return string
      */
-    public function getAriaLabel ()
+    public function getAriaLabel()
     {
         return $this->ariaLabel;
     }
@@ -71,7 +72,7 @@ class ViewActionDefinition
     /**
      * @return string
      */
-    public function getTitle ()
+    public function getTitle()
     {
         return $this->title;
     }
@@ -79,7 +80,7 @@ class ViewActionDefinition
     /**
      * @return string
      */
-    public function getIconClass ()
+    public function getIconClass()
     {
         return $this->iconClass;
     }
