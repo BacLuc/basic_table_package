@@ -26,14 +26,6 @@ class ActionRegistryFactory
      */
     private $actions;
 
-    /**
-     * ActionRegistryFactory constructor.
-     * @param ShowTable $showTableActionProcessor
-     * @param ShowNewEntryForm $showFormActionProcessor
-     * @param PostForm $postFormActionProcessor
-     * @param ShowEditEntryForm $showEditEntryFormActionProcessor
-     * @param ShowEntryDetails $showEntryDetailsActionProcessor
-     */
     public function __construct(ShowTable $showTableActionProcessor,
                                 ShowNewEntryForm $showFormActionProcessor,
                                 PostForm $postFormActionProcessor,
