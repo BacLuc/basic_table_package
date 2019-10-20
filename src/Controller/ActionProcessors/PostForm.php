@@ -34,6 +34,10 @@ class PostForm implements ActionProcessor
 
     /**
      * PostFormActionProcessor constructor.
+     * @param Validator $validator
+     * @param ShowNewEntryForm $showFormActionProcessor
+     * @param Repository $repository
+     * @param PersistorConfiguration $peristorConfiguration
      */
     public function __construct (Validator $validator,
                                  ShowNewEntryForm $showFormActionProcessor,
