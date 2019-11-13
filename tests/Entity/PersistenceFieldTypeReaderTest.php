@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 class PersistenceFieldTypeReaderTest extends TestCase
 {
+
     /**
      * @throws \Doctrine\Common\Annotations\AnnotationException
      * @throws \ReflectionException
@@ -23,6 +24,7 @@ class PersistenceFieldTypeReaderTest extends TestCase
                 "intcolumn"      => PersistenceFieldTypes::INTEGER,
                 "datecolumn"     => PersistenceFieldTypes::DATE,
                 "datetimecolumn" => PersistenceFieldTypes::DATETIME,
+                "wysiwygcolumn"  => PersistenceFieldTypes::TEXT,
             ]));
     }
 
