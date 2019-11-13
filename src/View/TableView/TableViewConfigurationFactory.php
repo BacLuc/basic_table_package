@@ -49,6 +49,11 @@ class TableViewConfigurationFactory
                 return function ($value) {
                     return new DateTimeField($value);
                 };
+            /** @noinspection PhpDuplicateCaseInspection */
+            case PersistenceFieldTypes::TEXT:
+                return function ($value) {
+                    return new TextField($value);
+                };
             default:
                 return null;
         }

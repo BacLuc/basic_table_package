@@ -8,10 +8,11 @@ use ReflectionClass;
 
 class PersistenceFieldTypes
 {
-    const INTEGER  = "integer";
-    const STRING   = "string";
-    const DATE     = "date";
-    const DATETIME = "datetime";
+    const        INTEGER  = "integer";
+    const        STRING   = "string";
+    const        DATE     = "date";
+    const        DATETIME = "datetime";
+    public const TEXT     = "text";
 
     /**
      * @throws \ReflectionException

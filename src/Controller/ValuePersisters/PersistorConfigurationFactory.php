@@ -44,6 +44,9 @@ class PersistorConfigurationFactory
                 return new DatePersistor($key);
             case PersistenceFieldTypes::DATETIME:
                 return new DateTimePersistor($key);
+            /** @noinspection PhpDuplicateSwitchCaseBodyInspection */
+            case PersistenceFieldTypes::TEXT:
+                return new TextFieldPersistor($key);
             default:
                 return null;
         }

@@ -13,9 +13,9 @@ class Validator
      */
     private $validationConfiguration;
 
-    public function __construct(ValidationConfiguration $validationConfiguration)
+    public function __construct(ValidationConfigurationFactory $validationConfigurationFactory)
     {
-        $this->validationConfiguration = $validationConfiguration;
+        $this->validationConfiguration = $validationConfigurationFactory->createConfiguration();
     }
 
     public function validate($post): ValidationResult

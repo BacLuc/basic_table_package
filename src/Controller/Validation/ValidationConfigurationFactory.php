@@ -44,6 +44,9 @@ class ValidationConfigurationFactory
             case PersistenceFieldTypes::DATE:
             case PersistenceFieldTypes::DATETIME:
                 return new DateValidator($key);
+            /** @noinspection PhpDuplicateSwitchCaseBodyInspection */
+            case PersistenceFieldTypes::TEXT:
+                return new TextFieldValidator($key);
             default:
                 return null;
         }

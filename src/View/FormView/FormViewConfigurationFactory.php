@@ -54,6 +54,10 @@ class FormViewConfigurationFactory
                 return function ($entity) use ($key) {
                     return new DateTimeField($key, $key, self::extractSqlValueOfEntity($entity, $key));
                 };
+            case PersistenceFieldTypes::TEXT:
+                return function ($entity) use ($key) {
+                    return new TextField($key, $key, self::extractSqlValueOfEntity($entity, $key));
+                };
             default:
                 return null;
         }

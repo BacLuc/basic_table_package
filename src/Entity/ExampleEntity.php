@@ -46,6 +46,11 @@ class ExampleEntity
      */
     private $datetimecolumn;
 
+    /**
+     * @Column(type="text")
+     */
+    private $wysiwygcolumn;
+
     public function __get($name)
     {
         return $this->{$name};
