@@ -34,14 +34,7 @@ class ActionRegistryFactory
         DeleteEntry $deleteEntryActionProcessor,
         ShowEntryDetails $showEntryDetailsActionProcessor
     ) {
-        $this->actions = [
-            $showTableActionProcessor,
-            $showFormActionProcessor,
-            $postFormActionProcessor,
-            $showEditEntryFormActionProcessor,
-            $deleteEntryActionProcessor,
-            $showEntryDetailsActionProcessor,
-        ];
+        $this->actions = func_get_args();
     }
 
 
