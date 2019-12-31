@@ -38,6 +38,7 @@ class TableViewConfigurationFactory
         switch ($persistenceFieldType) {
             case PersistenceFieldTypes::STRING:
             case PersistenceFieldTypes::INTEGER:
+            case PersistenceFieldTypes::TEXT:
                 return function ($value) {
                     return new TextField($value);
                 };
@@ -48,11 +49,6 @@ class TableViewConfigurationFactory
             case PersistenceFieldTypes::DATETIME:
                 return function ($value) {
                     return new DateTimeField($value);
-                };
-            /** @noinspection PhpDuplicateCaseInspection */
-            case PersistenceFieldTypes::TEXT:
-                return function ($value) {
-                    return new TextField($value);
                 };
             default:
                 return null;

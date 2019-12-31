@@ -37,6 +37,7 @@ class ValidationConfigurationFactory
     private function createFieldTypeOf(string $persistenceFieldType, string $key)
     {
         switch ($persistenceFieldType) {
+            case PersistenceFieldTypes::TEXT:
             case PersistenceFieldTypes::STRING:
                 return new TextFieldValidator($key);
             case PersistenceFieldTypes::INTEGER:
@@ -44,9 +45,6 @@ class ValidationConfigurationFactory
             case PersistenceFieldTypes::DATE:
             case PersistenceFieldTypes::DATETIME:
                 return new DateValidator($key);
-            /** @noinspection PhpDuplicateSwitchCaseBodyInspection */
-            case PersistenceFieldTypes::TEXT:
-                return new TextFieldValidator($key);
             default:
                 return null;
         }
