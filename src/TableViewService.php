@@ -44,7 +44,7 @@ class TableViewService
                 ->map(function ($entity) {
                     return collect($this->tableViewFieldConfiguration)
                         ->map(function ($fieldFactory, $name) use ($entity) {
-                            return call_user_func($fieldFactory, $entity->{$name});
+                            return call_user_func($fieldFactory, $entity->{$name}, $name);
                         })->map(function ($field) {
                             return self::toTableView($field);
                         });

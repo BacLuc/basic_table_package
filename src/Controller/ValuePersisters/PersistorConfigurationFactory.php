@@ -4,6 +4,7 @@
 namespace BasicTablePackage\Controller\ValuePersisters;
 
 
+use BasicTablePackage\Entity\EntityFieldOverrides;
 use BasicTablePackage\Entity\PersistenceFieldTypeReader;
 use BasicTablePackage\Entity\PersistenceFieldTypes;
 use function BasicTablePackage\Lib\collect as collect;
@@ -14,13 +15,21 @@ class PersistorConfigurationFactory
      * @var PersistenceFieldTypeReader
      */
     private $persistenceFieldTypeReader;
+    /**
+     * @var EntityFieldOverrides
+     */
+    private $entityFieldOverrides;
 
     /**
      * @param PersistenceFieldTypeReader $persistenceFieldTypeReader
+     * @param EntityFieldOverrides $entityFieldOverrides
      */
-    public function __construct(PersistenceFieldTypeReader $persistenceFieldTypeReader)
-    {
+    public function __construct(
+        PersistenceFieldTypeReader $persistenceFieldTypeReader,
+        EntityFieldOverrides $entityFieldOverrides
+    ) {
         $this->persistenceFieldTypeReader = $persistenceFieldTypeReader;
+        $this->entityFieldOverrides = $entityFieldOverrides;
     }
 
     public function createConfiguration(): PersistorConfiguration
@@ -36,6 +45,10 @@ class PersistorConfigurationFactory
 
     private function createFieldTypeOf(string $persistenceFieldType, string $key)
     {
+        if (isset($this->entityFieldOverrides[$key]) &&
+            isset($this->entityFieldOverrides[$key][FieldPersistor::class])) {
+            return $this->entityFieldOverrides[$key][FieldPersistor::class]($key);
+        }
         switch ($persistenceFieldType) {
             case PersistenceFieldTypes::STRING:
             case PersistenceFieldTypes::TEXT:

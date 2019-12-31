@@ -12,6 +12,7 @@ use BasicTablePackage\Controller\Validation\ValidationConfigurationFactory;
 use BasicTablePackage\Controller\ValuePersisters\PersistorConfiguration;
 use BasicTablePackage\Controller\ValuePersisters\PersistorConfigurationFactory;
 use BasicTablePackage\Controller\VariableSetter;
+use BasicTablePackage\Entity\EntityFieldOverrides;
 use BasicTablePackage\Entity\EntityManagerRepository;
 use BasicTablePackage\Entity\PersistenceFieldTypeReader;
 use BasicTablePackage\Entity\Repository;
@@ -35,16 +36,20 @@ class DIContainerFactory
 {
     /**
      * @param BlockController $controller
+     * @param EntityManager $entityManager
+     * @param $entityClass
+     * @param EntityFieldOverrides $entityFieldOverrides
      * @return Container
      * @throws \Exception
      */
     public static function createContainer(
         BlockController $controller,
         EntityManager $entityManager,
-        $entityClass
+        $entityClass,
+        EntityFieldOverrides $entityFieldOverrides
     ): Container {
         $containerBuilder = new ContainerBuilder();
-        $definitions = self::createDefinition($entityManager, $entityClass);
+        $definitions = self::createDefinition($entityManager, $entityClass, $entityFieldOverrides);
         $definitions[BlockController::class] = value($controller);
         $containerBuilder->addDefinitions($definitions);
         return $containerBuilder->build();
@@ -53,11 +58,13 @@ class DIContainerFactory
     /**
      * @param EntityManager $entityManager
      * @param $entityClass
+     * @param EntityFieldOverrides $entityFieldOverrides
      * @return array
      */
     public static function createDefinition(
         EntityManager $entityManager,
-        $entityClass
+        $entityClass,
+        EntityFieldOverrides $entityFieldOverrides
     ): array {
         AnnotationRegistry::registerLoader("class_exists");
         $definitions = [
@@ -65,6 +72,7 @@ class DIContainerFactory
             EntityManager::class               => value($entityManager),
             Repository::class                  => value(new EntityManagerRepository($entityManager,
                 $entityClass)),
+            EntityFieldOverrides::class        => value($entityFieldOverrides),
             VariableSetter::class              => autowire(Concrete5VariableSetter::class),
             Renderer::class                    => autowire(Concrete5Renderer::class),
             ViewActionRegistry::class          => factory(function (Container $container) {

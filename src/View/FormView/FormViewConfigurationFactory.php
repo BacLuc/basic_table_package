@@ -4,6 +4,7 @@
 namespace BasicTablePackage\View\FormView;
 
 
+use BasicTablePackage\Entity\EntityFieldOverrides;
 use BasicTablePackage\Entity\PersistenceFieldTypeReader;
 use BasicTablePackage\Entity\PersistenceFieldTypes;
 use function BasicTablePackage\Lib\collect as collect;
@@ -19,17 +20,24 @@ class FormViewConfigurationFactory
      * @var WysiwygEditorFactory
      */
     private $wysiwygEditorFactory;
+    /**
+     * @var EntityFieldOverrides
+     */
+    private $entityFieldOverrides;
 
     /**
      * @param PersistenceFieldTypeReader $persistenceFieldTypeReader
      * @param WysiwygEditorFactory $wysiwygEditorFactory
+     * @param EntityFieldOverrides $entityFieldOverrides
      */
     public function __construct(
         PersistenceFieldTypeReader $persistenceFieldTypeReader,
-        WysiwygEditorFactory $wysiwygEditorFactory
+        WysiwygEditorFactory $wysiwygEditorFactory,
+        EntityFieldOverrides $entityFieldOverrides
     ) {
         $this->persistenceFieldTypeReader = $persistenceFieldTypeReader;
         $this->wysiwygEditorFactory = $wysiwygEditorFactory;
+        $this->entityFieldOverrides = $entityFieldOverrides;
     }
 
     public function createConfiguration(): FormViewFieldConfiguration
@@ -45,6 +53,10 @@ class FormViewConfigurationFactory
 
     private function createFieldTypeOf(string $persistenceFieldType, string $key)
     {
+        if (isset($this->entityFieldOverrides[$key]) &&
+            isset($this->entityFieldOverrides[$key][Field::class])) {
+            return $this->entityFieldOverrides[$key][Field::class]($key);
+        }
         switch ($persistenceFieldType) {
             case PersistenceFieldTypes::STRING:
                 return function ($entity) use ($key) {

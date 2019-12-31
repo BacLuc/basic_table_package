@@ -4,6 +4,7 @@
 namespace BasicTablePackage\Controller\Validation;
 
 
+use BasicTablePackage\Entity\EntityFieldOverrides;
 use BasicTablePackage\Entity\PersistenceFieldTypeReader;
 use BasicTablePackage\Entity\PersistenceFieldTypes;
 use function BasicTablePackage\Lib\collect as collect;
@@ -14,13 +15,21 @@ class ValidationConfigurationFactory
      * @var PersistenceFieldTypeReader
      */
     private $persistenceFieldTypeReader;
+    /**
+     * @var EntityFieldOverrides
+     */
+    private $entityFieldOverrides;
 
     /**
      * @param PersistenceFieldTypeReader $persistenceFieldTypeReader
+     * @param EntityFieldOverrides $entityFieldOverrides
      */
-    public function __construct(PersistenceFieldTypeReader $persistenceFieldTypeReader)
-    {
+    public function __construct(
+        PersistenceFieldTypeReader $persistenceFieldTypeReader,
+        EntityFieldOverrides $entityFieldOverrides
+    ) {
         $this->persistenceFieldTypeReader = $persistenceFieldTypeReader;
+        $this->entityFieldOverrides = $entityFieldOverrides;
     }
 
     public function createConfiguration(): ValidationConfiguration
@@ -36,6 +45,10 @@ class ValidationConfigurationFactory
 
     private function createFieldTypeOf(string $persistenceFieldType, string $key)
     {
+        if (isset($this->entityFieldOverrides[$key]) &&
+            isset($this->entityFieldOverrides[$key][FieldValidator::class])) {
+            return $this->entityFieldOverrides[$key][FieldValidator::class]($key);
+        }
         switch ($persistenceFieldType) {
             case PersistenceFieldTypes::TEXT:
             case PersistenceFieldTypes::STRING:

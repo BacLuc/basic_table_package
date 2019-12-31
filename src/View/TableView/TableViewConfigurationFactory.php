@@ -4,6 +4,7 @@
 namespace BasicTablePackage\View\TableView;
 
 
+use BasicTablePackage\Entity\EntityFieldOverrides;
 use BasicTablePackage\Entity\PersistenceFieldTypeReader;
 use BasicTablePackage\Entity\PersistenceFieldTypes;
 use function BasicTablePackage\Lib\collect as collect;
@@ -14,13 +15,21 @@ class TableViewConfigurationFactory
      * @var PersistenceFieldTypeReader
      */
     private $persistenceFieldTypeReader;
+    /**
+     * @var EntityFieldOverrides
+     */
+    private $entityFieldOverrides;
 
     /**
      * @param PersistenceFieldTypeReader $persistenceFieldTypeReader
+     * @param EntityFieldOverrides $entityFieldOverrides
      */
-    public function __construct(PersistenceFieldTypeReader $persistenceFieldTypeReader)
-    {
+    public function __construct(
+        PersistenceFieldTypeReader $persistenceFieldTypeReader,
+        EntityFieldOverrides $entityFieldOverrides
+    ) {
         $this->persistenceFieldTypeReader = $persistenceFieldTypeReader;
+        $this->entityFieldOverrides = $entityFieldOverrides;
     }
 
     public function createConfiguration(): TableViewFieldConfiguration
@@ -39,19 +48,34 @@ class TableViewConfigurationFactory
             case PersistenceFieldTypes::STRING:
             case PersistenceFieldTypes::INTEGER:
             case PersistenceFieldTypes::TEXT:
-                return function ($value) {
-                    return new TextField($value);
+                return function ($value, $key) {
+                    return $this->checkFieldOverride($value, $key) ?: new TextField($value);
                 };
             case PersistenceFieldTypes::DATE:
-                return function ($value) {
-                    return new DateField($value);
+                return function ($value, $key) {
+                    return $this->checkFieldOverride($value, $key) ?: new DateField($value);
                 };
             case PersistenceFieldTypes::DATETIME:
-                return function ($value) {
-                    return new DateTimeField($value);
+                return function ($value, $key) {
+                    return $this->checkFieldOverride($value, $key) ?: new DateTimeField($value);
                 };
             default:
                 return null;
+        }
+    }
+
+    /**
+     * @param $value
+     * @param $key
+     * @return callable|null
+     */
+    private function checkFieldOverride($value, $key)
+    {
+        if (isset($this->entityFieldOverrides[$key]) &&
+            isset($this->entityFieldOverrides[$key][Field::class])) {
+            return $this->entityFieldOverrides[$key][Field::class]($value);
+        } else {
+            return null;
         }
     }
 }
