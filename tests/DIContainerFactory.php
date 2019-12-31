@@ -11,7 +11,9 @@ use BasicTablePackage\Entity\ExampleEntity;
 use BasicTablePackage\Entity\Repository;
 use BasicTablePackage\Test\Adapters\DefaultContext;
 use BasicTablePackage\Test\Adapters\DefaultRenderer;
+use BasicTablePackage\Test\Adapters\DefaultWysiwygEditorFactory;
 use BasicTablePackage\Test\Entity\InMemoryRepository;
+use BasicTablePackage\View\FormView\WysiwygEditorFactory;
 use DI\Container;
 use DI\ContainerBuilder;
 use Doctrine\Common\Annotations\AnnotationRegistry;
@@ -33,6 +35,7 @@ class DIContainerFactory
         $definitions[DefaultContext::class] = get(VariableSetter::class);
         $definitions[Renderer::class] = autowire(DefaultRenderer::class);
         $definitions[Repository::class] = value(new InMemoryRepository(ExampleEntity::class));
+        $definitions[WysiwygEditorFactory::class] = value(new DefaultWysiwygEditorFactory());
 
         $containerBuilder->addDefinitions($definitions);
         return $containerBuilder->build();

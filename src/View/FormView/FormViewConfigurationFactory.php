@@ -15,13 +15,21 @@ class FormViewConfigurationFactory
      * @var PersistenceFieldTypeReader
      */
     private $persistenceFieldTypeReader;
+    /**
+     * @var WysiwygEditorFactory
+     */
+    private $wysiwygEditorFactory;
 
     /**
      * @param PersistenceFieldTypeReader $persistenceFieldTypeReader
+     * @param WysiwygEditorFactory $wysiwygEditorFactory
      */
-    public function __construct(PersistenceFieldTypeReader $persistenceFieldTypeReader)
-    {
+    public function __construct(
+        PersistenceFieldTypeReader $persistenceFieldTypeReader,
+        WysiwygEditorFactory $wysiwygEditorFactory
+    ) {
         $this->persistenceFieldTypeReader = $persistenceFieldTypeReader;
+        $this->wysiwygEditorFactory = $wysiwygEditorFactory;
     }
 
     public function createConfiguration(): FormViewFieldConfiguration
@@ -56,7 +64,10 @@ class FormViewConfigurationFactory
                 };
             case PersistenceFieldTypes::TEXT:
                 return function ($entity) use ($key) {
-                    return new TextField($key, $key, self::extractSqlValueOfEntity($entity, $key));
+                    return new WysiwygField($this->wysiwygEditorFactory->createEditor(),
+                        $key,
+                        $key,
+                        self::extractSqlValueOfEntity($entity, $key));
                 };
             default:
                 return null;
