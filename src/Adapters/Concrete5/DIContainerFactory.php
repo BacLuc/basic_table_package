@@ -17,6 +17,7 @@ use BasicTablePackage\Entity\PersistenceFieldTypeReader;
 use BasicTablePackage\Entity\Repository;
 use BasicTablePackage\View\FormView\FormViewConfigurationFactory;
 use BasicTablePackage\View\FormView\FormViewFieldConfiguration;
+use BasicTablePackage\View\FormView\WysiwygEditorFactory;
 use BasicTablePackage\View\TableView\TableViewConfigurationFactory;
 use BasicTablePackage\View\TableView\TableViewFieldConfiguration;
 use BasicTablePackage\View\ViewActionRegistry;
@@ -84,6 +85,7 @@ class DIContainerFactory
             PersistorConfiguration::class      => factory(function (Container $container) {
                 return $container->get(PersistorConfigurationFactory::class)->createConfiguration();
             }),
+            WysiwygEditorFactory::class        => value(new Concrete5WysiwygEditorFactory()),
 
         ];
         return $definitions;
