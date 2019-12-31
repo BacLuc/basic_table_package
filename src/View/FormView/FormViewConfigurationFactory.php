@@ -55,7 +55,7 @@ class FormViewConfigurationFactory
     {
         if (isset($this->entityFieldOverrides[$key]) &&
             isset($this->entityFieldOverrides[$key][Field::class])) {
-            return $this->entityFieldOverrides[$key][Field::class]($key);
+            return $this->entityFieldOverrides[$key][Field::class];
         }
         switch ($persistenceFieldType) {
             case PersistenceFieldTypes::STRING:
@@ -86,7 +86,7 @@ class FormViewConfigurationFactory
         }
     }
 
-    private static function extractSqlValueOfEntity($entity, string $key)
+    public static function extractSqlValueOfEntity($entity, string $key)
     {
         return property_exists($entity, $key) ? $entity->{$key} : null;
     }

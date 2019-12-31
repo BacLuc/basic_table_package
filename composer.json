@@ -5,7 +5,8 @@
     "portphp/csv": "1.1.*",
     "portphp/excel": "1.1.*",
     "php-di/php-di": "6.*",
-    "tightenco/collect": "6.0.*"
+    "tightenco/collect": "6.0.*",
+    "php-ds/php-ds": "1.2.*"
   },
   "autoload": {
     "psr-4": {

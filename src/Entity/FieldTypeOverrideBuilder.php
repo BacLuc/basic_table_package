@@ -5,7 +5,6 @@ namespace BasicTablePackage\Entity;
 
 
 use LogicException;
-use function BasicTablePackage\Lib\collect as collect;
 
 class FieldTypeOverrideBuilder
 {
@@ -13,7 +12,7 @@ class FieldTypeOverrideBuilder
      * @var string
      */
     private $fieldName;
-    private $overrides;
+    private $overrides = [];
     private $currentOverride;
 
     /**
@@ -35,6 +34,7 @@ class FieldTypeOverrideBuilder
             throw new LogicException("cannot define override for same interface twice. Override for interface $interfaceName is already defined");
         }
 
+        $this->currentOverride = $interfaceName;
         $this->overrides[$interfaceName] = null;
         return $this;
     }
@@ -51,8 +51,6 @@ class FieldTypeOverrideBuilder
 
     public function build()
     {
-        return new FieldTypeOverride($this->fieldName, collect($this->currentOverride)->map(function ($value) {
-            return $value;
-        })->toArray());
+        return new FieldTypeOverride($this->fieldName, $this->overrides);
     }
 }

@@ -8,6 +8,9 @@ use BasicTablePackage\Controller\ActionRegistryFactory;
 use BasicTablePackage\Controller\BasicTableController;
 use BasicTablePackage\Entity\EntityFieldOverrideBuilder;
 use BasicTablePackage\Entity\ExampleEntity;
+use BasicTablePackage\Entity\ExampleEntityDropdownValueSupplier;
+use BasicTablePackage\View\FormView\Dropdownfield;
+use BasicTablePackage\View\FormView\Field as FormField;
 use Concrete\Core\Block\BlockController;
 use Concrete\Core\Page\Page;
 use Concrete\Core\Routing\Redirect;
@@ -18,6 +21,7 @@ use Exception;
 
 class Controller extends BlockController
 {
+
     /**
      * @throws DependencyException
      * @throws NotFoundException
@@ -45,6 +49,14 @@ class Controller extends BlockController
         $entityManager = PackageController::getEntityManagerStatic();
         $entityClass = ExampleEntity::class;
         $entityFieldOverrides = new EntityFieldOverrideBuilder($entityClass);
+
+        $dropdownfield = "dropdowncolumn";
+        $entityFieldOverrides->forField($dropdownfield)
+                             ->forType(FormField::class)
+                             ->useFactory(Dropdownfield::createDropdownField($dropdownfield,
+                                 new ExampleEntityDropdownValueSupplier()))
+                             ->buildField();
+
         $container = DIContainerFactory::createContainer($this,
             $entityManager,
             $entityClass,

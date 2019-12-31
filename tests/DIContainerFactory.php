@@ -9,11 +9,14 @@ use BasicTablePackage\Controller\Renderer;
 use BasicTablePackage\Controller\VariableSetter;
 use BasicTablePackage\Entity\EntityFieldOverrideBuilder;
 use BasicTablePackage\Entity\ExampleEntity;
+use BasicTablePackage\Entity\ExampleEntityDropdownValueSupplier;
 use BasicTablePackage\Entity\Repository;
 use BasicTablePackage\Test\Adapters\DefaultContext;
 use BasicTablePackage\Test\Adapters\DefaultRenderer;
 use BasicTablePackage\Test\Adapters\DefaultWysiwygEditorFactory;
 use BasicTablePackage\Test\Entity\InMemoryRepository;
+use BasicTablePackage\View\FormView\Dropdownfield;
+use BasicTablePackage\View\FormView\Field as FormField;
 use BasicTablePackage\View\FormView\WysiwygEditorFactory;
 use DI\Container;
 use DI\ContainerBuilder;
@@ -32,6 +35,13 @@ class DIContainerFactory
         $containerBuilder = new ContainerBuilder();
         try {
             $entityFieldOverrides = new EntityFieldOverrideBuilder($entityClass);
+
+            $dropdownfield = "dropdowncolumn";
+            $entityFieldOverrides->forField($dropdownfield)
+                                 ->forType(FormField::class)
+                                 ->useFactory(Dropdownfield::createDropdownField($dropdownfield,
+                                     new ExampleEntityDropdownValueSupplier()))
+                                 ->buildField();
         } catch (ReflectionException $e) {
             throw new RuntimeException($e);
         }

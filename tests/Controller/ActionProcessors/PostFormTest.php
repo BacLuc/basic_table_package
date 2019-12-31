@@ -6,6 +6,7 @@ namespace BasicTablePackage\Test\Controller\ActionProcessors;
 use BasicTablePackage\Controller\ActionRegistryFactory;
 use BasicTablePackage\Controller\BasicTableController;
 use BasicTablePackage\Entity\ExampleEntity;
+use BasicTablePackage\Entity\ExampleEntityDropdownValueSupplier;
 use BasicTablePackage\Test\Constraints\Matchers;
 use BasicTablePackage\Test\DIContainerFactory;
 use DI\Container;
@@ -40,6 +41,7 @@ class PostFormTest extends TestCase
         $changed_date_value = '2020-12-13';
         $changed_date_time_value = '2020-12-13 18:43';
         $changed_wysiwyg_value = BigTestValues::WYSIWYGVALUE2;
+        $changed_dropdown_value = ExampleEntityDropdownValueSupplier::KEY_6;
         $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
                                    ->process([],
                                        [
@@ -48,6 +50,7 @@ class PostFormTest extends TestCase
                                            "datecolumn"     => $changed_date_value,
                                            "datetimecolumn" => $changed_date_time_value,
                                            "wysiwygcolumn"  => $changed_wysiwyg_value,
+                                           "dropdowncolumn" => $changed_dropdown_value,
                                        ],
                                        1);
 
@@ -65,6 +68,8 @@ class PostFormTest extends TestCase
         $this->assertThat($output, $this->stringContains($changed_date_time_value));
         $this->assertThat($output, $this->stringContains("wysiwygcolumn"));
         $this->assertThat($output, $this->stringContains($changed_wysiwyg_value));
+        $this->assertThat($output, $this->stringContains("dropdowncolumn"));
+        $this->assertThat($output, $this->stringContains($changed_dropdown_value));
         $this->assertThat($output, $this->stringContains("/1"));
     }
 

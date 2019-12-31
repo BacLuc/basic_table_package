@@ -3,8 +3,6 @@
 
 namespace BasicTablePackage\Entity;
 
-use function BasicTablePackage\Lib\collect as collect;
-
 class EntityFieldOverrideBuilder
 {
     /**
@@ -19,7 +17,7 @@ class EntityFieldOverrideBuilder
     /**
      * @var array
      */
-    private $fieldOverrides;
+    private $fieldOverrides = [];
 
     /**
      * EntityFieldOverrideBuilder constructor.
@@ -70,8 +68,6 @@ class EntityFieldOverrideBuilder
 
     public function build()
     {
-        return new EntityFieldOverrides(collect($this->fieldOverrides)->map(function ($value) {
-            return $value;
-        })->toArray());
+        return new EntityFieldOverrides($this->fieldOverrides);
     }
 }

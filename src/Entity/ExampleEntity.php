@@ -51,6 +51,11 @@ class ExampleEntity
      */
     private $wysiwygcolumn;
 
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    protected $dropdowncolumn;
+
     public function __get($name)
     {
         return $this->{$name};
