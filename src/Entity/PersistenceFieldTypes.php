@@ -12,7 +12,7 @@ class PersistenceFieldTypes
     const        STRING   = "string";
     const        DATE     = "date";
     const        DATETIME = "datetime";
-    public const TEXT     = "text";
+    const        TEXT     = "text";
 
     /**
      * @throws \ReflectionException
