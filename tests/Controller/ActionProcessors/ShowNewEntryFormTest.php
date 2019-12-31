@@ -30,6 +30,7 @@ class ShowNewEntryFormTest extends TestCase
         $this->assertStringNotContainsString(ExampleEntityConstants::INT_VAL_1, $output);
         $this->assertStringNotContainsString(ExampleEntityConstants::DATE_VALUE_1, $output);
         $this->assertStringNotContainsString(ExampleEntityConstants::DATETIME_VALUE_1, $output);
+        $this->assertStringNotContainsString(ExampleEntityConstants::WYSIWYG_VALUE_1, $output);
         $this->assertThat($output, Matchers::stringContainsAll(array_keys(ExampleEntityConstants::ENTRY_1_POST)));
         $this->assertThat($output, $this->stringContains("action=\"post_form\""));
     }
