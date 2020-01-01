@@ -4,6 +4,7 @@
 namespace BasicTablePackage\Entity;
 
 use BasicTablePackage\Lib\GetterTrait;
+use BasicTablePackage\Lib\SetterTrait;
 use Doctrine\Common\Annotations\Annotation\IgnoreAnnotation;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
@@ -20,7 +21,7 @@ use Doctrine\ORM\Mapping\Table;
  */
 class ExampleEntity
 {
-    use GetterTrait;
+    use GetterTrait, SetterTrait;
     /**
      * @var int
      * @Id @Column(type="integer")
@@ -57,9 +58,4 @@ class ExampleEntity
      * @Column(type="string", nullable=true)
      */
     protected $dropdowncolumn;
-
-    public function __set($name, $value)
-    {
-        $this->{$name} = $value;
-    }
 }
