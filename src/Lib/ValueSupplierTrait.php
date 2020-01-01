@@ -1,9 +1,7 @@
 <?php
 
 
-namespace BasicTablePackage\Entity;
-
-use BasicTablePackage\Lib\DuplicateRejectingMap;
+namespace BasicTablePackage\Lib;
 
 trait ValueSupplierTrait
 {

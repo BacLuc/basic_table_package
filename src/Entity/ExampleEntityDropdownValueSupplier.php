@@ -3,6 +3,8 @@
 
 namespace BasicTablePackage\Entity;
 
+use BasicTablePackage\Lib\ValueSupplierTrait;
+
 class ExampleEntityDropdownValueSupplier implements ValueSupplier
 {
     use ValueSupplierTrait;
