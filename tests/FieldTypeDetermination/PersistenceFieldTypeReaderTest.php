@@ -1,11 +1,12 @@
 <?php
 
 
-namespace BasicTablePackage\Test\Entity;
+namespace BasicTablePackage\Test\FieldTypeDetermination;
 
 
-use BasicTablePackage\Entity\PersistenceFieldTypeReader;
-use BasicTablePackage\Entity\PersistenceFieldTypes;
+use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypeReader;
+use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypes;
+use BasicTablePackage\Test\Entity\SomeEntity;
 use PHPUnit\Framework\TestCase;
 
 class PersistenceFieldTypeReaderTest extends TestCase

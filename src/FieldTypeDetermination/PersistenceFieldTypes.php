@@ -1,7 +1,7 @@
 <?php
 
 
-namespace BasicTablePackage\Entity;
+namespace BasicTablePackage\FieldTypeDetermination;
 
 
 use ReflectionClass;

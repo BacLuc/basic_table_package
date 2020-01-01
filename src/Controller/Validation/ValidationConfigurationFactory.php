@@ -4,9 +4,9 @@
 namespace BasicTablePackage\Controller\Validation;
 
 
-use BasicTablePackage\Entity\PersistenceFieldTypeReader;
-use BasicTablePackage\Entity\PersistenceFieldTypes;
 use BasicTablePackage\FieldConfigurationOverride\EntityFieldOverrides;
+use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypeReader;
+use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypes;
 use function BasicTablePackage\Lib\collect as collect;
 
 class ValidationConfigurationFactory
