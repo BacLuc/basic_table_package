@@ -4,9 +4,9 @@
 namespace BasicTablePackage\Controller\ValuePersisters;
 
 
-use BasicTablePackage\Entity\EntityFieldOverrides;
 use BasicTablePackage\Entity\PersistenceFieldTypeReader;
 use BasicTablePackage\Entity\PersistenceFieldTypes;
+use BasicTablePackage\FieldConfigurationOverride\EntityFieldOverrides;
 use function BasicTablePackage\Lib\collect as collect;
 
 class PersistorConfigurationFactory

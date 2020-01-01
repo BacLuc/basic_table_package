@@ -1,7 +1,7 @@
 <?php
 
 
-namespace BasicTablePackage\Entity;
+namespace BasicTablePackage\FieldConfigurationOverride;
 
 
 use BasicTablePackage\Lib\ImmutableArrayAccessTrait;
