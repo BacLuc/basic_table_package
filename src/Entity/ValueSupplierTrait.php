@@ -14,6 +14,10 @@ trait ValueSupplierTrait
 
     public function initialize(array $values)
     {
+        if (isset($values[""]) || isset($values[null])) {
+            throw new \InvalidArgumentException("Empty string and null are not valid keys");
+        }
+
         $this->values = new DuplicateRejectingMap($values);
     }
 

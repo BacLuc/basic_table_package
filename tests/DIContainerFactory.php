@@ -6,6 +6,8 @@ namespace BasicTablePackage\Test;
 
 use BasicTablePackage\Adapters\Concrete5\DIContainerFactory as ProductionDefinition;
 use BasicTablePackage\Controller\Renderer;
+use BasicTablePackage\Controller\Validation\DropdownFieldValidator;
+use BasicTablePackage\Controller\Validation\FieldValidator;
 use BasicTablePackage\Controller\VariableSetter;
 use BasicTablePackage\Entity\EntityFieldOverrideBuilder;
 use BasicTablePackage\Entity\ExampleEntity;
@@ -45,6 +47,8 @@ class DIContainerFactory
                                  ->useFactory(DropdownFormField::createDropdownField($dropdownfield, $valueSupplier))
                                  ->forType(TableField::class)
                                  ->useFactory(DropdownTableField::createDropdownField($valueSupplier))
+                                 ->forType(FieldValidator::class)
+                                 ->useFactory(DropdownFieldValidator::createDropdownFieldValidator($valueSupplier))
                                  ->buildField();
         } catch (ReflectionException $e) {
             throw new RuntimeException($e);

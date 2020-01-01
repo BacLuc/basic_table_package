@@ -6,6 +6,8 @@ use BasicTablePackage\Adapters\Concrete5\DIContainerFactory;
 use BasicTablePackage\Controller\ActionProcessor;
 use BasicTablePackage\Controller\ActionRegistryFactory;
 use BasicTablePackage\Controller\BasicTableController;
+use BasicTablePackage\Controller\Validation\DropdownFieldValidator;
+use BasicTablePackage\Controller\Validation\FieldValidator;
 use BasicTablePackage\Entity\EntityFieldOverrideBuilder;
 use BasicTablePackage\Entity\ExampleEntity;
 use BasicTablePackage\Entity\ExampleEntityDropdownValueSupplier;
@@ -59,6 +61,8 @@ class Controller extends BlockController
                              ->useFactory(Dropdownfield::createDropdownField($dropdownfield, $valueSupplier))
                              ->forType(TableField::class)
                              ->useFactory(DropdownTableField::createDropdownField($valueSupplier))
+                             ->forType(FieldValidator::class)
+                             ->useFactory(DropdownFieldValidator::createDropdownFieldValidator($valueSupplier))
                              ->buildField();
 
         $container = DIContainerFactory::createContainer($this,
