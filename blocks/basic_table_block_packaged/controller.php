@@ -11,6 +11,8 @@ use BasicTablePackage\Entity\ExampleEntity;
 use BasicTablePackage\Entity\ExampleEntityDropdownValueSupplier;
 use BasicTablePackage\View\FormView\Dropdownfield;
 use BasicTablePackage\View\FormView\Field as FormField;
+use BasicTablePackage\View\TableView\DropdownField as DropdownTableField;
+use BasicTablePackage\View\TableView\Field as TableField;
 use Concrete\Core\Block\BlockController;
 use Concrete\Core\Page\Page;
 use Concrete\Core\Routing\Redirect;
@@ -51,10 +53,12 @@ class Controller extends BlockController
         $entityFieldOverrides = new EntityFieldOverrideBuilder($entityClass);
 
         $dropdownfield = "dropdowncolumn";
+        $valueSupplier = new ExampleEntityDropdownValueSupplier();
         $entityFieldOverrides->forField($dropdownfield)
                              ->forType(FormField::class)
-                             ->useFactory(Dropdownfield::createDropdownField($dropdownfield,
-                                 new ExampleEntityDropdownValueSupplier()))
+                             ->useFactory(Dropdownfield::createDropdownField($dropdownfield, $valueSupplier))
+                             ->forType(TableField::class)
+                             ->useFactory(DropdownTableField::createDropdownField($valueSupplier))
                              ->buildField();
 
         $container = DIContainerFactory::createContainer($this,

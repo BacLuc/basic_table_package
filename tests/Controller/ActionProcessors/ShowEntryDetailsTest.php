@@ -26,7 +26,7 @@ class ShowEntryDetailsTest extends TestCase
                                    ->process([], [], 1);
 
         $output = ob_get_clean();
-        $this->assertThat($output, Matchers::stringContainsKeysAndValues(ExampleEntityConstants::ENTRY_1_POST));
+        $this->assertThat($output, Matchers::stringContainsKeysAndValues(ExampleEntityConstants::getValues()));
         $this->assertStringNotContainsString("<form", $output);
     }
 

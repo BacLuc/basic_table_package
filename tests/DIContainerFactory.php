@@ -15,9 +15,11 @@ use BasicTablePackage\Test\Adapters\DefaultContext;
 use BasicTablePackage\Test\Adapters\DefaultRenderer;
 use BasicTablePackage\Test\Adapters\DefaultWysiwygEditorFactory;
 use BasicTablePackage\Test\Entity\InMemoryRepository;
-use BasicTablePackage\View\FormView\Dropdownfield;
+use BasicTablePackage\View\FormView\Dropdownfield as DropdownFormField;
 use BasicTablePackage\View\FormView\Field as FormField;
 use BasicTablePackage\View\FormView\WysiwygEditorFactory;
+use BasicTablePackage\View\TableView\DropdownField as DropdownTableField;
+use BasicTablePackage\View\TableView\Field as TableField;
 use DI\Container;
 use DI\ContainerBuilder;
 use Doctrine\Common\Annotations\AnnotationRegistry;
@@ -37,10 +39,12 @@ class DIContainerFactory
             $entityFieldOverrides = new EntityFieldOverrideBuilder($entityClass);
 
             $dropdownfield = "dropdowncolumn";
+            $valueSupplier = new ExampleEntityDropdownValueSupplier();
             $entityFieldOverrides->forField($dropdownfield)
                                  ->forType(FormField::class)
-                                 ->useFactory(Dropdownfield::createDropdownField($dropdownfield,
-                                     new ExampleEntityDropdownValueSupplier()))
+                                 ->useFactory(DropdownFormField::createDropdownField($dropdownfield, $valueSupplier))
+                                 ->forType(TableField::class)
+                                 ->useFactory(DropdownTableField::createDropdownField($valueSupplier))
                                  ->buildField();
         } catch (ReflectionException $e) {
             throw new RuntimeException($e);

@@ -28,7 +28,7 @@ class PostFormTest extends TestCase
         $this->basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
 
         $output = ob_get_clean();
-        $this->assertThat($output, Matchers::stringContainsKeysAndValues(ExampleEntityConstants::ENTRY_1_POST));
+        $this->assertThat($output, Matchers::stringContainsKeysAndValues(ExampleEntityConstants::getValues()));
     }
 
     public function test_post_form_existing_entry()
@@ -69,7 +69,9 @@ class PostFormTest extends TestCase
         $this->assertThat($output, $this->stringContains("wysiwygcolumn"));
         $this->assertThat($output, $this->stringContains($changed_wysiwyg_value));
         $this->assertThat($output, $this->stringContains("dropdowncolumn"));
-        $this->assertThat($output, $this->stringContains($changed_dropdown_value));
+        $exampleEntityDropdownValueSupplier = new ExampleEntityDropdownValueSupplier();
+        $this->assertThat($output,
+            $this->stringContains($exampleEntityDropdownValueSupplier->getValues()[$changed_dropdown_value]));
         $this->assertThat($output, $this->stringContains("/1"));
     }
 
