@@ -6,7 +6,7 @@ namespace BasicTablePackage\FieldTypeDetermination;
 
 use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Annotation;
 use ReflectionClass;
 use ReflectionProperty;
 use Tightenco\Collect\Support\Collection;
@@ -18,10 +18,15 @@ class PersistenceFieldTypeReader
      * @var string
      */
     private $className;
+    /**
+     * @var PersistenceFieldTypeHandler[]
+     */
+    private $persistenceFieldTypeHandlers;
 
-    public function __construct(string $className)
+    public function __construct(string $className, array $persistenceFieldTypeHandlers)
     {
         $this->className = $className;
+        $this->persistenceFieldTypeHandlers = $persistenceFieldTypeHandlers;
     }
 
     /**
@@ -49,14 +54,22 @@ class PersistenceFieldTypeReader
                     return $annotationReader->getPropertyAnnotations($reflectionProperty);
                 })
                 ->map(function (array $propertyAnnotations) {
-                    return collect($propertyAnnotations)->filter(function ($annotation) {
-                        return $annotation instanceof Column;
+                    return collect($propertyAnnotations)->filter(function (Annotation $annotation) {
+                        return collect($this->persistenceFieldTypeHandlers)
+                                   ->filter(function (PersistenceFieldTypeHandler $handler) use ($annotation) {
+                                       return $handler->canHandle($annotation);
+                                   })->count() > 0;
                     });
                 })
                 ->map(function (Collection $propertyAnnotations) {
                     return collect($propertyAnnotations)
-                        ->map(function (Column $column) {
-                            return $column->type;
+                        ->map(function (Annotation $annotation) {
+                            /**@var PersistenceFieldTypeHandler $handler */
+                            $handler = collect($this->persistenceFieldTypeHandlers)
+                                ->filter(function (PersistenceFieldTypeHandler $handler) use ($annotation) {
+                                    return $handler->canHandle($annotation);
+                                })->first();
+                            return $handler->getFieldTypeOf($annotation);
                         })->first();
                 })->toArray();
     }

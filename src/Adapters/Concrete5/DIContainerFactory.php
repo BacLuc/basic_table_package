@@ -15,6 +15,8 @@ use BasicTablePackage\Controller\VariableSetter;
 use BasicTablePackage\Entity\EntityManagerRepository;
 use BasicTablePackage\Entity\Repository;
 use BasicTablePackage\FieldConfigurationOverride\EntityFieldOverrides;
+use BasicTablePackage\FieldTypeDetermination\ColumnAnnotationHandler;
+use BasicTablePackage\FieldTypeDetermination\ManyToOneAnnotationHandler;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypeReader;
 use BasicTablePackage\View\FormView\FormViewConfigurationFactory;
 use BasicTablePackage\View\FormView\FormViewFieldConfiguration;
@@ -68,7 +70,8 @@ class DIContainerFactory
     ): array {
         AnnotationRegistry::registerLoader("class_exists");
         $definitions = [
-            PersistenceFieldTypeReader::class  => value(new PersistenceFieldTypeReader($entityClass)),
+            PersistenceFieldTypeReader::class  => value(new PersistenceFieldTypeReader($entityClass,
+                [new ColumnAnnotationHandler(), new ManyToOneAnnotationHandler()])),
             EntityManager::class               => value($entityManager),
             Repository::class                  => value(new EntityManagerRepository($entityManager,
                 $entityClass)),

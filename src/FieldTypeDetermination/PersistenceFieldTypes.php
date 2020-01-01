@@ -8,11 +8,12 @@ use ReflectionClass;
 
 class PersistenceFieldTypes
 {
-    const        INTEGER  = "integer";
-    const        STRING   = "string";
-    const        DATE     = "date";
-    const        DATETIME = "datetime";
-    const        TEXT     = "text";
+    const        INTEGER     = "integer";
+    const        STRING      = "string";
+    const        DATE        = "date";
+    const        DATETIME    = "datetime";
+    const        TEXT        = "text";
+    const        MANY_TO_ONE = "manyToOne";
 
     /**
      * @throws \ReflectionException
