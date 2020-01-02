@@ -4,16 +4,19 @@
 namespace BasicTablePackage\Lib;
 
 
+use ArrayAccess;
 use Ds\Collection;
-use Ds\Hashable;
 use Ds\Map;
 use Ds\Pair;
 use Ds\Sequence;
 use Ds\Set;
-use Ds\Vector;
 use http\Exception\InvalidArgumentException;
+use OutOfBoundsException;
+use OutOfRangeException;
+use Stash\Exception\LogicException;
+use UnderflowException;
 
-class DuplicateRejectingMap implements \IteratorAggregate, \ArrayAccess, Collection
+class DuplicateRejectingMap implements \IteratorAggregate, ArrayAccess, Collection
 {
 
     /**
@@ -42,8 +45,12 @@ class DuplicateRejectingMap implements \IteratorAggregate, \ArrayAccess, Collect
      */
     public function apply(callable $callback)
     {
-        foreach ($this->pairs as &$pair) {
-            $pair->value = $callback($pair->key, $pair->value);
+        foreach ($this->map->pairs() as &$pair) {
+            $newValue = $callback($pair->key, $pair->value);
+            if ($this->lookupValue($newValue) !== null) {
+                throw new LogicException("this operation would lead to a duplicate value $newValue");
+            }
+            $pair->value = $newValue;
         }
     }
 
@@ -52,8 +59,7 @@ class DuplicateRejectingMap implements \IteratorAggregate, \ArrayAccess, Collect
      */
     public function clear()
     {
-        $this->pairs = [];
-        $this->capacity = self::MIN_CAPACITY;
+        $this->map->clear();
     }
 
     /**
@@ -65,11 +71,7 @@ class DuplicateRejectingMap implements \IteratorAggregate, \ArrayAccess, Collect
      */
     public function first(): Pair
     {
-        if ($this->isEmpty()) {
-            throw new UnderflowException();
-        }
-
-        return $this->pairs[0];
+        return $this->map->first();
     }
 
     /**
@@ -81,11 +83,7 @@ class DuplicateRejectingMap implements \IteratorAggregate, \ArrayAccess, Collect
      */
     public function last(): Pair
     {
-        if ($this->isEmpty()) {
-            throw new UnderflowException();
-        }
-
-        return $this->pairs[count($this->pairs) - 1];
+        return $this->map->last();
     }
 
     /**
@@ -99,11 +97,7 @@ class DuplicateRejectingMap implements \IteratorAggregate, \ArrayAccess, Collect
      */
     public function skip(int $position): Pair
     {
-        if ($position < 0 || $position >= count($this->pairs)) {
-            throw new OutOfRangeException();
-        }
-
-        return $this->pairs[$position]->copy();
+        return $this->map->skip($position);
     }
 
     /**
@@ -112,13 +106,13 @@ class DuplicateRejectingMap implements \IteratorAggregate, \ArrayAccess, Collect
      *
      * @param array|\Traversable $values
      *
-     * @return Map
+     * @return DuplicateRejectingMap
      */
-    public function merge($values): Map
+    public function merge($values): DuplicateRejectingMap
     {
-        $merged = new self($this);
+        $merged = new Map($this);
         $merged->putAll($values);
-        return $merged;
+        return new self($values);
     }
 
     /**
@@ -126,17 +120,17 @@ class DuplicateRejectingMap implements \IteratorAggregate, \ArrayAccess, Collect
      * are also present in the given map. In other words, returns a copy of the
      * current map with all keys removed that are not also in the other map.
      *
-     * @param Map $map The other map.
+     * @param ArrayAccess $map The other map.
      *
-     * @return Map A new map containing the pairs of the current instance
+     * @return DuplicateRejectingMap A new map containing the pairs of the current instance
      *                 whose keys are also present in the given map. In other
      *                 words, returns a copy of the current map with all keys
      *                 removed that are not also in the other map.
      */
-    public function intersect(Map $map): Map
+    public function intersect(ArrayAccess $map): DuplicateRejectingMap
     {
         return $this->filter(function ($key) use ($map) {
-            return $map->hasKey($key);
+            return isset($map[$key]);
         });
     }
 
@@ -144,33 +138,16 @@ class DuplicateRejectingMap implements \IteratorAggregate, \ArrayAccess, Collect
      * Returns the result of removing all keys from the current instance that
      * are present in a given map.
      *
-     * @param Map $map The map containing the keys to exclude.
+     * @param ArrayAccess $map The map containing the keys to exclude.
      *
-     * @return Map The result of removing all keys from the current instance
+     * @return DuplicateRejectingMap The result of removing all keys from the current instance
      *                 that are present in a given map.
      */
-    public function diff(Map $map): Map
+    public function diff(ArrayAccess $map): DuplicateRejectingMap
     {
         return $this->filter(function ($key) use ($map) {
-            return !$map->hasKey($key);
+            return !isset($map[$key]);
         });
-    }
-
-    /**
-     * Determines whether two keys are equal.
-     *
-     * @param mixed $a
-     * @param mixed $b
-     *
-     * @return bool
-     */
-    private function keysAreEqual($a, $b): bool
-    {
-        if (is_object($a) && $a instanceof Hashable) {
-            return get_class($a) === get_class($b) && $a->equals($b);
-        }
-
-        return $a === $b;
     }
 
     /**
@@ -239,9 +216,9 @@ class DuplicateRejectingMap implements \IteratorAggregate, \ArrayAccess, Collect
      *                                true : include the value,
      *                                false: skip the value.
      *
-     * @return Map
+     * @return DuplicateRejectingMap
      */
-    public function filter(callable $callback = null): Map
+    public function filter(callable $callback = null): DuplicateRejectingMap
     {
         $filtered = new self();
 
@@ -287,11 +264,7 @@ class DuplicateRejectingMap implements \IteratorAggregate, \ArrayAccess, Collect
      */
     public function keys(): Set
     {
-        $key = function ($pair) {
-            return $pair->key;
-        };
-
-        return new Set(array_map($key, $this->pairs));
+        return $this->map->keys();
     }
 
     /**
@@ -302,15 +275,11 @@ class DuplicateRejectingMap implements \IteratorAggregate, \ArrayAccess, Collect
      * @param callable $callback Accepts two arguments: key and value, should
      *                           return what the updated value will be.
      *
-     * @return Map
+     * @return DuplicateRejectingMap
      */
-    public function map(callable $callback): Map
+    public function map(callable $callback): DuplicateRejectingMap
     {
-        $apply = function ($pair) use ($callback) {
-            return $callback($pair->key, $pair->value);
-        };
-
-        return new self(array_map($apply, $this->pairs));
+        return new self($this->map->map($callback));
     }
 
     /**
@@ -320,11 +289,7 @@ class DuplicateRejectingMap implements \IteratorAggregate, \ArrayAccess, Collect
      */
     public function pairs(): Sequence
     {
-        $copy = function ($pair) {
-            return $pair->copy();
-        };
-
-        return new Vector(array_map($copy, $this->pairs));
+        return $this->map->pairs();
     }
 
     /**
@@ -384,7 +349,7 @@ class DuplicateRejectingMap implements \IteratorAggregate, \ArrayAccess, Collect
      *
      * @return mixed The associated value or fallback default if provided.
      *
-     * @throws \OutOfBoundsException if no default was provided and the key is
+     * @throws OutOfBoundsException if no default was provided and the key is
      *                               not associated with a value.
      */
     public function remove($key, $default = null)
@@ -395,21 +360,21 @@ class DuplicateRejectingMap implements \IteratorAggregate, \ArrayAccess, Collect
     /**
      * Returns a reversed copy of the map.
      *
-     * @return Map
+     * @return DuplicateRejectingMap
      */
     public function reverse()
     {
-        return $this->map->reverse();
+        return new self($this->map->reverse());
     }
 
     /**
      * Returns a reversed copy of the map.
      *
-     * @return Map
+     * @return DuplicateRejectingMap
      */
-    public function reversed(): Map
+    public function reversed(): DuplicateRejectingMap
     {
-        return $this->map->reversed();
+        return $this->reverse();
     }
 
     /**
@@ -433,11 +398,11 @@ class DuplicateRejectingMap implements \IteratorAggregate, \ArrayAccess, Collect
      *                        will contains all pairs between the offset and
      *                        the end of the map.
      *
-     * @return Map
+     * @return DuplicateRejectingMap
      */
-    public function slice(int $offset, int $length = null): Map
+    public function slice(int $offset, int $length = null): DuplicateRejectingMap
     {
-        return $this->map->slice($offset, $length);
+        return new self($this->map->slice($offset, $length));
     }
 
     /**
@@ -453,19 +418,6 @@ class DuplicateRejectingMap implements \IteratorAggregate, \ArrayAccess, Collect
     }
 
     /**
-     * Returns a sorted copy of the map, based on an optional callable
-     * comparator. The map will be sorted by value.
-     *
-     * @param callable|null $comparator Accepts two values to be compared.
-     *
-     * @return Map
-     */
-    public function sorted(callable $comparator = null): Map
-    {
-        return $this->map->sorted($comparator);
-    }
-
-    /**
      * Sorts the map in-place, based on an optional callable comparator.
      *
      * The map will be sorted by key.
@@ -475,19 +427,6 @@ class DuplicateRejectingMap implements \IteratorAggregate, \ArrayAccess, Collect
     public function ksort(callable $comparator = null)
     {
         $this->map->ksort($comparator);
-    }
-
-    /**
-     * Returns a sorted copy of the map, based on an optional callable
-     * comparator. The map will be sorted by key.
-     *
-     * @param callable|null $comparator Accepts two keys to be compared.
-     *
-     * @return Map
-     */
-    public function ksorted(callable $comparator = null): Map
-    {
-        return $this->map->ksorted($comparator);
     }
 
     /**
@@ -516,34 +455,6 @@ class DuplicateRejectingMap implements \IteratorAggregate, \ArrayAccess, Collect
     public function values(): Sequence
     {
         return $this->map->values();
-    }
-
-    /**
-     * Creates a new map that contains the pairs of the current instance as well
-     * as the pairs of another map.
-     *
-     * @param Map $map The other map, to combine with the current instance.
-     *
-     * @return Map A new map containing all the pairs of the current
-     *                 instance as well as another map.
-     */
-    public function union(Map $map): Map
-    {
-        return $this->map->union($map);
-    }
-
-    /**
-     * Creates a new map using keys of either the current instance or of another
-     * map, but not of both.
-     *
-     * @param Map $map
-     *
-     * @return Map A new map containing keys in the current instance as well
-     *                 as another map, but not in both.
-     */
-    public function xor(Map $map): Map
-    {
-        return $this->map->xor($map);
     }
 
     /**
