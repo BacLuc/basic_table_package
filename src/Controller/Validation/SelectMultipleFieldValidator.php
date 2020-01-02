@@ -35,6 +35,9 @@ class SelectMultipleFieldValidator implements FieldValidator
         if ($postValue === "" || $postValue === null) {
             $postValue = [];
         }
+        if (filter_var($postValue, FILTER_VALIDATE_INT) !== false || is_string($postValue)) {
+            $postValue = [$postValue];
+        }
         if (!is_array($postValue)) {
             return new ValidationResultItem($this->name, $postValue, ["the value must be an array"]);
         }
