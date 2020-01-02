@@ -72,8 +72,13 @@ class DIContainerFactory
     ): array {
         AnnotationRegistry::registerLoader("class_exists");
         $definitions = [
-            PersistenceFieldTypeReader::class  => value(new PersistenceFieldTypeReader($entityClass,
-                [new ColumnAnnotationHandler(), new ManyToOneAnnotationHandler()])),
+            PersistenceFieldTypeReader::class  => factory(function (Container $container) use ($entityClass) {
+                return new PersistenceFieldTypeReader($entityClass,
+                    [
+                        new ColumnAnnotationHandler(),
+                        new ManyToOneAnnotationHandler($container->get(RepositoryFactory::class))
+                    ]);
+            }),
             EntityManager::class               => value($entityManager),
             Repository::class                  => value(new EntityManagerRepository($entityManager,
                 $entityClass)),
@@ -99,7 +104,7 @@ class DIContainerFactory
                 return $container->get(PersistorConfigurationFactory::class)->createConfiguration();
             }),
             WysiwygEditorFactory::class        => value(new Concrete5WysiwygEditorFactory()),
-            RepositoryFactory::class => value(new EntityManagerRepositoryFactory($entityManager))
+            RepositoryFactory::class           => value(new EntityManagerRepositoryFactory($entityManager))
 
         ];
         return $definitions;

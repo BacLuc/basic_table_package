@@ -4,12 +4,11 @@
 namespace BasicTablePackage\Controller\Validation;
 
 
-use BasicTablePackage\Entity\ReferencedEntity;
-use BasicTablePackage\Entity\RepositoryFactory;
-use BasicTablePackage\Entity\RepositoryValueSupplier;
 use BasicTablePackage\FieldConfigurationOverride\EntityFieldOverrides;
+use BasicTablePackage\FieldTypeDetermination\PersistenceFieldType;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypeReader;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypes;
+use BasicTablePackage\FieldTypeDetermination\ReferencingPersistenceFieldType;
 use function BasicTablePackage\Lib\collect as collect;
 
 class ValidationConfigurationFactory
@@ -22,24 +21,17 @@ class ValidationConfigurationFactory
      * @var EntityFieldOverrides
      */
     private $entityFieldOverrides;
-    /**
-     * @var RepositoryFactory
-     */
-    private $repositoryFactory;
 
     /**
      * @param PersistenceFieldTypeReader $persistenceFieldTypeReader
      * @param EntityFieldOverrides $entityFieldOverrides
-     * @param RepositoryFactory $repositoryFactory
      */
     public function __construct(
         PersistenceFieldTypeReader $persistenceFieldTypeReader,
-        EntityFieldOverrides $entityFieldOverrides,
-        RepositoryFactory $repositoryFactory
+        EntityFieldOverrides $entityFieldOverrides
     ) {
         $this->persistenceFieldTypeReader = $persistenceFieldTypeReader;
         $this->entityFieldOverrides = $entityFieldOverrides;
-        $this->repositoryFactory = $repositoryFactory;
     }
 
     public function createConfiguration(): ValidationConfiguration
@@ -53,13 +45,13 @@ class ValidationConfigurationFactory
         return new ValidationConfiguration($fieldTypes->toArray());
     }
 
-    private function createFieldTypeOf(string $persistenceFieldType, string $key)
+    private function createFieldTypeOf(PersistenceFieldType $persistenceFieldType, string $key)
     {
         if (isset($this->entityFieldOverrides[$key]) &&
             isset($this->entityFieldOverrides[$key][FieldValidator::class])) {
             return $this->entityFieldOverrides[$key][FieldValidator::class]($key);
         }
-        switch ($persistenceFieldType) {
+        switch ($persistenceFieldType->getType()) {
             case PersistenceFieldTypes::TEXT:
             case PersistenceFieldTypes::STRING:
                 return new TextFieldValidator($key);
@@ -69,9 +61,8 @@ class ValidationConfigurationFactory
             case PersistenceFieldTypes::DATETIME:
                 return new DateValidator($key);
             case PersistenceFieldTypes::MANY_TO_ONE:
-                $repository = $this->repositoryFactory->createRepositoryFor(ReferencedEntity::class);
-                $valueSupplier = new RepositoryValueSupplier($repository);
-                return new DropdownFieldValidator($key, $valueSupplier);
+                /** @var ReferencingPersistenceFieldType $persistenceFieldType */
+                return new DropdownFieldValidator($key, $persistenceFieldType->getValueSupplier());
             default:
                 return null;
         }

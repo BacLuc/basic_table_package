@@ -4,12 +4,11 @@
 namespace BasicTablePackage\View\FormView;
 
 
-use BasicTablePackage\Entity\ReferencedEntity;
-use BasicTablePackage\Entity\RepositoryFactory;
-use BasicTablePackage\Entity\RepositoryValueSupplier;
 use BasicTablePackage\FieldConfigurationOverride\EntityFieldOverrides;
+use BasicTablePackage\FieldTypeDetermination\PersistenceFieldType;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypeReader;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypes;
+use BasicTablePackage\FieldTypeDetermination\ReferencingPersistenceFieldType;
 use function BasicTablePackage\Lib\collect as collect;
 
 class FormViewConfigurationFactory
@@ -27,27 +26,20 @@ class FormViewConfigurationFactory
      * @var EntityFieldOverrides
      */
     private $entityFieldOverrides;
-    /**
-     * @var RepositoryFactory
-     */
-    private $repositoryFactory;
 
     /**
      * @param PersistenceFieldTypeReader $persistenceFieldTypeReader
      * @param WysiwygEditorFactory $wysiwygEditorFactory
      * @param EntityFieldOverrides $entityFieldOverrides
-     * @param RepositoryFactory $repositoryFactory
      */
     public function __construct(
         PersistenceFieldTypeReader $persistenceFieldTypeReader,
         WysiwygEditorFactory $wysiwygEditorFactory,
-        EntityFieldOverrides $entityFieldOverrides,
-        RepositoryFactory $repositoryFactory
+        EntityFieldOverrides $entityFieldOverrides
     ) {
         $this->persistenceFieldTypeReader = $persistenceFieldTypeReader;
         $this->wysiwygEditorFactory = $wysiwygEditorFactory;
         $this->entityFieldOverrides = $entityFieldOverrides;
-        $this->repositoryFactory = $repositoryFactory;
     }
 
     public function createConfiguration(): FormViewFieldConfiguration
@@ -61,13 +53,13 @@ class FormViewConfigurationFactory
         return new FormViewFieldConfiguration($fieldTypes->toArray());
     }
 
-    private function createFieldTypeOf(string $persistenceFieldType, string $key)
+    private function createFieldTypeOf(PersistenceFieldType $persistenceFieldType, string $key)
     {
         if (isset($this->entityFieldOverrides[$key]) &&
             isset($this->entityFieldOverrides[$key][Field::class])) {
             return $this->entityFieldOverrides[$key][Field::class];
         }
-        switch ($persistenceFieldType) {
+        switch ($persistenceFieldType->getType()) {
             case PersistenceFieldTypes::STRING:
                 return function ($entity) use ($key) {
                     return new TextField($key, $key, self::extractSqlValueOfEntity($entity, $key));
@@ -92,10 +84,12 @@ class FormViewConfigurationFactory
                         self::extractSqlValueOfEntity($entity, $key));
                 };
             case PersistenceFieldTypes::MANY_TO_ONE:
-                return function ($entity) use ($key) {
-                    $repository = $this->repositoryFactory->createRepositoryFor(ReferencedEntity::class);
-                    $valueSupplier = new RepositoryValueSupplier($repository);
-                    return new Dropdownfield($key, $key, self::extractSqlValueOfEntity($entity, $key), $valueSupplier);
+                return function ($entity) use ($key, $persistenceFieldType) {
+                    /** @var ReferencingPersistenceFieldType $persistenceFieldType */
+                    return new Dropdownfield($key,
+                        $key,
+                        self::extractSqlValueOfEntity($entity, $key),
+                        $persistenceFieldType->getValueSupplier());
                 };
             default:
                 return null;

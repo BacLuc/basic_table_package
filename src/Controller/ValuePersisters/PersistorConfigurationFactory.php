@@ -4,12 +4,11 @@
 namespace BasicTablePackage\Controller\ValuePersisters;
 
 
-use BasicTablePackage\Entity\ReferencedEntity;
-use BasicTablePackage\Entity\RepositoryFactory;
-use BasicTablePackage\Entity\RepositoryValueSupplier;
 use BasicTablePackage\FieldConfigurationOverride\EntityFieldOverrides;
+use BasicTablePackage\FieldTypeDetermination\PersistenceFieldType;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypeReader;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypes;
+use BasicTablePackage\FieldTypeDetermination\ReferencingPersistenceFieldType;
 use function BasicTablePackage\Lib\collect as collect;
 
 class PersistorConfigurationFactory
@@ -22,24 +21,17 @@ class PersistorConfigurationFactory
      * @var EntityFieldOverrides
      */
     private $entityFieldOverrides;
-    /**
-     * @var RepositoryFactory
-     */
-    private $repositoryFactory;
 
     /**
      * @param PersistenceFieldTypeReader $persistenceFieldTypeReader
      * @param EntityFieldOverrides $entityFieldOverrides
-     * @param RepositoryFactory $repositoryFactory
      */
     public function __construct(
         PersistenceFieldTypeReader $persistenceFieldTypeReader,
-        EntityFieldOverrides $entityFieldOverrides,
-        RepositoryFactory $repositoryFactory
+        EntityFieldOverrides $entityFieldOverrides
     ) {
         $this->persistenceFieldTypeReader = $persistenceFieldTypeReader;
         $this->entityFieldOverrides = $entityFieldOverrides;
-        $this->repositoryFactory = $repositoryFactory;
     }
 
     public function createConfiguration(): PersistorConfiguration
@@ -53,13 +45,13 @@ class PersistorConfigurationFactory
         return new PersistorConfiguration($fieldTypes->toArray());
     }
 
-    private function createFieldTypeOf(string $persistenceFieldType, string $key)
+    private function createFieldTypeOf(PersistenceFieldType $persistenceFieldType, string $key)
     {
         if (isset($this->entityFieldOverrides[$key]) &&
             isset($this->entityFieldOverrides[$key][FieldPersistor::class])) {
             return $this->entityFieldOverrides[$key][FieldPersistor::class]($key);
         }
-        switch ($persistenceFieldType) {
+        switch ($persistenceFieldType->getType()) {
             case PersistenceFieldTypes::STRING:
             case PersistenceFieldTypes::TEXT:
             case PersistenceFieldTypes::INTEGER:
@@ -69,9 +61,8 @@ class PersistorConfigurationFactory
             case PersistenceFieldTypes::DATETIME:
                 return new DateTimePersistor($key);
             case PersistenceFieldTypes::MANY_TO_ONE:
-                $repository = $this->repositoryFactory->createRepositoryFor(ReferencedEntity::class);
-                $valueSupplier = new RepositoryValueSupplier($repository);
-                return new ManyToOneFieldPersistor($key, $valueSupplier);
+                /** @var ReferencingPersistenceFieldType $persistenceFieldType */
+                return new ManyToOneFieldPersistor($key, $persistenceFieldType->getValueSupplier());
             default:
                 return null;
         }

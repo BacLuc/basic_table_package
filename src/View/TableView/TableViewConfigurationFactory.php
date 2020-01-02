@@ -4,12 +4,11 @@
 namespace BasicTablePackage\View\TableView;
 
 
-use BasicTablePackage\Entity\ReferencedEntity;
-use BasicTablePackage\Entity\RepositoryFactory;
-use BasicTablePackage\Entity\RepositoryValueSupplier;
 use BasicTablePackage\FieldConfigurationOverride\EntityFieldOverrides;
+use BasicTablePackage\FieldTypeDetermination\PersistenceFieldType;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypeReader;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypes;
+use BasicTablePackage\FieldTypeDetermination\ReferencingPersistenceFieldType;
 use function BasicTablePackage\Lib\collect as collect;
 
 class TableViewConfigurationFactory
@@ -22,24 +21,17 @@ class TableViewConfigurationFactory
      * @var EntityFieldOverrides
      */
     private $entityFieldOverrides;
-    /**
-     * @var RepositoryFactory
-     */
-    private $repositoryFactory;
 
     /**
      * @param PersistenceFieldTypeReader $persistenceFieldTypeReader
      * @param EntityFieldOverrides $entityFieldOverrides
-     * @param RepositoryFactory $repositoryFactory
      */
     public function __construct(
         PersistenceFieldTypeReader $persistenceFieldTypeReader,
-        EntityFieldOverrides $entityFieldOverrides,
-        RepositoryFactory $repositoryFactory
+        EntityFieldOverrides $entityFieldOverrides
     ) {
         $this->persistenceFieldTypeReader = $persistenceFieldTypeReader;
         $this->entityFieldOverrides = $entityFieldOverrides;
-        $this->repositoryFactory = $repositoryFactory;
     }
 
     public function createConfiguration(): TableViewFieldConfiguration
@@ -52,9 +44,9 @@ class TableViewConfigurationFactory
         return new TableViewFieldConfiguration($fieldTypes->toArray());
     }
 
-    private function createFieldTypeOf(string $persistenceFieldType)
+    private function createFieldTypeOf(PersistenceFieldType $persistenceFieldType)
     {
-        switch ($persistenceFieldType) {
+        switch ($persistenceFieldType->getType()) {
             case PersistenceFieldTypes::STRING:
             case PersistenceFieldTypes::INTEGER:
             case PersistenceFieldTypes::TEXT:
@@ -70,10 +62,10 @@ class TableViewConfigurationFactory
                     return $this->checkFieldOverride($value, $key) ?: new DateTimeField($value);
                 };
             case PersistenceFieldTypes::MANY_TO_ONE:
-                return function ($value, $key) {
-                    $repository = $this->repositoryFactory->createRepositoryFor(ReferencedEntity::class);
-                    $valueSupplier = new RepositoryValueSupplier($repository);
-                    return $this->checkFieldOverride($value, $key) ?: new DropdownField($value, $valueSupplier);
+                return function ($value, $key) use ($persistenceFieldType) {
+                    /** @var ReferencingPersistenceFieldType $persistenceFieldType */
+                    return $this->checkFieldOverride($value, $key) ?:
+                        new DropdownField($value, $persistenceFieldType->getValueSupplier());
                 };
             default:
                 return null;
