@@ -52,8 +52,6 @@ class ShowNewEntryFormTest extends TestCase
         $container = DIContainerFactory::createContainer($entityManager, ExampleEntity::class);
         ExampleEntityConstants::addReferencedEntityTestValues($container);
         $this->basicTableController = $container->get(BasicTableController::class);
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
-                                   ->process([], ExampleEntityConstants::ENTRY_1_POST);
     }
 
     /**
