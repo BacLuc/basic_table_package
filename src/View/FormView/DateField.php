@@ -23,7 +23,7 @@ class DateField implements Field
      * TextField constructor.
      * @param string $label
      * @param string $postname
-     * @param string $sqlValue
+     * @param \DateTime|null $sqlValue
      */
     public function __construct(string $label, string $postname, ?\DateTime $sqlValue)
     {
