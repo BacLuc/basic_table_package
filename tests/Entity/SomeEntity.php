@@ -6,6 +6,7 @@ namespace BasicTablePackage\Test\Entity;
 use BasicTablePackage\Lib\GetterTrait;
 use BasicTablePackage\Lib\SetterTrait;
 use Doctrine\Common\Annotations\Annotation\IgnoreAnnotation;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
@@ -68,4 +69,9 @@ class SomeEntity
      * @ManyToMany(targetEntity="BasicTablePackage\Test\Entity\SomeReferencedEntity" )
      */
     protected $manyToMany;
+
+    public function __construct()
+    {
+        $this->manyToMany = new ArrayCollection();
+    }
 }
