@@ -42,6 +42,7 @@ class PostFormTest extends TestCase
         $changed_date_time_value = '2020-12-13 18:43';
         $changed_wysiwyg_value = BigTestValues::WYSIWYGVALUE2;
         $changed_dropdown_value = ExampleEntityDropdownValueSupplier::KEY_6;
+        $changed_manyToOne_value = ExampleEntityConstants::REFERENCED_ENTITY_ID_2;
         $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
                                    ->process([],
                                        [
@@ -51,6 +52,7 @@ class PostFormTest extends TestCase
                                            "datetimecolumn" => $changed_date_time_value,
                                            "wysiwygcolumn"  => $changed_wysiwyg_value,
                                            "dropdowncolumn" => $changed_dropdown_value,
+                                           "manyToOne"      => $changed_manyToOne_value,
                                        ],
                                        1);
 
@@ -72,15 +74,22 @@ class PostFormTest extends TestCase
         $exampleEntityDropdownValueSupplier = new ExampleEntityDropdownValueSupplier();
         $this->assertThat($output,
             $this->stringContains($exampleEntityDropdownValueSupplier->getValues()[$changed_dropdown_value]));
+        $referencedEntityValues = ExampleEntityConstants::getReferencedEntityValues();
+        $this->assertThat($output, $this->stringContains($referencedEntityValues[$changed_manyToOne_value]));
         $this->assertThat($output, $this->stringContains("/1"));
     }
 
+    /**
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
     protected function setUp()
     {
         /** @var EntityManager $entityManager */
         $entityManager = $this->createMock(EntityManager::class);
         /** @var Container $container */
-        $this->basicTableController =
-            DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(BasicTableController::class);
+        $container = DIContainerFactory::createContainer($entityManager, ExampleEntity::class);
+        ExampleEntityConstants::addReferencedEntityTestValues($container);
+        $this->basicTableController = $container->get(BasicTableController::class);
     }
 }

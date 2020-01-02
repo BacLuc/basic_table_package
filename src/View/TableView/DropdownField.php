@@ -42,7 +42,7 @@ class DropdownField implements Field
         if (is_object($sqlValue)) {
             $sqlValue = $sqlValue->id;
         }
-        return isset($values[$sqlValue]) ? t($values[$sqlValue]) : "";
+        return isset($values[$sqlValue]) ? $values[$sqlValue] : "";
     }
 
 

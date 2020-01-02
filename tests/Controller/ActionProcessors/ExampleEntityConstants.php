@@ -5,24 +5,30 @@ namespace BasicTablePackage\Test\Controller\ActionProcessors;
 
 
 use BasicTablePackage\Entity\ExampleEntityDropdownValueSupplier;
+use BasicTablePackage\Entity\ReferencedEntity;
+use BasicTablePackage\Entity\RepositoryFactory;
+use DI\Container;
 
 class ExampleEntityConstants
 {
 
-    public const INT_VAL_1        = 65498;
-    public const TEXT_VAL_1       = "test_value";
-    public const DATE_VALUE_1     = '2020-12-12';
-    const        DATETIME_VALUE_1 = '2020-12-12 12:59';
-    const        WYSIWYG_VALUE_1  = BigTestValues::WYSIWYGVALUE;
-    const        DROPDOWN_KEY_5   = ExampleEntityDropdownValueSupplier::KEY_5;
-    const        DROPDOWN_VALUE_5 = ExampleEntityDropdownValueSupplier::VALUE_5;
-    public const ENTRY_1_POST     = [
+    public const INT_VAL_1              = 65498;
+    public const TEXT_VAL_1             = "test_value";
+    public const DATE_VALUE_1           = '2020-12-12';
+    const        DATETIME_VALUE_1       = '2020-12-12 12:59';
+    const        WYSIWYG_VALUE_1        = BigTestValues::WYSIWYGVALUE;
+    const        DROPDOWN_KEY_5         = ExampleEntityDropdownValueSupplier::KEY_5;
+    const        DROPDOWN_VALUE_5       = ExampleEntityDropdownValueSupplier::VALUE_5;
+    const        REFERENCED_ENTITY_ID_1 = 1;
+    const        REFERENCED_ENTITY_ID_2 = 2;
+    public const ENTRY_1_POST           = [
         "value"          => self::TEXT_VAL_1,
         "intcolumn"      => self::INT_VAL_1,
         "datecolumn"     => self::DATE_VALUE_1,
         "datetimecolumn" => self::DATETIME_VALUE_1,
         "wysiwygcolumn"  => self::WYSIWYG_VALUE_1,
         "dropdowncolumn" => self::DROPDOWN_KEY_5,
+        "manyToOne"      => self::REFERENCED_ENTITY_ID_1
     ];
 
     public static function getValues()
@@ -31,6 +37,65 @@ class ExampleEntityConstants
         $exampleEntityDropdownValueSupplier = new ExampleEntityDropdownValueSupplier();
         $dropDownValues = $exampleEntityDropdownValueSupplier->getValues();
         $postValues["dropdowncolumn"] = $dropDownValues[self::ENTRY_1_POST["dropdowncolumn"]];
+        $manyToOneValues = self::getReferencedEntityValues();
+        $postValues["manyToOne"] = $manyToOneValues[self::ENTRY_1_POST["manyToOne"]];
         return $postValues;
+    }
+
+    /**
+     * @var ReferencedEntity
+     */
+    private static $MANY_TO_ONE_VALUE_1;
+
+    public static function getReferencedEntity1()
+    {
+        if (static::$MANY_TO_ONE_VALUE_1 == null) {
+            static::$MANY_TO_ONE_VALUE_1 = new ReferencedEntity();
+            static::$MANY_TO_ONE_VALUE_1->id = self::REFERENCED_ENTITY_ID_1;
+            static::$MANY_TO_ONE_VALUE_1->value = "referenced1";
+            static::$MANY_TO_ONE_VALUE_1->intcolumn = self::REFERENCED_ENTITY_ID_1;
+        }
+        return static::$MANY_TO_ONE_VALUE_1;
+    }
+
+    /**
+     * @var ReferencedEntity
+     */
+    private static $MANY_TO_ONE_VALUE_2;
+
+    public static function getReferencedEntity2()
+    {
+        if (static::$MANY_TO_ONE_VALUE_2 == null) {
+            static::$MANY_TO_ONE_VALUE_2 = new ReferencedEntity();
+            static::$MANY_TO_ONE_VALUE_2->id = self::REFERENCED_ENTITY_ID_2;
+            static::$MANY_TO_ONE_VALUE_2->value = "referenced2";
+            static::$MANY_TO_ONE_VALUE_2->intcolumn = self::REFERENCED_ENTITY_ID_2;
+        }
+        return static::$MANY_TO_ONE_VALUE_2;
+    }
+
+    /**
+     * @param Container $container
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public static function addReferencedEntityTestValues(Container $container): void
+    {
+        $referencedEntityRepository = $container->get(RepositoryFactory::class)
+                                                ->createRepositoryFor(ReferencedEntity::class);
+
+        $referencedEntityRepository->persist(ExampleEntityConstants::getReferencedEntity1());
+        $referencedEntityRepository->persist(ExampleEntityConstants::getReferencedEntity2());
+    }
+
+    /**
+     * @return array
+     */
+    public static function getReferencedEntityValues(): array
+    {
+        return [
+            self::REFERENCED_ENTITY_ID_1 => self::getReferencedEntity1(),
+            self::REFERENCED_ENTITY_ID_2 => self::getReferencedEntity2()
+        ];
     }
 }

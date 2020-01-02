@@ -32,18 +32,36 @@ class ShowNewEntryFormTest extends TestCase
         $this->assertStringNotContainsString(ExampleEntityConstants::DATETIME_VALUE_1, $output);
         $this->assertStringNotContainsString(ExampleEntityConstants::WYSIWYG_VALUE_1, $output);
         $this->assertStringContainsString("<option selected/>", $output);
+        $this->assertStringContainsString(self::createOptionStringFor(ExampleEntityConstants::REFERENCED_ENTITY_ID_1),
+            $output);
+        $this->assertStringContainsString(self::createOptionStringFor(ExampleEntityConstants::REFERENCED_ENTITY_ID_2),
+            $output);
         $this->assertThat($output, Matchers::stringContainsAll(array_keys(ExampleEntityConstants::ENTRY_1_POST)));
         $this->assertThat($output, $this->stringContains("action=\"post_form\""));
     }
 
+    /**
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
     protected function setUp()
     {
         /** @var EntityManager $entityManager */
         $entityManager = $this->createMock(EntityManager::class);
         /** @var Container $container */
-        $this->basicTableController =
-            DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(BasicTableController::class);
+        $container = DIContainerFactory::createContainer($entityManager, ExampleEntity::class);
+        ExampleEntityConstants::addReferencedEntityTestValues($container);
+        $this->basicTableController = $container->get(BasicTableController::class);
         $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
                                    ->process([], ExampleEntityConstants::ENTRY_1_POST);
+    }
+
+    /**
+     * @param $id
+     * @return string
+     */
+    public static function createOptionStringFor($id): string
+    {
+        return "<option value=\"" . $id . "\" >";
     }
 }

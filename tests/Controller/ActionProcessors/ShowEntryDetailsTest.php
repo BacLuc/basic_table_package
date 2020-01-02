@@ -30,13 +30,18 @@ class ShowEntryDetailsTest extends TestCase
         $this->assertStringNotContainsString("<form", $output);
     }
 
+    /**
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
     protected function setUp()
     {
         /** @var EntityManager $entityManager */
         $entityManager = $this->createMock(EntityManager::class);
         /** @var Container $container */
-        $this->basicTableController =
-            DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(BasicTableController::class);
+        $container = DIContainerFactory::createContainer($entityManager, ExampleEntity::class);
+        ExampleEntityConstants::addReferencedEntityTestValues($container);
+        $this->basicTableController = $container->get(BasicTableController::class);
         $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
                                    ->process([], ExampleEntityConstants::ENTRY_1_POST);
     }
