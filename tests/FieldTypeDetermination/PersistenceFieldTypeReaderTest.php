@@ -5,6 +5,7 @@ namespace BasicTablePackage\Test\FieldTypeDetermination;
 
 
 use BasicTablePackage\FieldTypeDetermination\ColumnAnnotationHandler;
+use BasicTablePackage\FieldTypeDetermination\ManyToManyAnnotationHandler;
 use BasicTablePackage\FieldTypeDetermination\ManyToOneAnnotationHandler;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldType;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypeReader;
@@ -23,9 +24,14 @@ class PersistenceFieldTypeReaderTest extends TestCase
      */
     public function test_read_property_types()
     {
+        $repositoryFactory = new InMemoryRepositoryFactory();
         $persistenceFieldTypeReader =
             new PersistenceFieldTypeReader(SomeEntity::class,
-                [new ColumnAnnotationHandler(), new ManyToOneAnnotationHandler(new InMemoryRepositoryFactory())]);
+                [
+                    new ColumnAnnotationHandler(),
+                    new ManyToOneAnnotationHandler($repositoryFactory),
+                    new ManyToManyAnnotationHandler($repositoryFactory)
+                ]);
         $persistenceFieldTypes = $persistenceFieldTypeReader->getPersistenceFieldTypes();
         $types = collect($persistenceFieldTypes)->map(function (PersistenceFieldType $value) {
             return $value->getType();
@@ -37,7 +43,8 @@ class PersistenceFieldTypeReaderTest extends TestCase
                 "datecolumn"     => PersistenceFieldTypes::DATE,
                 "datetimecolumn" => PersistenceFieldTypes::DATETIME,
                 "wysiwygcolumn"  => PersistenceFieldTypes::TEXT,
-                "manyToOne"      => PersistenceFieldTypes::MANY_TO_ONE
+                "manyToOne"      => PersistenceFieldTypes::MANY_TO_ONE,
+                "manyToMany"     => PersistenceFieldTypes::MANY_TO_MANY
             ]));
     }
 

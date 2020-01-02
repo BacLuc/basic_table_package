@@ -18,6 +18,7 @@ use BasicTablePackage\Entity\Repository;
 use BasicTablePackage\Entity\RepositoryFactory;
 use BasicTablePackage\FieldConfigurationOverride\EntityFieldOverrides;
 use BasicTablePackage\FieldTypeDetermination\ColumnAnnotationHandler;
+use BasicTablePackage\FieldTypeDetermination\ManyToManyAnnotationHandler;
 use BasicTablePackage\FieldTypeDetermination\ManyToOneAnnotationHandler;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypeReader;
 use BasicTablePackage\View\FormView\FormViewConfigurationFactory;
@@ -76,7 +77,8 @@ class DIContainerFactory
                 return new PersistenceFieldTypeReader($entityClass,
                     [
                         new ColumnAnnotationHandler(),
-                        new ManyToOneAnnotationHandler($container->get(RepositoryFactory::class))
+                        new ManyToOneAnnotationHandler($container->get(RepositoryFactory::class)),
+                        new ManyToManyAnnotationHandler($container->get(RepositoryFactory::class))
                     ]);
             }),
             EntityManager::class               => value($entityManager),
