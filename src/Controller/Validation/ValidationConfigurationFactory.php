@@ -63,6 +63,9 @@ class ValidationConfigurationFactory
             case PersistenceFieldTypes::MANY_TO_ONE:
                 /** @var ReferencingPersistenceFieldType $persistenceFieldType */
                 return new DropdownFieldValidator($key, $persistenceFieldType->getValueSupplier());
+            case PersistenceFieldTypes::MANY_TO_MANY:
+                /** @var ReferencingPersistenceFieldType $persistenceFieldType */
+                return new SelectMultipleFieldValidator($key, $persistenceFieldType->getValueSupplier());
             default:
                 return null;
         }

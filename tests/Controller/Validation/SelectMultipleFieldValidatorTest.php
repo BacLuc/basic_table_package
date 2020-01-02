@@ -46,11 +46,9 @@ class SelectMultipleFieldValidatorTest extends TestCase
     public function test_return_valid_for_known_value()
     {
         $knownKey = "knownkey";
-        $this->valueSupplier->expects($this->exactly(2))
+        $this->valueSupplier->expects($this->once())
                             ->method("getValues")
                             ->willReturn([$knownKey => "knownvalue"]);
-        $this->assertThat($this->dropdownFieldValidator->validate(["test" => $knownKey])->isError(),
-            $this->isFalse());
         $this->assertThat($this->dropdownFieldValidator->validate(["test" => [$knownKey]])->isError(),
             $this->isFalse());
     }

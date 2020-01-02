@@ -63,6 +63,9 @@ class PersistorConfigurationFactory
             case PersistenceFieldTypes::MANY_TO_ONE:
                 /** @var ReferencingPersistenceFieldType $persistenceFieldType */
                 return new ManyToOneFieldPersistor($key, $persistenceFieldType->getValueSupplier());
+            case PersistenceFieldTypes::MANY_TO_MANY:
+                /** @var ReferencingPersistenceFieldType $persistenceFieldType */
+                return new ManyToManyFieldPersistor($key, $persistenceFieldType->getValueSupplier());
             default:
                 return null;
         }

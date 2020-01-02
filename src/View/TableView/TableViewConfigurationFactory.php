@@ -67,6 +67,12 @@ class TableViewConfigurationFactory
                     return $this->checkFieldOverride($value, $key) ?:
                         new DropdownField($value, $persistenceFieldType->getValueSupplier());
                 };
+            case PersistenceFieldTypes::MANY_TO_MANY:
+                return function ($value, $key) use ($persistenceFieldType) {
+                    /** @var ReferencingPersistenceFieldType $persistenceFieldType */
+                    return $this->checkFieldOverride($value, $key) ?:
+                        new MultiSelectField($value, $persistenceFieldType->getValueSupplier());
+                };
             default:
                 return null;
         }
