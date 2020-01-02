@@ -66,9 +66,14 @@ class Dropdownfield implements Field
 
     public function getFormView(): string
     {
+
+        $sqlValue = $this->sqlValue;
+        if (is_object($sqlValue)) {
+            $sqlValue = $sqlValue->id;
+        }
         $variables = array(
             "postname" => $this->postname,
-            "sqlValue" => $this->sqlValue,
+            "sqlValue" => $sqlValue,
             "options"  => $this->valueSupplier->getValues(),
         );
         extract($variables);

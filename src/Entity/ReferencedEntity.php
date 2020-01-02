@@ -5,13 +5,11 @@ namespace BasicTablePackage\Entity;
 
 use BasicTablePackage\Lib\GetterTrait;
 use BasicTablePackage\Lib\SetterTrait;
-use Concrete\Package\BaclucExampleBasicTablePackage\Src\Example;
 use Doctrine\Common\Annotations\Annotation\IgnoreAnnotation;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\Table;
 
 /**
@@ -19,9 +17,9 @@ use Doctrine\ORM\Mapping\Table;
  * @IgnoreAnnotation("package")
  *  Concrete\Package\BasicTablePackage\Src
  * @Entity
- * @Table(name="btExampleEntity")
+ * @Table(name="btReferencedEntity")
  */
-class ExampleEntity
+class ReferencedEntity implements WithUniqueStringRepresentation
 {
     use GetterTrait, SetterTrait;
     /**
@@ -41,29 +39,16 @@ class ExampleEntity
      */
     protected $intcolumn;
 
-    /**
-     * @Column(type="date", nullable=true)
-     */
-    private $datecolumn;
 
-    /**
-     * @Column(type="datetime", nullable=true)
-     */
-    private $datetimecolumn;
+    public function createUniqueString(): string
+    {
+        return $this->id . " " . $this->value . " " . $this->intcolumn;
+    }
 
-    /**
-     * @Column(type="text")
-     */
-    private $wysiwygcolumn;
+    public function __toString()
+    {
+        return $this->createUniqueString();
+    }
 
-    /**
-     * @Column(type="string", nullable=true)
-     */
-    protected $dropdowncolumn;
 
-    /**
-     * @var ReferencedEntity
-     * @ManyToOne(targetEntity="BasicTablePackage\Entity\ReferencedEntity")
-     */
-    protected $manyToOne;
 }

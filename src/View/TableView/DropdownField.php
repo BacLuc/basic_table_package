@@ -38,7 +38,11 @@ class DropdownField implements Field
     public function getTableView(): string
     {
         $values = $this->valueSupplier->getValues();
-        return isset($values[$this->sqlValue]) ? t($values[$this->sqlValue]) : "";
+        $sqlValue = $this->sqlValue;
+        if (is_object($sqlValue)) {
+            $sqlValue = $sqlValue->id;
+        }
+        return isset($values[$sqlValue]) ? t($values[$sqlValue]) : "";
     }
 
 

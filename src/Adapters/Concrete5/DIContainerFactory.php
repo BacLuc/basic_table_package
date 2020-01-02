@@ -13,7 +13,9 @@ use BasicTablePackage\Controller\ValuePersisters\PersistorConfiguration;
 use BasicTablePackage\Controller\ValuePersisters\PersistorConfigurationFactory;
 use BasicTablePackage\Controller\VariableSetter;
 use BasicTablePackage\Entity\EntityManagerRepository;
+use BasicTablePackage\Entity\EntityManagerRepositoryFactory;
 use BasicTablePackage\Entity\Repository;
+use BasicTablePackage\Entity\RepositoryFactory;
 use BasicTablePackage\FieldConfigurationOverride\EntityFieldOverrides;
 use BasicTablePackage\FieldTypeDetermination\ColumnAnnotationHandler;
 use BasicTablePackage\FieldTypeDetermination\ManyToOneAnnotationHandler;
@@ -97,6 +99,7 @@ class DIContainerFactory
                 return $container->get(PersistorConfigurationFactory::class)->createConfiguration();
             }),
             WysiwygEditorFactory::class        => value(new Concrete5WysiwygEditorFactory()),
+            RepositoryFactory::class => value(new EntityManagerRepositoryFactory($entityManager))
 
         ];
         return $definitions;

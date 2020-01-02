@@ -4,6 +4,9 @@
 namespace BasicTablePackage\View\FormView;
 
 
+use BasicTablePackage\Entity\ReferencedEntity;
+use BasicTablePackage\Entity\RepositoryFactory;
+use BasicTablePackage\Entity\RepositoryValueSupplier;
 use BasicTablePackage\FieldConfigurationOverride\EntityFieldOverrides;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypeReader;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypes;
@@ -24,20 +27,27 @@ class FormViewConfigurationFactory
      * @var EntityFieldOverrides
      */
     private $entityFieldOverrides;
+    /**
+     * @var RepositoryFactory
+     */
+    private $repositoryFactory;
 
     /**
      * @param PersistenceFieldTypeReader $persistenceFieldTypeReader
      * @param WysiwygEditorFactory $wysiwygEditorFactory
      * @param EntityFieldOverrides $entityFieldOverrides
+     * @param RepositoryFactory $repositoryFactory
      */
     public function __construct(
         PersistenceFieldTypeReader $persistenceFieldTypeReader,
         WysiwygEditorFactory $wysiwygEditorFactory,
-        EntityFieldOverrides $entityFieldOverrides
+        EntityFieldOverrides $entityFieldOverrides,
+        RepositoryFactory $repositoryFactory
     ) {
         $this->persistenceFieldTypeReader = $persistenceFieldTypeReader;
         $this->wysiwygEditorFactory = $wysiwygEditorFactory;
         $this->entityFieldOverrides = $entityFieldOverrides;
+        $this->repositoryFactory = $repositoryFactory;
     }
 
     public function createConfiguration(): FormViewFieldConfiguration
@@ -80,6 +90,12 @@ class FormViewConfigurationFactory
                         $key,
                         $key,
                         self::extractSqlValueOfEntity($entity, $key));
+                };
+            case PersistenceFieldTypes::MANY_TO_ONE:
+                return function ($entity) use ($key) {
+                    $repository = $this->repositoryFactory->createRepositoryFor(ReferencedEntity::class);
+                    $valueSupplier = new RepositoryValueSupplier($repository);
+                    return new Dropdownfield($key, $key, self::extractSqlValueOfEntity($entity, $key), $valueSupplier);
                 };
             default:
                 return null;

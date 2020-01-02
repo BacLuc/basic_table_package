@@ -4,6 +4,9 @@
 namespace BasicTablePackage\Controller\Validation;
 
 
+use BasicTablePackage\Entity\ReferencedEntity;
+use BasicTablePackage\Entity\RepositoryFactory;
+use BasicTablePackage\Entity\RepositoryValueSupplier;
 use BasicTablePackage\FieldConfigurationOverride\EntityFieldOverrides;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypeReader;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypes;
@@ -19,17 +22,24 @@ class ValidationConfigurationFactory
      * @var EntityFieldOverrides
      */
     private $entityFieldOverrides;
+    /**
+     * @var RepositoryFactory
+     */
+    private $repositoryFactory;
 
     /**
      * @param PersistenceFieldTypeReader $persistenceFieldTypeReader
      * @param EntityFieldOverrides $entityFieldOverrides
+     * @param RepositoryFactory $repositoryFactory
      */
     public function __construct(
         PersistenceFieldTypeReader $persistenceFieldTypeReader,
-        EntityFieldOverrides $entityFieldOverrides
+        EntityFieldOverrides $entityFieldOverrides,
+        RepositoryFactory $repositoryFactory
     ) {
         $this->persistenceFieldTypeReader = $persistenceFieldTypeReader;
         $this->entityFieldOverrides = $entityFieldOverrides;
+        $this->repositoryFactory = $repositoryFactory;
     }
 
     public function createConfiguration(): ValidationConfiguration
@@ -58,6 +68,10 @@ class ValidationConfigurationFactory
             case PersistenceFieldTypes::DATE:
             case PersistenceFieldTypes::DATETIME:
                 return new DateValidator($key);
+            case PersistenceFieldTypes::MANY_TO_ONE:
+                $repository = $this->repositoryFactory->createRepositoryFor(ReferencedEntity::class);
+                $valueSupplier = new RepositoryValueSupplier($repository);
+                return new DropdownFieldValidator($key, $valueSupplier);
             default:
                 return null;
         }

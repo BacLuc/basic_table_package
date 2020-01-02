@@ -12,11 +12,13 @@ use BasicTablePackage\Controller\VariableSetter;
 use BasicTablePackage\Entity\ExampleEntity;
 use BasicTablePackage\Entity\ExampleEntityDropdownValueSupplier;
 use BasicTablePackage\Entity\Repository;
+use BasicTablePackage\Entity\RepositoryFactory;
 use BasicTablePackage\FieldConfigurationOverride\EntityFieldOverrideBuilder;
 use BasicTablePackage\Test\Adapters\DefaultContext;
 use BasicTablePackage\Test\Adapters\DefaultRenderer;
 use BasicTablePackage\Test\Adapters\DefaultWysiwygEditorFactory;
 use BasicTablePackage\Test\Entity\InMemoryRepository;
+use BasicTablePackage\Test\Entity\InMemoryRepositoryFactory;
 use BasicTablePackage\View\FormView\Dropdownfield as DropdownFormField;
 use BasicTablePackage\View\FormView\Field as FormField;
 use BasicTablePackage\View\FormView\WysiwygEditorFactory;
@@ -63,6 +65,7 @@ class DIContainerFactory
         $definitions[Renderer::class] = autowire(DefaultRenderer::class);
         $definitions[Repository::class] = value(new InMemoryRepository(ExampleEntity::class));
         $definitions[WysiwygEditorFactory::class] = value(new DefaultWysiwygEditorFactory());
+        $definitions[RepositoryFactory::class] = value(new InMemoryRepositoryFactory());
 
         $containerBuilder->addDefinitions($definitions);
         return $containerBuilder->build();
