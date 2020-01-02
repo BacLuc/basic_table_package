@@ -1,6 +1,6 @@
 <?php /** @noinspection ALL */ ?>
 <form action="<?php echo $this->action('post_form') . (isset($editId) && $editId != null ? "/$editId" :
-        "") ?>" method='POST'>
+        "") ?>" method='POST' enctype="multipart/form-data">
     <?php foreach ($fields as $field) { ?>
         <?php /** @var $field \BasicTablePackage\View\FormView\Field */ ?>
         <div class="row">
