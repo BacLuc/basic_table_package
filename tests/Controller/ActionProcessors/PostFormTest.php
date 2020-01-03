@@ -36,51 +36,38 @@ class PostFormTest extends TestCase
         ob_start();
         $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
                                    ->process([], ExampleEntityConstants::ENTRY_1_POST);
-        $changed_value = "changed_value";
-        $changed_int_value = 203498;
-        $changed_date_value = '2020-12-13';
-        $changed_date_time_value = '2020-12-13 18:43';
-        $changed_wysiwyg_value = BigTestValues::WYSIWYGVALUE2;
-        $changed_dropdown_value = ExampleEntityDropdownValueSupplier::KEY_6;
-        $changed_manyToOne_value = ExampleEntityConstants::REFERENCED_ENTITY_ID_2;
-        $changed_manyToMany_value = [ExampleEntityConstants::REFERENCED_ENTITY_ID_1];
+        $secondPostArray = [
+            "value"          => "changed_value",
+            "intcolumn"      => 203498,
+            "datecolumn"     => '2020-12-13',
+            "datetimecolumn" => '2020-12-13 18:43',
+            "wysiwygcolumn"  => BigTestValues::WYSIWYGVALUE2,
+            "dropdowncolumn" => ExampleEntityDropdownValueSupplier::KEY_6,
+            "manyToOne"      => ExampleEntityConstants::REFERENCED_ENTITY_ID_2,
+            "manyToMany"     => [ExampleEntityConstants::REFERENCED_ENTITY_ID_1],
+        ];
         $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
                                    ->process([],
-                                       [
-                                           "value"          => $changed_value,
-                                           "intcolumn"      => $changed_int_value,
-                                           "datecolumn"     => $changed_date_value,
-                                           "datetimecolumn" => $changed_date_time_value,
-                                           "wysiwygcolumn"  => $changed_wysiwyg_value,
-                                           "dropdowncolumn" => $changed_dropdown_value,
-                                           "manyToOne"      => $changed_manyToOne_value,
-                                           "manyToMany"     => $changed_manyToMany_value,
-                                       ],
+                                       $secondPostArray,
                                        1);
 
         $this->basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
 
         $output = ob_get_clean();
         $this->assertStringNotContainsString(ExampleEntityConstants::TEXT_VAL_1, $output);
-        $this->assertThat($output, $this->stringContains("value"));
-        $this->assertThat($output, $this->stringContains($changed_value));
-        $this->assertThat($output, $this->stringContains("intcolumn"));
-        $this->assertThat($output, $this->stringContains($changed_int_value));
-        $this->assertThat($output, $this->stringContains("datecolumn"));
-        $this->assertThat($output, $this->stringContains($changed_date_value));
-        $this->assertThat($output, $this->stringContains("datetimecolumn"));
-        $this->assertThat($output, $this->stringContains($changed_date_time_value));
-        $this->assertThat($output, $this->stringContains("wysiwygcolumn"));
-        $this->assertThat($output, $this->stringContains($changed_wysiwyg_value));
-        $this->assertThat($output, $this->stringContains("dropdowncolumn"));
+
+        $tableValuesArray = $secondPostArray;
         $exampleEntityDropdownValueSupplier = new ExampleEntityDropdownValueSupplier();
-        $this->assertThat($output,
-            $this->stringContains($exampleEntityDropdownValueSupplier->getValues()[$changed_dropdown_value]));
+        $tableValuesArray["dropdowncolumn"] =
+            $exampleEntityDropdownValueSupplier->getValues()[$tableValuesArray["dropdowncolumn"]];
+
         $referencedEntityValues = ExampleEntityConstants::getReferencedEntityValues();
-        $this->assertThat($output, $this->stringContains($referencedEntityValues[$changed_manyToOne_value]));
-        $this->assertThat($output, $this->stringContains("manyToOne"));
-        $this->assertThat($output, $this->stringContains($referencedEntityValues[$changed_manyToMany_value[0]]));
-        $this->assertThat($output, $this->stringContains("manyToMany"));
+        $tableValuesArray["manyToOne"] = $referencedEntityValues[$tableValuesArray["manyToOne"]];
+        $tableValuesArray["manyToMany"] = $referencedEntityValues[$tableValuesArray["manyToMany"][0]];
+
+        $this->assertThat($output, Matchers::stringContainsKeysAndValuesRecursive($tableValuesArray));
+
+
         $this->assertThat($output, $this->stringContains("/1"));
     }
 
