@@ -26,7 +26,8 @@ class ShowEditEntryFormTest extends TestCase
                                    ->process([], [], 1);
 
         $output = ob_get_clean();
-        $this->assertThat($output, Matchers::stringContainsKeysAndValues(ExampleEntityConstants::ENTRY_1_POST));
+        $this->assertThat($output,
+            Matchers::stringContainsKeysAndValuesRecursive(ExampleEntityConstants::ENTRY_1_POST));
         $this->assertThat($output, $this->stringContains("action=\"post_form/1\""));
     }
 

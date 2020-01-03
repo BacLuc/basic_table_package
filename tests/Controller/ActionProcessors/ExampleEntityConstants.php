@@ -8,6 +8,7 @@ use BasicTablePackage\Entity\ExampleEntityDropdownValueSupplier;
 use BasicTablePackage\Entity\ReferencedEntity;
 use BasicTablePackage\Entity\RepositoryFactory;
 use DI\Container;
+use function BasicTablePackage\Lib\collect as collect;
 
 class ExampleEntityConstants
 {
@@ -28,7 +29,8 @@ class ExampleEntityConstants
         "datetimecolumn" => self::DATETIME_VALUE_1,
         "wysiwygcolumn"  => self::WYSIWYG_VALUE_1,
         "dropdowncolumn" => self::DROPDOWN_KEY_5,
-        "manyToOne"      => self::REFERENCED_ENTITY_ID_1
+        "manyToOne"      => self::REFERENCED_ENTITY_ID_1,
+        "manyToMany"     => [self::REFERENCED_ENTITY_ID_1, self::REFERENCED_ENTITY_ID_2]
     ];
 
     public static function getValues()
@@ -37,8 +39,17 @@ class ExampleEntityConstants
         $exampleEntityDropdownValueSupplier = new ExampleEntityDropdownValueSupplier();
         $dropDownValues = $exampleEntityDropdownValueSupplier->getValues();
         $postValues["dropdowncolumn"] = $dropDownValues[self::ENTRY_1_POST["dropdowncolumn"]];
-        $manyToOneValues = self::getReferencedEntityValues();
-        $postValues["manyToOne"] = $manyToOneValues[self::ENTRY_1_POST["manyToOne"]];
+        $referencedEntityValues = self::getReferencedEntityValues();
+        $postValues["manyToOne"] = $referencedEntityValues[self::ENTRY_1_POST["manyToOne"]];
+        $tableManyToMany = collect($postValues["manyToMany"])
+            ->map(function ($id) use ($referencedEntityValues) {
+                return $referencedEntityValues[$id];
+            })
+            ->map(function (ReferencedEntity $entity) {
+                return $entity->createUniqueString();
+            })
+            ->join(",");
+        $postValues["manyToMany"] = $tableManyToMany;
         return $postValues;
     }
 

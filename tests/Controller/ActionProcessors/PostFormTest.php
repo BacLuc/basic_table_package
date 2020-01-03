@@ -43,6 +43,7 @@ class PostFormTest extends TestCase
         $changed_wysiwyg_value = BigTestValues::WYSIWYGVALUE2;
         $changed_dropdown_value = ExampleEntityDropdownValueSupplier::KEY_6;
         $changed_manyToOne_value = ExampleEntityConstants::REFERENCED_ENTITY_ID_2;
+        $changed_manyToMany_value = [ExampleEntityConstants::REFERENCED_ENTITY_ID_1];
         $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
                                    ->process([],
                                        [
@@ -53,6 +54,7 @@ class PostFormTest extends TestCase
                                            "wysiwygcolumn"  => $changed_wysiwyg_value,
                                            "dropdowncolumn" => $changed_dropdown_value,
                                            "manyToOne"      => $changed_manyToOne_value,
+                                           "manyToMany"     => $changed_manyToMany_value,
                                        ],
                                        1);
 
@@ -76,6 +78,8 @@ class PostFormTest extends TestCase
             $this->stringContains($exampleEntityDropdownValueSupplier->getValues()[$changed_dropdown_value]));
         $referencedEntityValues = ExampleEntityConstants::getReferencedEntityValues();
         $this->assertThat($output, $this->stringContains($referencedEntityValues[$changed_manyToOne_value]));
+        $this->assertThat($output, $this->stringContains($referencedEntityValues[$changed_manyToMany_value[0]]));
+        $this->assertThat($output, $this->stringContains("manyToMany"));
         $this->assertThat($output, $this->stringContains("/1"));
     }
 
