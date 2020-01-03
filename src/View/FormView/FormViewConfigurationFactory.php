@@ -9,6 +9,7 @@ use BasicTablePackage\FieldTypeDetermination\PersistenceFieldType;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypeReader;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypes;
 use BasicTablePackage\FieldTypeDetermination\ReferencingPersistenceFieldType;
+use BasicTablePackage\View\FormView\ValueTransformers\ValueTransformerConfiguration;
 use function BasicTablePackage\Lib\collect as collect;
 
 class FormViewConfigurationFactory
@@ -26,20 +27,27 @@ class FormViewConfigurationFactory
      * @var EntityFieldOverrides
      */
     private $entityFieldOverrides;
+    /**
+     * @var ValueTransformerConfiguration
+     */
+    private $valueTransformerConfiguration;
 
     /**
      * @param PersistenceFieldTypeReader $persistenceFieldTypeReader
      * @param WysiwygEditorFactory $wysiwygEditorFactory
      * @param EntityFieldOverrides $entityFieldOverrides
+     * @param ValueTransformerConfiguration $valueTransformerConfiguration
      */
     public function __construct(
         PersistenceFieldTypeReader $persistenceFieldTypeReader,
         WysiwygEditorFactory $wysiwygEditorFactory,
-        EntityFieldOverrides $entityFieldOverrides
+        EntityFieldOverrides $entityFieldOverrides,
+        ValueTransformerConfiguration $valueTransformerConfiguration
     ) {
         $this->persistenceFieldTypeReader = $persistenceFieldTypeReader;
         $this->wysiwygEditorFactory = $wysiwygEditorFactory;
         $this->entityFieldOverrides = $entityFieldOverrides;
+        $this->valueTransformerConfiguration = $valueTransformerConfiguration;
     }
 
     public function createConfiguration(): FormViewFieldConfiguration
@@ -59,10 +67,13 @@ class FormViewConfigurationFactory
             isset($this->entityFieldOverrides[$key][Field::class])) {
             return $this->entityFieldOverrides[$key][Field::class];
         }
+        $valueTransformer = $this->valueTransformerConfiguration->getTransformerFor($persistenceFieldType);
         switch ($persistenceFieldType->getType()) {
             case PersistenceFieldTypes::STRING:
-                return function ($entity) use ($key) {
-                    return new TextField($key, $key, self::extractSqlValueOfEntity($entity, $key));
+                return function ($entity) use ($key, $valueTransformer) {
+                    return new TextField($key,
+                        $key,
+                        $valueTransformer->transform(self::extractSqlValueOfEntity($entity, $key)));
                 };
             case PersistenceFieldTypes::INTEGER:
                 return function ($entity) use ($key) {
