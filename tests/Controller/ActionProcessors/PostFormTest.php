@@ -33,7 +33,6 @@ class PostFormTest extends TestCase
 
     public function test_post_form_existing_entry()
     {
-        ob_start();
         $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
                                    ->process([], ExampleEntityConstants::ENTRY_1_POST);
         $secondPostArray = [
@@ -51,6 +50,7 @@ class PostFormTest extends TestCase
                                        $secondPostArray,
                                        1);
 
+        ob_start();
         $this->basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
 
         $output = ob_get_clean();
