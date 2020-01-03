@@ -21,10 +21,10 @@ class DeleteEntryTest extends TestCase
 
     public function test_delete_entry()
     {
-        ob_start();
         $this->basicTableController->getActionFor(ActionRegistryFactory::DELETE_ENTRY)
                                    ->process([], [], 1);
 
+        ob_start();
         $this->basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
         $output = ob_get_clean();
         $this->assertThat($output, $this->stringContains("value"));
