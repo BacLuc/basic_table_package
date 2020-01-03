@@ -71,4 +71,17 @@ class StringContainsAll extends Constraint
                 return $this->ignoreCase ? mb_stripos($other, $string) === false : mb_strpos($other, $string) === false;
             })->count() === 0;
     }
+
+    protected function failureDescription($other): string
+    {
+        $notFound = collect($this->strings)->filter(function ($string) use ($other) {
+            return $this->ignoreCase ? mb_stripos($other, $string) === false : mb_strpos($other, $string) === false;
+        })->join(",");
+        return "the following strings [$notFound]\n
+        of all strings [" . collect($this->strings)->join(",") . "]\n
+        were not found in:\n
+        $other";
+    }
+
+
 }
