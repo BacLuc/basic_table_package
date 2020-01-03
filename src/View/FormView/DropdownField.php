@@ -6,7 +6,7 @@ namespace BasicTablePackage\View\FormView;
 
 use BasicTablePackage\Entity\ValueSupplier;
 
-class Dropdownfield implements Field
+class DropdownField implements Field
 {
     /**
      * @var string
@@ -15,7 +15,7 @@ class Dropdownfield implements Field
     /**
      * @var string
      */
-    private $postname;
+    private $postName;
     /**
      * @var string
      */
@@ -26,16 +26,16 @@ class Dropdownfield implements Field
     private $valueSupplier;
 
     /**
-     * @param string $fieldname
+     * @param string $fieldName
      * @param ValueSupplier $valueSupplier
      * @return \Closure
      */
-    public static function createDropdownField(string $fieldname, ValueSupplier $valueSupplier): \Closure
+    public static function createDropdownField(string $fieldName, ValueSupplier $valueSupplier): \Closure
     {
-        return function ($entity) use ($fieldname, $valueSupplier) {
-            return new Dropdownfield($fieldname,
-                $fieldname,
-                FormViewConfigurationFactory::extractSqlValueOfEntity($entity, $fieldname),
+        return function ($entity) use ($fieldName, $valueSupplier) {
+            return new DropdownField($fieldName,
+                $fieldName,
+                FormViewConfigurationFactory::extractSqlValueOfEntity($entity, $fieldName),
                 $valueSupplier);
         };
     }
@@ -43,15 +43,15 @@ class Dropdownfield implements Field
     /**
      * TextField constructor.
      * @param string $label
-     * @param string $postname
+     * @param string $postName
      * @param string $sqlValue
      * @param ValueSupplier $valueSupplier
      */
-    public function __construct(string $label, string $postname, $sqlValue, ValueSupplier $valueSupplier)
+    public function __construct(string $label, string $postName, $sqlValue, ValueSupplier $valueSupplier)
     {
         $this->label = $label;
         $this->sqlValue = $sqlValue;
-        $this->postname = $postname;
+        $this->postName = $postName;
         $this->valueSupplier = $valueSupplier;
     }
 
@@ -72,7 +72,7 @@ class Dropdownfield implements Field
             $sqlValue = $sqlValue->id;
         }
         $variables = array(
-            "postname" => $this->postname,
+            "postname" => $this->postName,
             "sqlValue" => $sqlValue,
             "options"  => $this->valueSupplier->getValues(),
         );

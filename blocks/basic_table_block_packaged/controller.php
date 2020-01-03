@@ -11,7 +11,7 @@ use BasicTablePackage\Controller\Validation\FieldValidator;
 use BasicTablePackage\Entity\ExampleEntity;
 use BasicTablePackage\Entity\ExampleEntityDropdownValueSupplier;
 use BasicTablePackage\FieldConfigurationOverride\EntityFieldOverrideBuilder;
-use BasicTablePackage\View\FormView\Dropdownfield;
+use BasicTablePackage\View\FormView\DropdownField;
 use BasicTablePackage\View\FormView\Field as FormField;
 use BasicTablePackage\View\TableView\DropdownField as DropdownTableField;
 use BasicTablePackage\View\TableView\Field as TableField;
@@ -54,11 +54,11 @@ class Controller extends BlockController
         $entityClass = ExampleEntity::class;
         $entityFieldOverrides = new EntityFieldOverrideBuilder($entityClass);
 
-        $dropdownfield = "dropdowncolumn";
+        $dropdownField = "dropdowncolumn";
         $valueSupplier = new ExampleEntityDropdownValueSupplier();
-        $entityFieldOverrides->forField($dropdownfield)
+        $entityFieldOverrides->forField($dropdownField)
                              ->forType(FormField::class)
-                             ->useFactory(Dropdownfield::createDropdownField($dropdownfield, $valueSupplier))
+                             ->useFactory(DropdownField::createDropdownField($dropdownField, $valueSupplier))
                              ->forType(TableField::class)
                              ->useFactory(DropdownTableField::createDropdownField($valueSupplier))
                              ->forType(FieldValidator::class)

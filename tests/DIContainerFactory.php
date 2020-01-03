@@ -19,7 +19,7 @@ use BasicTablePackage\Test\Adapters\DefaultRenderer;
 use BasicTablePackage\Test\Adapters\DefaultWysiwygEditorFactory;
 use BasicTablePackage\Test\Entity\InMemoryRepository;
 use BasicTablePackage\Test\Entity\InMemoryRepositoryFactory;
-use BasicTablePackage\View\FormView\Dropdownfield as DropdownFormField;
+use BasicTablePackage\View\FormView\DropdownField as DropdownFormField;
 use BasicTablePackage\View\FormView\Field as FormField;
 use BasicTablePackage\View\FormView\WysiwygEditorFactory;
 use BasicTablePackage\View\TableView\DropdownField as DropdownTableField;
@@ -42,11 +42,11 @@ class DIContainerFactory
         try {
             $entityFieldOverrides = new EntityFieldOverrideBuilder($entityClass);
 
-            $dropdownfield = "dropdowncolumn";
+            $dropdownField = "dropdowncolumn";
             $valueSupplier = new ExampleEntityDropdownValueSupplier();
-            $entityFieldOverrides->forField($dropdownfield)
+            $entityFieldOverrides->forField($dropdownField)
                                  ->forType(FormField::class)
-                                 ->useFactory(DropdownFormField::createDropdownField($dropdownfield, $valueSupplier))
+                                 ->useFactory(DropdownFormField::createDropdownField($dropdownField, $valueSupplier))
                                  ->forType(TableField::class)
                                  ->useFactory(DropdownTableField::createDropdownField($valueSupplier))
                                  ->forType(FieldValidator::class)

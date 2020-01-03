@@ -86,7 +86,7 @@ class FormViewConfigurationFactory
             case PersistenceFieldTypes::MANY_TO_ONE:
                 return function ($entity) use ($key, $persistenceFieldType) {
                     /** @var ReferencingPersistenceFieldType $persistenceFieldType */
-                    return new Dropdownfield($key,
+                    return new DropdownField($key,
                         $key,
                         self::extractSqlValueOfEntity($entity, $key),
                         $persistenceFieldType->getValueSupplier());
