@@ -78,6 +78,7 @@ class PostFormTest extends TestCase
             $this->stringContains($exampleEntityDropdownValueSupplier->getValues()[$changed_dropdown_value]));
         $referencedEntityValues = ExampleEntityConstants::getReferencedEntityValues();
         $this->assertThat($output, $this->stringContains($referencedEntityValues[$changed_manyToOne_value]));
+        $this->assertThat($output, $this->stringContains("manyToOne"));
         $this->assertThat($output, $this->stringContains($referencedEntityValues[$changed_manyToMany_value[0]]));
         $this->assertThat($output, $this->stringContains("manyToMany"));
         $this->assertThat($output, $this->stringContains("/1"));
