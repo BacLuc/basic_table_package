@@ -48,7 +48,8 @@ class ShowNewEntryForm implements ActionProcessor
     function process(array $get, array $post, ...$additionalParameters)
     {
         $formView = $this->formViewService->getFormView();
-        $this->variableSetter->set("fields", $formView->getFields());
+        $this->variableSetter->set("formBuilder", $formView);
+        $this->variableSetter->set("twig", $this->formViewService->getTwig());
         $this->renderer->render(self::FORM_VIEW);
     }
 

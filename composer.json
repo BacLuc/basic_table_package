@@ -6,7 +6,12 @@
     "portphp/excel": "1.1.*",
     "php-di/php-di": "6.*",
     "tightenco/collect": "6.0.*",
-    "php-ds/php-ds": "1.2.*"
+    "php-ds/php-ds": "1.2.*",
+    "symfony/form": "v4.1.12",
+    "symfony/validator": "v4.1.12",
+    "symfony/config": "3.3.2",
+    "symfony/translation": "3.4.36",
+    "symfony/twig-bridge": "4.1.12"
   },
   "autoload": {
     "psr-4": {
