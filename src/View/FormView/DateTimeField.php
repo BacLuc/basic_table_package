@@ -4,6 +4,9 @@
 namespace BasicTablePackage\View\FormView;
 
 
+use BasicTablePackage\View\FormView\ValueTransformers\DateTimeValueTransformer;
+use DateTime;
+
 class DateTimeField implements Field
 {
     /**
@@ -17,29 +20,32 @@ class DateTimeField implements Field
     /**
      * @var ?\DateTime
      */
-    private $sqlValue;
+    private $value;
 
     /**
      * TextField constructor.
      * @param string $label
      * @param string $postname
-     * @param \DateTime|null $sqlValue
+     * @param string $value
      */
-    public function __construct(string $label, string $postname, ?\DateTime $sqlValue)
+    public function __construct(string $label, string $postname, string $value)
     {
         $this->label = $label;
-        $this->sqlValue = $sqlValue;
+        $this->value = $value;
         $this->postname = $postname;
     }
 
     public function getFormView(): string
     {
-        $output = $this->sqlValue ? $this->sqlValue->format("Y-m-d\TH:i") : "";
-        $sqlValue = $this->sqlValue ? $this->sqlValue->format("Y-m-d H:i") : "";
+        $output =
+            $this->value ?
+                DateTime::createFromFormat(DateTimeValueTransformer::DATETIME_FORMAT, $this->value)
+                        ->format("Y-m-d\TH:i")
+                : "";
         $variables = array(
             "postname"             => $this->postname,
             "datetime_local_value" => $output,
-            "sqlValue"             => $sqlValue,
+            "sqlValue"             => $this->value,
         );
         extract($variables);
         ob_start();

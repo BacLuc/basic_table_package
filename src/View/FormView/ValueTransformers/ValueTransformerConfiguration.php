@@ -14,6 +14,8 @@ class ValueTransformerConfiguration
         switch ($persistenceFieldType->getType()) {
             case PersistenceFieldTypes::DATE:
                 return new DateValueTransformer();
+            case PersistenceFieldTypes::DATETIME:
+                return new DateTimeValueTransformer();
             default:
                 return new IdentityValueTransformer();
         }
