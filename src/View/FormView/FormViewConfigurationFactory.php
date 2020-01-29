@@ -89,11 +89,11 @@ class FormViewConfigurationFactory
                     return new DateTimeField($key, $key, $getValue($entity, $key));
                 };
             case PersistenceFieldTypes::TEXT:
-                return function ($entity) use ($key) {
+                return function ($entity) use ($key, $getValue) {
                     return new WysiwygField($this->wysiwygEditorFactory->createEditor(),
                         $key,
                         $key,
-                        self::extractSqlValueOfEntity($entity, $key));
+                        $getValue($entity, $key));
                 };
             case PersistenceFieldTypes::MANY_TO_ONE:
                 return function ($entity) use ($key, $persistenceFieldType) {

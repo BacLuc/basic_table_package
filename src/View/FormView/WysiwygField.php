@@ -22,20 +22,20 @@ class WysiwygField implements Field
     /**
      * @var string
      */
-    private $sqlValue;
+    private $value;
 
     /**
      * TextField constructor.
      * @param WysiwygEditor $wysiwygEditor
      * @param string $label
      * @param string $postname
-     * @param string $sqlValue
+     * @param string $value
      */
-    public function __construct(WysiwygEditor $wysiwygEditor, string $label, string $postname, $sqlValue)
+    public function __construct(WysiwygEditor $wysiwygEditor, string $label, string $postname, $value)
     {
         $this->wysiwygEditor = $wysiwygEditor;
         $this->label = $label;
-        $this->sqlValue = $sqlValue;
+        $this->value = $value;
         $this->postname = $postname;
     }
 
@@ -50,6 +50,6 @@ class WysiwygField implements Field
 
     public function getFormView(): string
     {
-        return $this->wysiwygEditor->render($this->postname, $this->sqlValue);
+        return $this->wysiwygEditor->render($this->postname, $this->value);
     }
 }
