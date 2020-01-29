@@ -9,7 +9,7 @@ use BasicTablePackage\FieldTypeDetermination\PersistenceFieldType;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypeReader;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypes;
 use BasicTablePackage\FieldTypeDetermination\ReferencingPersistenceFieldType;
-use BasicTablePackage\View\FormView\ValueTransformers\ValueTransformerConfiguration;
+use BasicTablePackage\View\FormView\ValueTransformers\PersistenceValueTransformerConfiguration;
 use function BasicTablePackage\Lib\collect as collect;
 
 class FormViewConfigurationFactory
@@ -28,7 +28,7 @@ class FormViewConfigurationFactory
      */
     private $entityFieldOverrides;
     /**
-     * @var ValueTransformerConfiguration
+     * @var PersistenceValueTransformerConfiguration
      */
     private $valueTransformerConfiguration;
 
@@ -36,13 +36,13 @@ class FormViewConfigurationFactory
      * @param PersistenceFieldTypeReader $persistenceFieldTypeReader
      * @param WysiwygEditorFactory $wysiwygEditorFactory
      * @param EntityFieldOverrides $entityFieldOverrides
-     * @param ValueTransformerConfiguration $valueTransformerConfiguration
+     * @param PersistenceValueTransformerConfiguration $valueTransformerConfiguration
      */
     public function __construct(
         PersistenceFieldTypeReader $persistenceFieldTypeReader,
         WysiwygEditorFactory $wysiwygEditorFactory,
         EntityFieldOverrides $entityFieldOverrides,
-        ValueTransformerConfiguration $valueTransformerConfiguration
+        PersistenceValueTransformerConfiguration $valueTransformerConfiguration
     ) {
         $this->persistenceFieldTypeReader = $persistenceFieldTypeReader;
         $this->wysiwygEditorFactory = $wysiwygEditorFactory;
