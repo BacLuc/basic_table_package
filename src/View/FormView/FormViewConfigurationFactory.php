@@ -76,8 +76,10 @@ class FormViewConfigurationFactory
                         $valueTransformer->transform(self::extractSqlValueOfEntity($entity, $key)));
                 };
             case PersistenceFieldTypes::INTEGER:
-                return function ($entity) use ($key) {
-                    return new IntegerField($key, $key, self::extractSqlValueOfEntity($entity, $key));
+                return function ($entity) use ($key, $valueTransformer) {
+                    return new IntegerField($key,
+                        $key,
+                        $valueTransformer->transform(self::extractSqlValueOfEntity($entity, $key)));
                 };
             case PersistenceFieldTypes::DATE:
                 return function ($entity) use ($key) {
