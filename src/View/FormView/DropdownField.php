@@ -5,6 +5,8 @@ namespace BasicTablePackage\View\FormView;
 
 
 use BasicTablePackage\Entity\ValueSupplier;
+use BasicTablePackage\View\FormView\ValueTransformers\DropdownValueTransformer;
+use BasicTablePackage\View\FormView\ValueTransformers\ValueTransformer;
 
 class DropdownField implements Field
 {
@@ -19,7 +21,7 @@ class DropdownField implements Field
     /**
      * @var string
      */
-    private $sqlValue;
+    private $value;
     /**
      * @var ValueSupplier
      */
@@ -28,15 +30,28 @@ class DropdownField implements Field
     /**
      * @param string $fieldName
      * @param ValueSupplier $valueSupplier
+     * @param ValueTransformer|null $dropdownValueTransformer
      * @return \Closure
      */
-    public static function createDropdownField(string $fieldName, ValueSupplier $valueSupplier): \Closure
-    {
-        return function ($entity) use ($fieldName, $valueSupplier) {
-            return new DropdownField($fieldName,
-                $fieldName,
-                FormViewConfigurationFactory::extractSqlValueOfEntity($entity, $fieldName),
-                $valueSupplier);
+    public static function createDropdownField(
+        string $fieldName,
+        ValueSupplier $valueSupplier,
+        ValueTransformer $dropdownValueTransformer = null
+    ): \Closure {
+        $dropdownValueTransformer = $dropdownValueTransformer ?: new DropdownValueTransformer();
+        $getValue = function ($entity, $overrideValueTransformer) use ($fieldName, $dropdownValueTransformer) {
+            $persistenceValue = FormViewConfigurationFactory::extractSqlValueOfEntity($entity, $fieldName);
+
+            $valueTransformer = $overrideValueTransformer ?: $dropdownValueTransformer;
+            return $valueTransformer->transform($persistenceValue);
+        };
+        return function ($overrideValueTransformer) use ($fieldName, $valueSupplier, $getValue) {
+            return function ($entity) use ($fieldName, $valueSupplier, $getValue, $overrideValueTransformer) {
+                return new DropdownField($fieldName,
+                    $fieldName,
+                    $getValue($entity, $overrideValueTransformer),
+                    $valueSupplier);
+            };
         };
     }
 
@@ -44,13 +59,13 @@ class DropdownField implements Field
      * TextField constructor.
      * @param string $label
      * @param string $postName
-     * @param string $sqlValue
+     * @param string $value
      * @param ValueSupplier $valueSupplier
      */
-    public function __construct(string $label, string $postName, $sqlValue, ValueSupplier $valueSupplier)
+    public function __construct(string $label, string $postName, $value, ValueSupplier $valueSupplier)
     {
         $this->label = $label;
-        $this->sqlValue = $sqlValue;
+        $this->value = $value;
         $this->postName = $postName;
         $this->valueSupplier = $valueSupplier;
     }
@@ -66,14 +81,9 @@ class DropdownField implements Field
 
     public function getFormView(): string
     {
-
-        $sqlValue = $this->sqlValue;
-        if (is_object($sqlValue)) {
-            $sqlValue = $sqlValue->id;
-        }
         $variables = array(
             "postname" => $this->postName,
-            "sqlValue" => $sqlValue,
+            "sqlValue" => $this->value,
             "options"  => $this->valueSupplier->getValues(),
         );
         extract($variables);

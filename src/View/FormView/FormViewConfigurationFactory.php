@@ -65,7 +65,7 @@ class FormViewConfigurationFactory
     {
         if (isset($this->entityFieldOverrides[$key]) &&
             isset($this->entityFieldOverrides[$key][Field::class])) {
-            return $this->entityFieldOverrides[$key][Field::class];
+            return $this->entityFieldOverrides[$key][Field::class](null);
         }
         $valueTransformer = $this->valueTransformerConfiguration->getTransformerFor($persistenceFieldType);
         $getValue = function ($entity, $key) use ($valueTransformer) {
@@ -96,11 +96,11 @@ class FormViewConfigurationFactory
                         $getValue($entity, $key));
                 };
             case PersistenceFieldTypes::MANY_TO_ONE:
-                return function ($entity) use ($key, $persistenceFieldType) {
+                return function ($entity) use ($key, $persistenceFieldType, $getValue) {
                     /** @var ReferencingPersistenceFieldType $persistenceFieldType */
                     return new DropdownField($key,
                         $key,
-                        self::extractSqlValueOfEntity($entity, $key),
+                        $getValue($entity, $key),
                         $persistenceFieldType->getValueSupplier());
                 };
             case PersistenceFieldTypes::MANY_TO_MANY:
