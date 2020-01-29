@@ -68,30 +68,25 @@ class FormViewConfigurationFactory
             return $this->entityFieldOverrides[$key][Field::class];
         }
         $valueTransformer = $this->valueTransformerConfiguration->getTransformerFor($persistenceFieldType);
+        $getValue = function ($entity, $key) use ($valueTransformer) {
+            return $valueTransformer->transform(self::extractSqlValueOfEntity($entity, $key));
+        };
         switch ($persistenceFieldType->getType()) {
             case PersistenceFieldTypes::STRING:
-                return function ($entity) use ($key, $valueTransformer) {
-                    return new TextField($key,
-                        $key,
-                        $valueTransformer->transform(self::extractSqlValueOfEntity($entity, $key)));
+                return function ($entity) use ($key, $getValue) {
+                    return new TextField($key, $key, $getValue($entity, $key));
                 };
             case PersistenceFieldTypes::INTEGER:
-                return function ($entity) use ($key, $valueTransformer) {
-                    return new IntegerField($key,
-                        $key,
-                        $valueTransformer->transform(self::extractSqlValueOfEntity($entity, $key)));
+                return function ($entity) use ($key, $getValue) {
+                    return new IntegerField($key, $key, $getValue($entity, $key));
                 };
             case PersistenceFieldTypes::DATE:
-                return function ($entity) use ($key, $valueTransformer) {
-                    return new DateField($key,
-                        $key,
-                        $valueTransformer->transform(self::extractSqlValueOfEntity($entity, $key)));
+                return function ($entity) use ($key, $getValue) {
+                    return new DateField($key, $key, $getValue($entity, $key));
                 };
             case PersistenceFieldTypes::DATETIME:
-                return function ($entity) use ($key, $valueTransformer) {
-                    return new DateTimeField($key,
-                        $key,
-                        $valueTransformer->transform(self::extractSqlValueOfEntity($entity, $key)));
+                return function ($entity) use ($key, $getValue) {
+                    return new DateTimeField($key, $key, $getValue($entity, $key));
                 };
             case PersistenceFieldTypes::TEXT:
                 return function ($entity) use ($key) {
