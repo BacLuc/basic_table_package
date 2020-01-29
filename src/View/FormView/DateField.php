@@ -17,27 +17,26 @@ class DateField implements Field
     /**
      * @var ?\DateTime
      */
-    private $sqlValue;
+    private $value;
 
     /**
      * TextField constructor.
      * @param string $label
      * @param string $postname
-     * @param \DateTime|null $sqlValue
+     * @param string $value
      */
-    public function __construct(string $label, string $postname, ?\DateTime $sqlValue)
+    public function __construct(string $label, string $postname, string $value)
     {
         $this->label = $label;
-        $this->sqlValue = $sqlValue;
+        $this->value = $value;
         $this->postname = $postname;
     }
 
     public function getFormView(): string
     {
-        $output = $this->sqlValue ? $this->sqlValue->format("Y-m-d") : "";
         $variables = array(
             "postname" => $this->postname,
-            "sqlValue" => $output,
+            "sqlValue" => $this->value,
         );
         extract($variables);
         ob_start();
