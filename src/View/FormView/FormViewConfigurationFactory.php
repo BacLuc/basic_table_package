@@ -104,11 +104,11 @@ class FormViewConfigurationFactory
                         $persistenceFieldType->getValueSupplier());
                 };
             case PersistenceFieldTypes::MANY_TO_MANY:
-                return function ($entity) use ($key, $persistenceFieldType) {
+                return function ($entity) use ($key, $persistenceFieldType, $getValue) {
                     /** @var ReferencingPersistenceFieldType $persistenceFieldType */
                     return new MultiSelectField($key,
                         $key,
-                        self::extractSqlValueOfEntity($entity, $key),
+                        $getValue($entity, $key),
                         $persistenceFieldType->getValueSupplier());
                 };
             default:

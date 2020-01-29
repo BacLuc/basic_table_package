@@ -18,6 +18,8 @@ class ValueTransformerConfiguration
                 return new DateTimeValueTransformer();
             case PersistenceFieldTypes::MANY_TO_ONE:
                 return new DropdownValueTransformer();
+            case PersistenceFieldTypes::MANY_TO_MANY:
+                return new MultiSelectValueTransformer();
             default:
                 return new IdentityValueTransformer();
         }

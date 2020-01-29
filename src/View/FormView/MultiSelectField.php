@@ -20,7 +20,7 @@ class MultiSelectField implements Field
     /**
      * @var ArrayCollection
      */
-    private $sqlValue;
+    private $value;
     /**
      * @var ValueSupplier
      */
@@ -30,13 +30,13 @@ class MultiSelectField implements Field
      * TextField constructor.
      * @param string $label
      * @param string $postname
-     * @param ArrayCollection $sqlValue
+     * @param ArrayCollection $value
      * @param ValueSupplier $valueSupplier
      */
-    public function __construct(string $label, string $postname, $sqlValue, ValueSupplier $valueSupplier)
+    public function __construct(string $label, string $postname, $value, ValueSupplier $valueSupplier)
     {
         $this->label = $label;
-        $this->sqlValue = $sqlValue;
+        $this->value = $value;
         $this->postname = $postname;
         $this->valueSupplier = $valueSupplier;
     }
@@ -53,13 +53,9 @@ class MultiSelectField implements Field
     public function getFormView(): string
     {
 
-        $arrayCollection = $this->sqlValue ?: new ArrayCollection();
-        $sqlValue = collect($arrayCollection->toArray())->keyBy(function ($value) {
-            return $value->id;
-        })->toArray();
         $variables = array(
             "postname" => $this->postname,
-            "sqlValue" => $sqlValue,
+            "sqlValue" => $this->value,
             "options"  => $this->valueSupplier->getValues(),
         );
         extract($variables);
