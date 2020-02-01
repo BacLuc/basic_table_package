@@ -105,6 +105,13 @@ class PostForm implements ActionProcessor
             $formView = $this->formViewAfterValidationFailedService->getFormView($validationResult);
             $this->variableSetter->set("fields", $formView->getFields());
             $this->variableSetter->set("editId", $editId);
+            $validationErrors = collect($validationResult)
+                ->keyBy(function (ValidationResultItem $resultItem) {
+                    return $resultItem->getName();
+                })->map(function (ValidationResultItem $resultItem) {
+                    return $resultItem->getMessages();
+                });
+            $this->variableSetter->set("validationErrors", $validationErrors);
             $this->renderer->render(self::FORM_VIEW);
         }
     }
