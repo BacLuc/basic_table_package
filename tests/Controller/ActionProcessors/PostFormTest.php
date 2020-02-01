@@ -92,6 +92,25 @@ class PostFormTest extends TestCase
         $this->assertThat($output, $this->stringContains("<option value=\"2\" selected>"));
     }
 
+    public function test_post_form_validation_notnull()
+    {
+        $ENTRY_1_POST = ExampleEntityConstants::ENTRY_1_POST;
+        unset($ENTRY_1_POST['wysiwygcolumn']);
+        ob_start();
+        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
+                                   ->process([], $ENTRY_1_POST);
+
+        $output = ob_get_clean();
+
+        $form_fields = $ENTRY_1_POST;
+        $form_fields['dropdowncolumn'] = "<option value=\"" . ExampleEntityConstants::DROPDOWN_KEY_5 . "\" selected>";
+        $form_fields['manyToOne'] = "<option value=\"1\" selected>";
+        $form_fields['manyToMany'] = "<option value=\"1\" selected>";
+        $this->assertThat($output, Matchers::stringContainsKeysAndValues($form_fields));
+        //second selected entry of manyToOne
+        $this->assertThat($output, $this->stringContains("<option value=\"2\" selected>"));
+    }
+
     public function test_post_form_validation_fails_existing_entry()
     {
         $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)

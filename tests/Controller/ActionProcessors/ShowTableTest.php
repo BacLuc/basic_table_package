@@ -35,17 +35,25 @@ class ShowTableTest extends TestCase
         $this->assertThat($output, $this->stringContains(self::TEST_4));
     }
 
+    /**
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
     protected function setUp()
     {
         /** @var EntityManager $entityManager */
         $entityManager = $this->createMock(EntityManager::class);
 
         /** @var Container $container */
+        $container = DIContainerFactory::createContainer($entityManager, ExampleEntity::class);
+        ExampleEntityConstants::addReferencedEntityTestValues($container);
         $this->basicTableController =
-            DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(BasicTableController::class);
+            $container->get(BasicTableController::class);
         collect([self::TEST_1, self::TEST_2, self::TEST_3, self::TEST_4])->each(function (string $value) {
+            $postValues = ExampleEntityConstants::ENTRY_1_POST;
+            $postValues["value"] = $value;
             $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
-                                       ->process([], ["value" => $value]);
+                                       ->process([], $postValues);
         });
     }
 }

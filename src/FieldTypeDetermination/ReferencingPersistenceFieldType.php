@@ -36,5 +36,10 @@ class ReferencingPersistenceFieldType implements PersistenceFieldType
         return $this->valueSupplier;
     }
 
+    public function isNullable()
+    {
+        return true;
+    }
+
 
 }

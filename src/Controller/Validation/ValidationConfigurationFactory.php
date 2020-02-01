@@ -51,6 +51,23 @@ class ValidationConfigurationFactory
             isset($this->entityFieldOverrides[$key][FieldValidator::class])) {
             return $this->entityFieldOverrides[$key][FieldValidator::class]($key);
         }
+        $validators = [];
+        $validators[] = $this->getValidatorForType($persistenceFieldType, $key);
+
+        if (!$persistenceFieldType->isNullable()) {
+            $validators[] = new NotNullValidator($key);
+        }
+
+        return new CombinedValidator($key, $validators);
+    }
+
+    /**
+     * @param PersistenceFieldType $persistenceFieldType
+     * @param string $key
+     * @return DateValidator|DropdownFieldValidator|IntegerFieldValidator|SelectMultipleFieldValidator|TextFieldValidator|null
+     */
+    private function getValidatorForType(PersistenceFieldType $persistenceFieldType, string $key)
+    {
         switch ($persistenceFieldType->getType()) {
             case PersistenceFieldTypes::TEXT:
             case PersistenceFieldTypes::STRING:

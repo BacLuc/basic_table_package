@@ -39,6 +39,6 @@ class DeleteEntryTest extends TestCase
         $this->basicTableController =
             DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(BasicTableController::class);
         $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
-                                   ->process([], ["value" => self::TEST_1]);
+                                   ->process([], ExampleEntityConstants::ENTRY_1_POST);
     }
 }

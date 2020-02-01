@@ -19,7 +19,7 @@ class ColumnAnnotationHandler implements PersistenceFieldTypeHandler
     {
         if ($this->canHandle($annotation)) {
             /** @var Column $annotation */
-            return new SimplePersistenceFieldType($annotation->type);
+            return new SimplePersistenceFieldType($annotation->type, $annotation->nullable);
         } else {
             return null;
         }
