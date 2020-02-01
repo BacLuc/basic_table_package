@@ -71,6 +71,58 @@ class PostFormTest extends TestCase
         $this->assertThat($output, $this->stringContains("/1"));
     }
 
+    public function test_post_form_validation_new_entry()
+    {
+        $ENTRY_1_POST = ExampleEntityConstants::ENTRY_1_POST;
+        $ENTRY_1_POST['intcolumn'] = "invalidInt";
+        $ENTRY_1_POST['datecolumn'] = "invalidDate";
+        $ENTRY_1_POST['datetimecolumn'] = "invalidDateTime";
+        ob_start();
+        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
+                                   ->process([], $ENTRY_1_POST);
+
+        $output = ob_get_clean();
+
+        $form_fields = $ENTRY_1_POST;
+        $form_fields['dropdowncolumn'] = "<option value=\"" . ExampleEntityConstants::DROPDOWN_KEY_5 . "\" selected>";
+        $form_fields['manyToOne'] = "<option value=\"1\" selected>";
+        $form_fields['manyToMany'] = "<option value=\"1\" selected>";
+        $this->assertThat($output, Matchers::stringContainsKeysAndValues($form_fields));
+        //second selected entry of manyToOne
+        $this->assertThat($output, $this->stringContains("<option value=\"2\" selected>"));
+    }
+
+    public function test_post_form_validation_fails_existing_entry()
+    {
+        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
+                                   ->process([], ExampleEntityConstants::ENTRY_1_POST);
+        $secondPostArray = [
+            "value"          => "changed_value",
+            "intcolumn"      => "invalidInt",
+            "datecolumn"     => 'invalidDate',
+            "datetimecolumn" => 'invalidDateTime',
+            "wysiwygcolumn"  => BigTestValues::WYSIWYGVALUE2,
+            "dropdowncolumn" => ExampleEntityDropdownValueSupplier::KEY_6,
+            "manyToOne"      => ExampleEntityConstants::REFERENCED_ENTITY_ID_2,
+            "manyToMany"     => [ExampleEntityConstants::REFERENCED_ENTITY_ID_1],
+        ];
+        ob_start();
+        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
+                                   ->process([],
+                                       $secondPostArray,
+                                       1);
+
+
+        $output = ob_get_clean();
+        $form_fields = $secondPostArray;
+        $form_fields['dropdowncolumn'] =
+            "<option value=\"" . ExampleEntityDropdownValueSupplier::KEY_6 . "\" selected>";
+        $form_fields['manyToOne'] = "<option value=\"1\" selected>";
+        $form_fields['manyToMany'] = "<option value=\"1\" selected>";
+        $this->assertThat($output, Matchers::stringContainsKeysAndValues($form_fields));
+        $this->assertThat($output, $this->stringContains("/1"));
+    }
+
     /**
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException

@@ -103,8 +103,10 @@ class Controller extends BlockController
     {
         $this->processAction($this->createBasicTableController()->getActionFor(ActionRegistryFactory::POST_FORM),
             $editId);
-        Redirect::page(Page::getCurrentPage())->send();
-        exit();
+        if ($this->blockViewRenderOverride == null) {
+            Redirect::page(Page::getCurrentPage())->send();
+            exit();
+        }
     }
 
     /**

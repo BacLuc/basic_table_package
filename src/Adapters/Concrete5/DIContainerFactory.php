@@ -23,6 +23,8 @@ use BasicTablePackage\FieldTypeDetermination\ManyToOneAnnotationHandler;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypeReader;
 use BasicTablePackage\View\FormView\FormViewConfigurationFactory;
 use BasicTablePackage\View\FormView\FormViewFieldConfiguration;
+use BasicTablePackage\View\FormView\ValueTransformers\PersistenceValueTransformerConfiguration;
+use BasicTablePackage\View\FormView\ValueTransformers\ValueTransformerConfiguration;
 use BasicTablePackage\View\FormView\WysiwygEditorFactory;
 use BasicTablePackage\View\TableView\TableViewConfigurationFactory;
 use BasicTablePackage\View\TableView\TableViewFieldConfiguration;
@@ -73,7 +75,7 @@ class DIContainerFactory
     ): array {
         AnnotationRegistry::registerLoader("class_exists");
         $definitions = [
-            PersistenceFieldTypeReader::class  => factory(function (Container $container) use ($entityClass) {
+            PersistenceFieldTypeReader::class    => factory(function (Container $container) use ($entityClass) {
                 return new PersistenceFieldTypeReader($entityClass,
                     [
                         new ColumnAnnotationHandler(),
@@ -81,32 +83,33 @@ class DIContainerFactory
                         new ManyToManyAnnotationHandler($container->get(RepositoryFactory::class))
                     ]);
             }),
-            EntityManager::class               => value($entityManager),
-            Repository::class                  => value(new EntityManagerRepository($entityManager,
+            EntityManager::class                 => value($entityManager),
+            Repository::class                    => value(new EntityManagerRepository($entityManager,
                 $entityClass)),
-            EntityFieldOverrides::class        => value($entityFieldOverrides),
-            VariableSetter::class              => autowire(Concrete5VariableSetter::class),
-            Renderer::class                    => autowire(Concrete5Renderer::class),
-            ViewActionRegistry::class          => factory(function (Container $container) {
+            EntityFieldOverrides::class          => value($entityFieldOverrides),
+            VariableSetter::class                => autowire(Concrete5VariableSetter::class),
+            Renderer::class                      => autowire(Concrete5Renderer::class),
+            ViewActionRegistry::class            => factory(function (Container $container) {
                 return $container->get(ViewActionRegistryFactory::class)->createActionRegistry();
             }),
-            ActionRegistry::class              => factory(function (Container $container) {
+            ActionRegistry::class                => factory(function (Container $container) {
                 return $container->get(ActionRegistryFactory::class)->createActionRegistry();
             }),
-            TableViewFieldConfiguration::class => factory(function (Container $container) {
+            TableViewFieldConfiguration::class   => factory(function (Container $container) {
                 return $container->get(TableViewConfigurationFactory::class)->createConfiguration();
             }),
-            ValidationConfiguration::class     => factory(function (Container $container) {
+            ValidationConfiguration::class       => factory(function (Container $container) {
                 return $container->get(ValidationConfigurationFactory::class)->createConfiguration();
             }),
-            FormViewFieldConfiguration::class  => factory(function (Container $container) {
+            FormViewFieldConfiguration::class    => factory(function (Container $container) {
                 return $container->get(FormViewConfigurationFactory::class)->createConfiguration();
             }),
-            PersistorConfiguration::class      => factory(function (Container $container) {
+            PersistorConfiguration::class        => factory(function (Container $container) {
                 return $container->get(PersistorConfigurationFactory::class)->createConfiguration();
             }),
-            WysiwygEditorFactory::class        => value(new Concrete5WysiwygEditorFactory()),
-            RepositoryFactory::class           => value(new EntityManagerRepositoryFactory($entityManager))
+            WysiwygEditorFactory::class          => value(new Concrete5WysiwygEditorFactory()),
+            RepositoryFactory::class             => value(new EntityManagerRepositoryFactory($entityManager)),
+            ValueTransformerConfiguration::class => autowire(PersistenceValueTransformerConfiguration::class)
 
         ];
         return $definitions;

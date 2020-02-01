@@ -7,7 +7,7 @@ namespace BasicTablePackage\View\FormView\ValueTransformers;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldType;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypes;
 
-class PersistenceValueTransformerConfiguration
+class PersistenceValueTransformerConfiguration implements ValueTransformerConfiguration
 {
     public function getTransformerFor(PersistenceFieldType $persistenceFieldType): ValueTransformer
     {

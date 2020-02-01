@@ -40,8 +40,12 @@ class DateTimeField implements Field
         $output =
             $this->value ?
                 DateTime::createFromFormat(DateTimeValueTransformer::DATETIME_FORMAT, $this->value)
-                        ->format("Y-m-d\TH:i")
                 : "";
+        if ($output instanceof DateTime) {
+            $output = $output->format("Y-m-d\TH:i");
+        } else {
+            $output = $this->value;
+        }
         $variables = array(
             "postname"             => $this->postname,
             "datetime_local_value" => $output,
