@@ -9,6 +9,7 @@ use BasicTablePackage\Controller\ActionRegistryFactory;
 use BasicTablePackage\Controller\Renderer;
 use BasicTablePackage\Controller\VariableSetter;
 use BasicTablePackage\FormViewService;
+use BasicTablePackage\View\FormType;
 
 class ShowEditEntryForm implements ActionProcessor
 {
@@ -25,18 +26,28 @@ class ShowEditEntryForm implements ActionProcessor
      * @var Renderer
      */
     private $renderer;
+    /**
+     * @var FormType
+     */
+    private $formType;
 
     /**
      * ShowFormActionProcessor constructor.
      * @param FormViewService $formViewService
      * @param VariableSetter $variableSetter
      * @param Renderer $renderer
+     * @param FormType $rendertype
      */
-    public function __construct(FormViewService $formViewService, VariableSetter $variableSetter, Renderer $renderer)
-    {
+    public function __construct(
+        FormViewService $formViewService,
+        VariableSetter $variableSetter,
+        Renderer $renderer,
+        FormType $rendertype
+    ) {
         $this->formViewService = $formViewService;
         $this->variableSetter = $variableSetter;
         $this->renderer = $renderer;
+        $this->formType = $rendertype;
     }
 
 
@@ -54,6 +65,7 @@ class ShowEditEntryForm implements ActionProcessor
         $formView = $this->formViewService->getFormView($editId);
         $this->variableSetter->set("fields", $formView->getFields());
         $this->variableSetter->set("editId", $editId);
+        $this->variableSetter->set("addFormTags", $this->formType === FormType::$BLOCK_VIEW);
         $this->renderer->render(self::FORM_VIEW);
     }
 

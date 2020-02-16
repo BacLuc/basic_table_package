@@ -21,6 +21,7 @@ use BasicTablePackage\FieldTypeDetermination\ColumnAnnotationHandler;
 use BasicTablePackage\FieldTypeDetermination\ManyToManyAnnotationHandler;
 use BasicTablePackage\FieldTypeDetermination\ManyToOneAnnotationHandler;
 use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypeReader;
+use BasicTablePackage\View\FormType;
 use BasicTablePackage\View\FormView\FormViewConfigurationFactory;
 use BasicTablePackage\View\FormView\FormViewFieldConfiguration;
 use BasicTablePackage\View\FormView\ValueTransformers\PersistenceValueTransformerConfiguration;
@@ -46,6 +47,7 @@ class DIContainerFactory
      * @param EntityManager $entityManager
      * @param $entityClass
      * @param EntityFieldOverrides $entityFieldOverrides
+     * @param FormType $formType
      * @return Container
      * @throws \Exception
      */
@@ -53,10 +55,11 @@ class DIContainerFactory
         BlockController $controller,
         EntityManager $entityManager,
         $entityClass,
-        EntityFieldOverrides $entityFieldOverrides
+        EntityFieldOverrides $entityFieldOverrides,
+        FormType $formType = null
     ): Container {
         $containerBuilder = new ContainerBuilder();
-        $definitions = self::createDefinition($entityManager, $entityClass, $entityFieldOverrides);
+        $definitions = self::createDefinition($entityManager, $entityClass, $entityFieldOverrides, $formType);
         $definitions[BlockController::class] = value($controller);
         $containerBuilder->addDefinitions($definitions);
         return $containerBuilder->build();
@@ -66,13 +69,16 @@ class DIContainerFactory
      * @param EntityManager $entityManager
      * @param $entityClass
      * @param EntityFieldOverrides $entityFieldOverrides
+     * @param FormType|null $formType
      * @return array
      */
     public static function createDefinition(
         EntityManager $entityManager,
         $entityClass,
-        EntityFieldOverrides $entityFieldOverrides
+        EntityFieldOverrides $entityFieldOverrides,
+        FormType $formType = null
     ): array {
+        $formType = $formType ? $formType : FormType::$BLOCK_VIEW;
         AnnotationRegistry::registerLoader("class_exists");
         $definitions = [
             PersistenceFieldTypeReader::class    => factory(function (Container $container) use ($entityClass) {
@@ -109,7 +115,8 @@ class DIContainerFactory
             }),
             WysiwygEditorFactory::class          => value(new Concrete5WysiwygEditorFactory()),
             RepositoryFactory::class             => value(new EntityManagerRepositoryFactory($entityManager)),
-            ValueTransformerConfiguration::class => autowire(PersistenceValueTransformerConfiguration::class)
+            ValueTransformerConfiguration::class => autowire(PersistenceValueTransformerConfiguration::class),
+            FormType::class                      => value($formType)
 
         ];
         return $definitions;

@@ -14,6 +14,7 @@ use BasicTablePackage\Controller\ValuePersisters\PersistorConfiguration;
 use BasicTablePackage\Controller\VariableSetter;
 use BasicTablePackage\Entity\Repository;
 use BasicTablePackage\FormViewAfterValidationFailedService;
+use BasicTablePackage\View\FormType;
 use function BasicTablePackage\Lib\collect as collect;
 
 class PostForm implements ActionProcessor
@@ -43,6 +44,10 @@ class PostForm implements ActionProcessor
      * @var Renderer
      */
     private $renderer;
+    /**
+     * @var FormType
+     */
+    private $formType;
 
     /**
      * PostFormActionProcessor constructor.
@@ -52,6 +57,7 @@ class PostForm implements ActionProcessor
      * @param PersistorConfiguration $peristorConfiguration
      * @param VariableSetter $variableSetter
      * @param Renderer $renderer
+     * @param FormType $formType
      */
     public function __construct(
         Validator $validator,
@@ -59,7 +65,8 @@ class PostForm implements ActionProcessor
         Repository $repository,
         PersistorConfiguration $peristorConfiguration,
         VariableSetter $variableSetter,
-        Renderer $renderer
+        Renderer $renderer,
+        FormType $formType
     ) {
         $this->validator = $validator;
         $this->formViewAfterValidationFailedService = $formViewAfterValidationFailedService;
@@ -67,6 +74,7 @@ class PostForm implements ActionProcessor
         $this->peristorConfiguration = $peristorConfiguration;
         $this->variableSetter = $variableSetter;
         $this->renderer = $renderer;
+        $this->formType = $formType;
     }
 
     function getName(): string
@@ -91,8 +99,14 @@ class PostForm implements ActionProcessor
                 });
             if ($editId != null) {
                 $entity = $this->repository->getById($editId);
+                if ($entity === null && $this->formType === FormType::$BLOCK_CONFIGURATION) {
+                    $entity = $this->repository->create();
+                }
             } else {
                 $entity = $this->repository->create();
+            }
+            if ($this->formType === FormType::$BLOCK_CONFIGURATION) {
+                $entity->id = $editId;
             }
             /**
              * @var FieldPersistor $persistor
@@ -112,6 +126,7 @@ class PostForm implements ActionProcessor
                     return $resultItem->getMessages();
                 });
             $this->variableSetter->set("validationErrors", $validationErrors);
+            $this->variableSetter->set("addFormTags", $this->formType === FormType::$BLOCK_VIEW);
             $this->renderer->render(self::FORM_VIEW);
         }
     }
