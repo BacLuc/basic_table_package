@@ -6,7 +6,10 @@
     "portphp/excel": "1.1.*",
     "php-di/php-di": "6.*",
     "tightenco/collect": "6.0.*",
-    "php-ds/php-ds": "1.2.*"
+    "php-ds/php-ds": "1.2.*",
+    "doctrine/dbal": "~2.5",
+    "doctrine/lexer": "1.0.*",
+    "symfony/inflector": "4.4.*"
   },
   "autoload": {
     "psr-4": {
