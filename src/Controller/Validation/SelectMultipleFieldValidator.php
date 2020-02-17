@@ -1,11 +1,11 @@
 <?php
 
 
-namespace BasicTablePackage\Controller\Validation;
+namespace BaclucC5Crud\Controller\Validation;
 
 
-use BasicTablePackage\Entity\ValueSupplier;
-use function BasicTablePackage\Lib\collect as collect;
+use BaclucC5Crud\Entity\ValueSupplier;
+use function BaclucC5Crud\Lib\collect as collect;
 
 class SelectMultipleFieldValidator implements FieldValidator
 {

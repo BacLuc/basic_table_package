@@ -1,11 +1,11 @@
 <?php
 
 
-namespace BasicTablePackage\Test\Constraints;
+namespace BaclucC5Crud\Test\Constraints;
 
 
 use PHPUnit\Framework\Constraint\Constraint;
-use function BasicTablePackage\Lib\collect as collect;
+use function BaclucC5Crud\Lib\collect as collect;
 use function mb_stripos;
 use function mb_strpos;
 use function mb_strtolower;

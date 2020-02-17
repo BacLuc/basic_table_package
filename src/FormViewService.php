@@ -1,15 +1,15 @@
 <?php
 
 
-namespace BasicTablePackage;
+namespace BaclucC5Crud;
 
 
-use BasicTablePackage\Entity\Repository;
-use BasicTablePackage\View\FormType;
-use BasicTablePackage\View\FormView\FormView;
-use BasicTablePackage\View\FormView\FormViewFieldConfiguration;
+use BaclucC5Crud\Entity\Repository;
+use BaclucC5Crud\View\FormType;
+use BaclucC5Crud\View\FormView\FormView;
+use BaclucC5Crud\View\FormView\FormViewFieldConfiguration;
 use stdClass;
-use function BasicTablePackage\Lib\collect as collect;
+use function BaclucC5Crud\Lib\collect as collect;
 
 class FormViewService
 {

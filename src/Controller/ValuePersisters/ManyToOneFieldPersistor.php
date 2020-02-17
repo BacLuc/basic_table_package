@@ -1,10 +1,10 @@
 <?php
 
 
-namespace BasicTablePackage\Controller\ValuePersisters;
+namespace BaclucC5Crud\Controller\ValuePersisters;
 
 
-use BasicTablePackage\Entity\ValueSupplier;
+use BaclucC5Crud\Entity\ValueSupplier;
 
 class ManyToOneFieldPersistor implements FieldPersistor
 {

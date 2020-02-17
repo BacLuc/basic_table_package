@@ -1,12 +1,12 @@
 <?php
 
 
-namespace BasicTablePackage\View\FormView;
+namespace BaclucC5Crud\View\FormView;
 
 
-use BasicTablePackage\Entity\ValueSupplier;
-use BasicTablePackage\View\FormView\ValueTransformers\DropdownValueTransformer;
-use BasicTablePackage\View\FormView\ValueTransformers\ValueTransformer;
+use BaclucC5Crud\Entity\ValueSupplier;
+use BaclucC5Crud\View\FormView\ValueTransformers\DropdownValueTransformer;
+use BaclucC5Crud\View\FormView\ValueTransformers\ValueTransformer;
 
 class DropdownField implements Field
 {

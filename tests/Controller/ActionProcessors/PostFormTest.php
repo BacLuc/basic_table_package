@@ -1,14 +1,14 @@
 <?php
 
-namespace BasicTablePackage\Test\Controller\ActionProcessors;
+namespace BaclucC5Crud\Test\Controller\ActionProcessors;
 
 
-use BasicTablePackage\Controller\ActionRegistryFactory;
-use BasicTablePackage\Controller\BasicTableController;
-use BasicTablePackage\Entity\ExampleEntity;
-use BasicTablePackage\Entity\ExampleEntityDropdownValueSupplier;
-use BasicTablePackage\Test\Constraints\Matchers;
-use BasicTablePackage\Test\DIContainerFactory;
+use BaclucC5Crud\Controller\ActionRegistryFactory;
+use BaclucC5Crud\Controller\CrudController;
+use BaclucC5Crud\Entity\ExampleEntity;
+use BaclucC5Crud\Entity\ExampleEntityDropdownValueSupplier;
+use BaclucC5Crud\Test\Constraints\Matchers;
+use BaclucC5Crud\Test\DIContainerFactory;
 use DI\Container;
 use Doctrine\ORM\EntityManager;
 use PHPUnit\Framework\TestCase;
@@ -16,16 +16,16 @@ use PHPUnit\Framework\TestCase;
 class PostFormTest extends TestCase
 {
     /**
-     * @var BasicTableController
+     * @var CrudController
      */
-    private $basicTableController;
+    private $crudController;
 
     public function test_post_form_new_entry()
     {
         ob_start();
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
-                                   ->process([], ExampleEntityConstants::ENTRY_1_POST);
-        $this->basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
+        $this->crudController->getActionFor(ActionRegistryFactory::POST_FORM)
+                             ->process([], ExampleEntityConstants::ENTRY_1_POST);
+        $this->crudController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
 
         $output = ob_get_clean();
         $this->assertThat($output, Matchers::stringContainsKeysAndValues(ExampleEntityConstants::getValues()));
@@ -33,7 +33,7 @@ class PostFormTest extends TestCase
 
     public function test_post_form_existing_entry()
     {
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
+        $this->crudController->getActionFor(ActionRegistryFactory::POST_FORM)
                                    ->process([], ExampleEntityConstants::ENTRY_1_POST);
         $secondPostArray = [
             "value"          => "changed_value",
@@ -45,13 +45,13 @@ class PostFormTest extends TestCase
             "manyToOne"      => ExampleEntityConstants::REFERENCED_ENTITY_ID_2,
             "manyToMany"     => [ExampleEntityConstants::REFERENCED_ENTITY_ID_1],
         ];
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
-                                   ->process([],
+        $this->crudController->getActionFor(ActionRegistryFactory::POST_FORM)
+                             ->process([],
                                        $secondPostArray,
                                        1);
 
         ob_start();
-        $this->basicTableController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
+        $this->crudController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);
 
         $output = ob_get_clean();
         $this->assertStringNotContainsString(ExampleEntityConstants::TEXT_VAL_1, $output);
@@ -78,7 +78,7 @@ class PostFormTest extends TestCase
         $ENTRY_1_POST['datecolumn'] = "invalidDate";
         $ENTRY_1_POST['datetimecolumn'] = "invalidDateTime";
         ob_start();
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
+        $this->crudController->getActionFor(ActionRegistryFactory::POST_FORM)
                                    ->process([], $ENTRY_1_POST);
 
         $output = ob_get_clean();
@@ -97,7 +97,7 @@ class PostFormTest extends TestCase
         $ENTRY_1_POST = ExampleEntityConstants::ENTRY_1_POST;
         unset($ENTRY_1_POST['wysiwygcolumn']);
         ob_start();
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
+        $this->crudController->getActionFor(ActionRegistryFactory::POST_FORM)
                                    ->process([], $ENTRY_1_POST);
 
         $output = ob_get_clean();
@@ -113,7 +113,7 @@ class PostFormTest extends TestCase
 
     public function test_post_form_validation_fails_existing_entry()
     {
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
+        $this->crudController->getActionFor(ActionRegistryFactory::POST_FORM)
                                    ->process([], ExampleEntityConstants::ENTRY_1_POST);
         $secondPostArray = [
             "value"          => "changed_value",
@@ -126,7 +126,7 @@ class PostFormTest extends TestCase
             "manyToMany"     => [ExampleEntityConstants::REFERENCED_ENTITY_ID_1],
         ];
         ob_start();
-        $this->basicTableController->getActionFor(ActionRegistryFactory::POST_FORM)
+        $this->crudController->getActionFor(ActionRegistryFactory::POST_FORM)
                                    ->process([],
                                        $secondPostArray,
                                        1);
@@ -153,6 +153,6 @@ class PostFormTest extends TestCase
         /** @var Container $container */
         $container = DIContainerFactory::createContainer($entityManager, ExampleEntity::class);
         ExampleEntityConstants::addReferencedEntityTestValues($container);
-        $this->basicTableController = $container->get(BasicTableController::class);
+        $this->crudController = $container->get(CrudController::class);
     }
 }

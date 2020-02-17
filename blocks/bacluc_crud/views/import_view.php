@@ -66,16 +66,16 @@
                     <?php
 
                     /**
-                     * @var \Concrete\Package\BasicTablePackage\Src\Import\ComparisonSet $comparisonset
+                     * @var \Concrete\Package\BaclucC5Crud\Src\Import\ComparisonSet $comparisonset
                      */
 
                     $isnewEntry = false;
                     foreach ($comparisonset as $modeltype => $model) {
                         echo '<tr>';
-                        if ($modeltype == \Concrete\Package\BasicTablePackage\Src\Import\ComparisonSet::KEY_CURRENT
+                        if ($modeltype == \Concrete\Package\BaclucC5Crud\Src\Import\ComparisonSet::KEY_CURRENT
                             && is_null($model->get($model->getIdFieldName()))) {
                             $model = $comparisonset->getResultModel();
-                            echo '<th>' . \Concrete\Package\BasicTablePackage\Src\Import\ComparisonSet::KEY_NEWENTRY
+                            echo '<th>' . \Concrete\Package\BaclucC5Crud\Src\Import\ComparisonSet::KEY_NEWENTRY
                                  . '</th>';
                             $isnewEntry = true;
                         } else {

@@ -1,10 +1,10 @@
 <?php
 
 
-namespace BasicTablePackage\View;
+namespace BaclucC5Crud\View;
 
 
-use BasicTablePackage\Controller\ActionRegistryFactory;
+use BaclucC5Crud\Controller\ActionRegistryFactory;
 
 class ViewActionRegistryFactory
 {

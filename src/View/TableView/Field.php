@@ -1,7 +1,7 @@
 <?php
 
 
-namespace BasicTablePackage\View\TableView;
+namespace BaclucC5Crud\View\TableView;
 
 
 interface Field

@@ -1,36 +1,36 @@
 <?php
 
 
-namespace BasicTablePackage\Adapters\Concrete5;
+namespace BaclucC5Crud\Adapters\Concrete5;
 
 
-use BasicTablePackage\Controller\ActionRegistry;
-use BasicTablePackage\Controller\ActionRegistryFactory;
-use BasicTablePackage\Controller\Renderer;
-use BasicTablePackage\Controller\Validation\ValidationConfiguration;
-use BasicTablePackage\Controller\Validation\ValidationConfigurationFactory;
-use BasicTablePackage\Controller\ValuePersisters\PersistorConfiguration;
-use BasicTablePackage\Controller\ValuePersisters\PersistorConfigurationFactory;
-use BasicTablePackage\Controller\VariableSetter;
-use BasicTablePackage\Entity\EntityManagerRepository;
-use BasicTablePackage\Entity\EntityManagerRepositoryFactory;
-use BasicTablePackage\Entity\Repository;
-use BasicTablePackage\Entity\RepositoryFactory;
-use BasicTablePackage\FieldConfigurationOverride\EntityFieldOverrides;
-use BasicTablePackage\FieldTypeDetermination\ColumnAnnotationHandler;
-use BasicTablePackage\FieldTypeDetermination\ManyToManyAnnotationHandler;
-use BasicTablePackage\FieldTypeDetermination\ManyToOneAnnotationHandler;
-use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypeReader;
-use BasicTablePackage\View\FormType;
-use BasicTablePackage\View\FormView\FormViewConfigurationFactory;
-use BasicTablePackage\View\FormView\FormViewFieldConfiguration;
-use BasicTablePackage\View\FormView\ValueTransformers\PersistenceValueTransformerConfiguration;
-use BasicTablePackage\View\FormView\ValueTransformers\ValueTransformerConfiguration;
-use BasicTablePackage\View\FormView\WysiwygEditorFactory;
-use BasicTablePackage\View\TableView\TableViewConfigurationFactory;
-use BasicTablePackage\View\TableView\TableViewFieldConfiguration;
-use BasicTablePackage\View\ViewActionRegistry;
-use BasicTablePackage\View\ViewActionRegistryFactory;
+use BaclucC5Crud\Controller\ActionRegistry;
+use BaclucC5Crud\Controller\ActionRegistryFactory;
+use BaclucC5Crud\Controller\Renderer;
+use BaclucC5Crud\Controller\Validation\ValidationConfiguration;
+use BaclucC5Crud\Controller\Validation\ValidationConfigurationFactory;
+use BaclucC5Crud\Controller\ValuePersisters\PersistorConfiguration;
+use BaclucC5Crud\Controller\ValuePersisters\PersistorConfigurationFactory;
+use BaclucC5Crud\Controller\VariableSetter;
+use BaclucC5Crud\Entity\EntityManagerRepository;
+use BaclucC5Crud\Entity\EntityManagerRepositoryFactory;
+use BaclucC5Crud\Entity\Repository;
+use BaclucC5Crud\Entity\RepositoryFactory;
+use BaclucC5Crud\FieldConfigurationOverride\EntityFieldOverrides;
+use BaclucC5Crud\FieldTypeDetermination\ColumnAnnotationHandler;
+use BaclucC5Crud\FieldTypeDetermination\ManyToManyAnnotationHandler;
+use BaclucC5Crud\FieldTypeDetermination\ManyToOneAnnotationHandler;
+use BaclucC5Crud\FieldTypeDetermination\PersistenceFieldTypeReader;
+use BaclucC5Crud\View\FormType;
+use BaclucC5Crud\View\FormView\FormViewConfigurationFactory;
+use BaclucC5Crud\View\FormView\FormViewFieldConfiguration;
+use BaclucC5Crud\View\FormView\ValueTransformers\PersistenceValueTransformerConfiguration;
+use BaclucC5Crud\View\FormView\ValueTransformers\ValueTransformerConfiguration;
+use BaclucC5Crud\View\FormView\WysiwygEditorFactory;
+use BaclucC5Crud\View\TableView\TableViewConfigurationFactory;
+use BaclucC5Crud\View\TableView\TableViewFieldConfiguration;
+use BaclucC5Crud\View\ViewActionRegistry;
+use BaclucC5Crud\View\ViewActionRegistryFactory;
 use Concrete\Core\Block\BlockController;
 use DI\Container;
 use DI\ContainerBuilder;

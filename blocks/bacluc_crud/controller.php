@@ -1,29 +1,29 @@
 <?php
 
-namespace Concrete\Package\BasicTablePackage\Block\BasicTableBlockPackaged;
+namespace Concrete\Package\BaclucC5Crud\Block\BaclucCrud;
 
-use BasicTablePackage\Adapters\Concrete5\DIContainerFactory;
-use BasicTablePackage\Controller\ActionProcessor;
-use BasicTablePackage\Controller\ActionRegistryFactory;
-use BasicTablePackage\Controller\BasicTableController;
-use BasicTablePackage\Controller\Validation\DropdownFieldValidator;
-use BasicTablePackage\Controller\Validation\FieldValidator;
-use BasicTablePackage\Controller\Validation\ValidationResult;
-use BasicTablePackage\Controller\Validation\ValidationResultItem;
-use BasicTablePackage\Entity\ExampleConfigurationEntity;
-use BasicTablePackage\Entity\ExampleEntity;
-use BasicTablePackage\Entity\ExampleEntityDropdownValueSupplier;
-use BasicTablePackage\FieldConfigurationOverride\EntityFieldOverrideBuilder;
-use BasicTablePackage\View\FormType;
-use BasicTablePackage\View\FormView\DropdownField;
-use BasicTablePackage\View\FormView\Field as FormField;
-use BasicTablePackage\View\TableView\DropdownField as DropdownTableField;
-use BasicTablePackage\View\TableView\Field as TableField;
+use BaclucC5Crud\Adapters\Concrete5\DIContainerFactory;
+use BaclucC5Crud\Controller\ActionProcessor;
+use BaclucC5Crud\Controller\ActionRegistryFactory;
+use BaclucC5Crud\Controller\CrudController;
+use BaclucC5Crud\Controller\Validation\DropdownFieldValidator;
+use BaclucC5Crud\Controller\Validation\FieldValidator;
+use BaclucC5Crud\Controller\Validation\ValidationResult;
+use BaclucC5Crud\Controller\Validation\ValidationResultItem;
+use BaclucC5Crud\Entity\ExampleConfigurationEntity;
+use BaclucC5Crud\Entity\ExampleEntity;
+use BaclucC5Crud\Entity\ExampleEntityDropdownValueSupplier;
+use BaclucC5Crud\FieldConfigurationOverride\EntityFieldOverrideBuilder;
+use BaclucC5Crud\View\FormType;
+use BaclucC5Crud\View\FormView\DropdownField;
+use BaclucC5Crud\View\FormView\Field as FormField;
+use BaclucC5Crud\View\TableView\DropdownField as DropdownTableField;
+use BaclucC5Crud\View\TableView\Field as TableField;
 use Concrete\Core\Block\BlockController;
 use Concrete\Core\Error\ErrorList\ErrorList;
 use Concrete\Core\Page\Page;
 use Concrete\Core\Routing\Redirect;
-use Concrete\Package\BasicTablePackage\Controller as PackageController;
+use Concrete\Package\BaclucC5Crud\Controller as PackageController;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Exception;
@@ -37,7 +37,7 @@ class Controller extends BlockController
      */
     public function view()
     {
-        $this->processAction($this->createBasicTableController()->getActionFor(ActionRegistryFactory::SHOW_TABLE));
+        $this->processAction($this->createCrudController()->getActionFor(ActionRegistryFactory::SHOW_TABLE));
     }
 
     private function processAction(ActionProcessor $actionProcessor, ...$additionalParams)
@@ -48,12 +48,12 @@ class Controller extends BlockController
     }
 
     /**
-     * @return BasicTableController
+     * @return CrudController
      * @throws DependencyException
      * @throws NotFoundException
      * @throws Exception
      */
-    private function createBasicTableController(): BasicTableController
+    private function createCrudController(): CrudController
     {
         $entityManager = PackageController::getEntityManagerStatic();
         $entityClass = ExampleEntity::class;
@@ -75,7 +75,7 @@ class Controller extends BlockController
             $entityClass,
             $entityFieldOverrides->build(),
             FormType::$BLOCK_VIEW);
-        return $container->get(BasicTableController::class);
+        return $container->get(CrudController::class);
     }
 
     /**
@@ -84,7 +84,7 @@ class Controller extends BlockController
      */
     public function action_add_new_row_form()
     {
-        $this->processAction($this->createBasicTableController()
+        $this->processAction($this->createCrudController()
                                   ->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM));
     }
 
@@ -94,7 +94,7 @@ class Controller extends BlockController
      */
     public function action_edit_row_form($ignored, $editId)
     {
-        $this->processAction($this->createBasicTableController()
+        $this->processAction($this->createCrudController()
                                   ->getActionFor(ActionRegistryFactory::EDIT_ROW_FORM),
             $editId);
     }
@@ -107,7 +107,7 @@ class Controller extends BlockController
      */
     public function action_post_form($ignored, $editId = null)
     {
-        $this->processAction($this->createBasicTableController()->getActionFor(ActionRegistryFactory::POST_FORM),
+        $this->processAction($this->createCrudController()->getActionFor(ActionRegistryFactory::POST_FORM),
             $editId);
         if ($this->blockViewRenderOverride == null) {
             Redirect::page(Page::getCurrentPage())->send();
@@ -123,7 +123,7 @@ class Controller extends BlockController
      */
     public function action_delete_entry($ignored, $toDeleteId)
     {
-        $this->processAction($this->createBasicTableController()->getActionFor(ActionRegistryFactory::DELETE_ENTRY),
+        $this->processAction($this->createCrudController()->getActionFor(ActionRegistryFactory::DELETE_ENTRY),
             $toDeleteId);
         Redirect::page(Page::getCurrentPage())->send();
         exit();
@@ -135,7 +135,7 @@ class Controller extends BlockController
      */
     public function action_cancel_form()
     {
-        $this->processAction($this->createBasicTableController()->getActionFor(ActionRegistryFactory::SHOW_TABLE));
+        $this->processAction($this->createCrudController()->getActionFor(ActionRegistryFactory::SHOW_TABLE));
     }
 
     /**
@@ -146,7 +146,7 @@ class Controller extends BlockController
      */
     public function action_show_details($ignored, $toShowId)
     {
-        $this->processAction($this->createBasicTableController()
+        $this->processAction($this->createCrudController()
                                   ->getActionFor(ActionRegistryFactory::SHOW_ENTRY_DETAILS),
             $toShowId);
     }
@@ -224,12 +224,12 @@ class Controller extends BlockController
     }
 
     /**
-     * @return BasicTableController
+     * @return CrudController
      * @throws DependencyException
      * @throws NotFoundException
      * @throws Exception
      */
-    private function createConfigController(): BasicTableController
+    private function createConfigController(): CrudController
     {
         $entityManager = PackageController::getEntityManagerStatic();
         $entityClass = ExampleConfigurationEntity::class;
@@ -251,7 +251,13 @@ class Controller extends BlockController
             $entityClass,
             $entityFieldOverrides->build(),
             FormType::$BLOCK_CONFIGURATION);
-        return $container->get(BasicTableController::class);
+        return $container->get(CrudController::class);
     }
+
+    public function getBlockTypeName()
+    {
+        return "bacluc_crud";
+    }
+
 
 }

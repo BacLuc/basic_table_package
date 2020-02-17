@@ -1,12 +1,12 @@
 <?php
 
 
-namespace BasicTablePackage\Controller\ValuePersisters;
+namespace BaclucC5Crud\Controller\ValuePersisters;
 
 
-use BasicTablePackage\Entity\ValueSupplier;
+use BaclucC5Crud\Entity\ValueSupplier;
 use Doctrine\Common\Collections\ArrayCollection;
-use function BasicTablePackage\Lib\collect as collect;
+use function BaclucC5Crud\Lib\collect as collect;
 
 class ManyToManyFieldPersistor implements FieldPersistor
 {

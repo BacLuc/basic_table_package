@@ -1,7 +1,7 @@
 <?php
 
 
-namespace BasicTablePackage\Controller\ValuePersisters;
+namespace BaclucC5Crud\Controller\ValuePersisters;
 
 
 class DatePersistor implements FieldPersistor

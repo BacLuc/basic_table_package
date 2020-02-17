@@ -1,12 +1,12 @@
 <?php
 
 
-namespace BasicTablePackage\View\FormView\ValueTransformers;
+namespace BaclucC5Crud\View\FormView\ValueTransformers;
 
 
-use BasicTablePackage\FieldTypeDetermination\PersistenceFieldType;
-use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypes;
-use function BasicTablePackage\Lib\collect as collect;
+use BaclucC5Crud\FieldTypeDetermination\PersistenceFieldType;
+use BaclucC5Crud\FieldTypeDetermination\PersistenceFieldTypes;
+use function BaclucC5Crud\Lib\collect as collect;
 
 class PostValueTransformerConfiguration implements ValueTransformerConfiguration
 {

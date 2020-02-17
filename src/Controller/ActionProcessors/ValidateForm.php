@@ -1,12 +1,12 @@
 <?php
 
 
-namespace BasicTablePackage\Controller\ActionProcessors;
+namespace BaclucC5Crud\Controller\ActionProcessors;
 
 
-use BasicTablePackage\Controller\ActionProcessor;
-use BasicTablePackage\Controller\ActionRegistryFactory;
-use BasicTablePackage\Controller\Validation\Validator;
+use BaclucC5Crud\Controller\ActionProcessor;
+use BaclucC5Crud\Controller\ActionRegistryFactory;
+use BaclucC5Crud\Controller\Validation\Validator;
 
 class ValidateForm implements ActionProcessor
 {

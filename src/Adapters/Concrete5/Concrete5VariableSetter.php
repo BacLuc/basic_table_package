@@ -1,10 +1,10 @@
 <?php
 
 
-namespace BasicTablePackage\Adapters\Concrete5;
+namespace BaclucC5Crud\Adapters\Concrete5;
 
 
-use BasicTablePackage\Controller\VariableSetter;
+use BaclucC5Crud\Controller\VariableSetter;
 use Concrete\Core\Block\BlockController;
 
 class Concrete5VariableSetter implements VariableSetter

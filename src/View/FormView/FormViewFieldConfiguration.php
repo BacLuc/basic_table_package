@@ -1,10 +1,10 @@
 <?php
 
 
-namespace BasicTablePackage\View\FormView;
+namespace BaclucC5Crud\View\FormView;
 
 
-use BasicTablePackage\Lib\IteratorTrait;
+use BaclucC5Crud\Lib\IteratorTrait;
 use Iterator;
 
 class FormViewFieldConfiguration implements Iterator

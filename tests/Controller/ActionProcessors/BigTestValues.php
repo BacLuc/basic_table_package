@@ -1,7 +1,7 @@
 <?php
 
 
-namespace BasicTablePackage\Test\Controller\ActionProcessors;
+namespace BaclucC5Crud\Test\Controller\ActionProcessors;
 
 
 class BigTestValues

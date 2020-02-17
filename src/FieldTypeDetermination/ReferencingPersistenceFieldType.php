@@ -1,10 +1,10 @@
 <?php
 
 
-namespace BasicTablePackage\FieldTypeDetermination;
+namespace BaclucC5Crud\FieldTypeDetermination;
 
 
-use BasicTablePackage\Entity\ValueSupplier;
+use BaclucC5Crud\Entity\ValueSupplier;
 
 class ReferencingPersistenceFieldType implements PersistenceFieldType
 {

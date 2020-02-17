@@ -1,10 +1,10 @@
 <?php
 
 
-namespace BasicTablePackage\Controller\ValuePersisters;
+namespace BaclucC5Crud\Controller\ValuePersisters;
 
 
-use BasicTablePackage\Lib\IteratorTrait;
+use BaclucC5Crud\Lib\IteratorTrait;
 use Iterator;
 
 class PersistorConfiguration implements Iterator

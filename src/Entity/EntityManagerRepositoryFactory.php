@@ -1,7 +1,7 @@
 <?php
 
 
-namespace BasicTablePackage\Entity;
+namespace BaclucC5Crud\Entity;
 
 
 use Doctrine\ORM\EntityManager;

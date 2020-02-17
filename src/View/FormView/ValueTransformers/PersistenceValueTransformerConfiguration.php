@@ -1,11 +1,11 @@
 <?php
 
 
-namespace BasicTablePackage\View\FormView\ValueTransformers;
+namespace BaclucC5Crud\View\FormView\ValueTransformers;
 
 
-use BasicTablePackage\FieldTypeDetermination\PersistenceFieldType;
-use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypes;
+use BaclucC5Crud\FieldTypeDetermination\PersistenceFieldType;
+use BaclucC5Crud\FieldTypeDetermination\PersistenceFieldTypes;
 
 class PersistenceValueTransformerConfiguration implements ValueTransformerConfiguration
 {

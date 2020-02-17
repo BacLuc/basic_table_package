@@ -1,10 +1,10 @@
 <?php
 
 
-namespace BasicTablePackage\Test\Adapters;
+namespace BaclucC5Crud\Test\Adapters;
 
 
-use BasicTablePackage\Controller\VariableSetter;
+use BaclucC5Crud\Controller\VariableSetter;
 
 class DefaultContext implements VariableSetter
 {

@@ -1,9 +1,9 @@
 <?php
 
 
-namespace BasicTablePackage\Entity;
+namespace BaclucC5Crud\Entity;
 
-use function BasicTablePackage\Lib\collect as collect;
+use function BaclucC5Crud\Lib\collect as collect;
 
 class RepositoryValueSupplier implements ValueSupplier
 {

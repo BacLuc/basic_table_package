@@ -1,10 +1,10 @@
 <?php
 
 
-namespace BasicTablePackage\View\FormView;
+namespace BaclucC5Crud\View\FormView;
 
 
-use BasicTablePackage\Entity\ValueSupplier;
+use BaclucC5Crud\Entity\ValueSupplier;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class MultiSelectField implements Field

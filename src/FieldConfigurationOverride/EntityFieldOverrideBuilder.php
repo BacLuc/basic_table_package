@@ -1,7 +1,7 @@
 <?php
 
 
-namespace BasicTablePackage\FieldConfigurationOverride;
+namespace BaclucC5Crud\FieldConfigurationOverride;
 
 class EntityFieldOverrideBuilder
 {

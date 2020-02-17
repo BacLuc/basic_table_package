@@ -1,7 +1,7 @@
 <?php
 
 
-namespace BasicTablePackage\Controller;
+namespace BaclucC5Crud\Controller;
 
 
 interface ActionProcessor

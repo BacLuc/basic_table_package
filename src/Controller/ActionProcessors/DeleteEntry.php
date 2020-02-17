@@ -1,12 +1,12 @@
 <?php
 
 
-namespace BasicTablePackage\Controller\ActionProcessors;
+namespace BaclucC5Crud\Controller\ActionProcessors;
 
 
-use BasicTablePackage\Controller\ActionProcessor;
-use BasicTablePackage\Controller\ActionRegistryFactory;
-use BasicTablePackage\Entity\Repository;
+use BaclucC5Crud\Controller\ActionProcessor;
+use BaclucC5Crud\Controller\ActionRegistryFactory;
+use BaclucC5Crud\Entity\Repository;
 
 class DeleteEntry implements ActionProcessor
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace BasicTablePackage\Controller\Validation;
+namespace BaclucC5Crud\Controller\Validation;
 
 use PHPUnit\Framework\TestCase;
-use function BasicTablePackage\Lib\collect as collect;
+use function BaclucC5Crud\Lib\collect as collect;
 
 class DateValidatorTest extends TestCase
 {

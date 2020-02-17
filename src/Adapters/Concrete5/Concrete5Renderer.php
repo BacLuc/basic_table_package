@@ -1,11 +1,11 @@
 <?php
 
 
-namespace BasicTablePackage\Adapters\Concrete5;
+namespace BaclucC5Crud\Adapters\Concrete5;
 
 
+use BaclucC5Crud\Controller\Renderer;
 use BadMethodCallException;
-use BasicTablePackage\Controller\Renderer;
 use Concrete\Core\Block\BlockController;
 
 class Concrete5Renderer implements Renderer

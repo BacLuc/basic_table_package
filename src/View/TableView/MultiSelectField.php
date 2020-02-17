@@ -1,13 +1,13 @@
 <?php
 
 
-namespace BasicTablePackage\View\TableView;
+namespace BaclucC5Crud\View\TableView;
 
 
-use BasicTablePackage\Entity\ValueSupplier;
-use BasicTablePackage\Entity\WithUniqueStringRepresentation;
+use BaclucC5Crud\Entity\ValueSupplier;
+use BaclucC5Crud\Entity\WithUniqueStringRepresentation;
 use Doctrine\Common\Collections\ArrayCollection;
-use function BasicTablePackage\Lib\collect as collect;
+use function BaclucC5Crud\Lib\collect as collect;
 
 class MultiSelectField implements Field
 {

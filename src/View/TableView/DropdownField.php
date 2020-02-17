@@ -1,10 +1,10 @@
 <?php
 
 
-namespace BasicTablePackage\View\TableView;
+namespace BaclucC5Crud\View\TableView;
 
 
-use BasicTablePackage\Entity\ValueSupplier;
+use BaclucC5Crud\Entity\ValueSupplier;
 
 class DropdownField implements Field
 {

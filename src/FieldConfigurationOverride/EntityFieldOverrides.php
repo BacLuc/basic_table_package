@@ -1,10 +1,10 @@
 <?php
 
 
-namespace BasicTablePackage\FieldConfigurationOverride;
+namespace BaclucC5Crud\FieldConfigurationOverride;
 
 
-use BasicTablePackage\Lib\ImmutableArrayAccessTrait;
+use BaclucC5Crud\Lib\ImmutableArrayAccessTrait;
 
 class EntityFieldOverrides implements \ArrayAccess
 {

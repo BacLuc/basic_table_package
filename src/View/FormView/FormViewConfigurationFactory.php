@@ -1,16 +1,16 @@
 <?php
 
 
-namespace BasicTablePackage\View\FormView;
+namespace BaclucC5Crud\View\FormView;
 
 
-use BasicTablePackage\FieldConfigurationOverride\EntityFieldOverrides;
-use BasicTablePackage\FieldTypeDetermination\PersistenceFieldType;
-use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypeReader;
-use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypes;
-use BasicTablePackage\FieldTypeDetermination\ReferencingPersistenceFieldType;
-use BasicTablePackage\View\FormView\ValueTransformers\ValueTransformerConfiguration;
-use function BasicTablePackage\Lib\collect as collect;
+use BaclucC5Crud\FieldConfigurationOverride\EntityFieldOverrides;
+use BaclucC5Crud\FieldTypeDetermination\PersistenceFieldType;
+use BaclucC5Crud\FieldTypeDetermination\PersistenceFieldTypeReader;
+use BaclucC5Crud\FieldTypeDetermination\PersistenceFieldTypes;
+use BaclucC5Crud\FieldTypeDetermination\ReferencingPersistenceFieldType;
+use BaclucC5Crud\View\FormView\ValueTransformers\ValueTransformerConfiguration;
+use function BaclucC5Crud\Lib\collect as collect;
 
 class FormViewConfigurationFactory
 {

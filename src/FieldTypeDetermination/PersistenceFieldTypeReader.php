@@ -1,7 +1,7 @@
 <?php
 
 
-namespace BasicTablePackage\FieldTypeDetermination;
+namespace BaclucC5Crud\FieldTypeDetermination;
 
 
 use Doctrine\Common\Annotations\AnnotationException;
@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping\Annotation;
 use ReflectionClass;
 use ReflectionProperty;
 use Tightenco\Collect\Support\Collection;
-use function BasicTablePackage\Lib\collect as collect;
+use function BaclucC5Crud\Lib\collect as collect;
 
 class PersistenceFieldTypeReader
 {

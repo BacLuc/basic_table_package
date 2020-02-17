@@ -1,16 +1,16 @@
 <?php
 
 
-namespace BasicTablePackage\Controller;
+namespace BaclucC5Crud\Controller;
 
 
-use BasicTablePackage\Controller\ActionProcessors\DeleteEntry;
-use BasicTablePackage\Controller\ActionProcessors\PostForm;
-use BasicTablePackage\Controller\ActionProcessors\ShowEditEntryForm;
-use BasicTablePackage\Controller\ActionProcessors\ShowEntryDetails;
-use BasicTablePackage\Controller\ActionProcessors\ShowNewEntryForm;
-use BasicTablePackage\Controller\ActionProcessors\ShowTable;
-use BasicTablePackage\Controller\ActionProcessors\ValidateForm;
+use BaclucC5Crud\Controller\ActionProcessors\DeleteEntry;
+use BaclucC5Crud\Controller\ActionProcessors\PostForm;
+use BaclucC5Crud\Controller\ActionProcessors\ShowEditEntryForm;
+use BaclucC5Crud\Controller\ActionProcessors\ShowEntryDetails;
+use BaclucC5Crud\Controller\ActionProcessors\ShowNewEntryForm;
+use BaclucC5Crud\Controller\ActionProcessors\ShowTable;
+use BaclucC5Crud\Controller\ActionProcessors\ValidateForm;
 
 class ActionRegistryFactory
 {

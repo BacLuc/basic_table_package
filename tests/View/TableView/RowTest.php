@@ -1,9 +1,9 @@
 <?php
 
-namespace BasicTablePackage\View\TableView;
+namespace BaclucC5Crud\View\TableView;
 
 use PHPUnit\Framework\TestCase;
-use function BasicTablePackage\Lib\collect as collect;
+use function BaclucC5Crud\Lib\collect as collect;
 
 class RowTest extends TestCase
 {

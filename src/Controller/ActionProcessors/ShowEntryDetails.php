@@ -1,16 +1,16 @@
 <?php
 
 
-namespace BasicTablePackage\Controller\ActionProcessors;
+namespace BaclucC5Crud\Controller\ActionProcessors;
 
 
-use BasicTablePackage\Controller\ActionProcessor;
-use BasicTablePackage\Controller\ActionRegistryFactory;
-use BasicTablePackage\Controller\Renderer;
-use BasicTablePackage\Controller\VariableSetter;
-use BasicTablePackage\TableViewService;
-use BasicTablePackage\View\TableView\Row;
-use function BasicTablePackage\Lib\collect as collect;
+use BaclucC5Crud\Controller\ActionProcessor;
+use BaclucC5Crud\Controller\ActionRegistryFactory;
+use BaclucC5Crud\Controller\Renderer;
+use BaclucC5Crud\Controller\VariableSetter;
+use BaclucC5Crud\TableViewService;
+use BaclucC5Crud\View\TableView\Row;
+use function BaclucC5Crud\Lib\collect as collect;
 
 class ShowEntryDetails implements ActionProcessor
 {

@@ -1,9 +1,9 @@
 <?php
 
 
-namespace BasicTablePackage\Controller;
+namespace BaclucC5Crud\Controller;
 
-class BasicTableController
+class CrudController
 {
     /**
      * @var ActionRegistry

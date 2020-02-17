@@ -1,7 +1,7 @@
 <?php
 
 
-namespace BasicTablePackage\View\FormView;
+namespace BaclucC5Crud\View\FormView;
 
 
 interface WysiwygEditor

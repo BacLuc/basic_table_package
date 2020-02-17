@@ -4,7 +4,7 @@
             "") ?>" method='POST' enctype="multipart/form-data" novalidate>
 <?php } ?>
 <?php foreach ($fields as $name => $field) { ?>
-    <?php /** @var $field \BasicTablePackage\View\FormView\Field */ ?>
+    <?php /** @var $field \BaclucC5Crud\View\FormView\Field */ ?>
     <div class="row">
         <div class="col-xs-12 col-md-6">
             <label><?= t($field->getLabel()) ?></label>

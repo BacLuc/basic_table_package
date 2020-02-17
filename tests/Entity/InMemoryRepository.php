@@ -1,11 +1,11 @@
 <?php
 
 
-namespace BasicTablePackage\Test\Entity;
+namespace BaclucC5Crud\Test\Entity;
 
 
-use BasicTablePackage\Entity\Repository;
-use function BasicTablePackage\Lib\collect as collect;
+use BaclucC5Crud\Entity\Repository;
+use function BaclucC5Crud\Lib\collect as collect;
 
 class InMemoryRepository implements Repository
 {

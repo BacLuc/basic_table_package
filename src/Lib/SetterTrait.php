@@ -1,7 +1,7 @@
 <?php
 
 
-namespace BasicTablePackage\Lib;
+namespace BaclucC5Crud\Lib;
 
 
 trait SetterTrait

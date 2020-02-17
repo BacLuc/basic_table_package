@@ -1,21 +1,21 @@
 <?php
 
 
-namespace BasicTablePackage\Controller\ActionProcessors;
+namespace BaclucC5Crud\Controller\ActionProcessors;
 
 
-use BasicTablePackage\Controller\ActionProcessor;
-use BasicTablePackage\Controller\ActionRegistryFactory;
-use BasicTablePackage\Controller\Renderer;
-use BasicTablePackage\Controller\Validation\ValidationResultItem;
-use BasicTablePackage\Controller\Validation\Validator;
-use BasicTablePackage\Controller\ValuePersisters\FieldPersistor;
-use BasicTablePackage\Controller\ValuePersisters\PersistorConfiguration;
-use BasicTablePackage\Controller\VariableSetter;
-use BasicTablePackage\Entity\Repository;
-use BasicTablePackage\FormViewAfterValidationFailedService;
-use BasicTablePackage\View\FormType;
-use function BasicTablePackage\Lib\collect as collect;
+use BaclucC5Crud\Controller\ActionProcessor;
+use BaclucC5Crud\Controller\ActionRegistryFactory;
+use BaclucC5Crud\Controller\Renderer;
+use BaclucC5Crud\Controller\Validation\ValidationResultItem;
+use BaclucC5Crud\Controller\Validation\Validator;
+use BaclucC5Crud\Controller\ValuePersisters\FieldPersistor;
+use BaclucC5Crud\Controller\ValuePersisters\PersistorConfiguration;
+use BaclucC5Crud\Controller\VariableSetter;
+use BaclucC5Crud\Entity\Repository;
+use BaclucC5Crud\FormViewAfterValidationFailedService;
+use BaclucC5Crud\View\FormType;
+use function BaclucC5Crud\Lib\collect as collect;
 
 class PostForm implements ActionProcessor
 {

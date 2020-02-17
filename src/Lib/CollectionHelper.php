@@ -1,6 +1,6 @@
 <?php
 
-namespace BasicTablePackage\Lib;
+namespace BaclucC5Crud\Lib;
 
 use Tightenco\Collect\Support\Collection;
 

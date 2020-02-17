@@ -1,7 +1,7 @@
 <?php
 
 
-namespace BasicTablePackage\Test\Constraints;
+namespace BaclucC5Crud\Test\Constraints;
 
 class Matchers
 {

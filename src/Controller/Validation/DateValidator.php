@@ -1,7 +1,7 @@
 <?php
 
 
-namespace BasicTablePackage\Controller\Validation;
+namespace BaclucC5Crud\Controller\Validation;
 
 
 class DateValidator implements FieldValidator

@@ -1,10 +1,10 @@
 <?php
 
-namespace BasicTablePackage\Test\View\FormView;
+namespace BaclucC5Crud\Test\View\FormView;
 
-use BasicTablePackage\Entity\ValueSupplier;
-use BasicTablePackage\View\FormView\DropdownField;
-use BasicTablePackage\View\FormView\ValueTransformers\ValueTransformer;
+use BaclucC5Crud\Entity\ValueSupplier;
+use BaclucC5Crud\View\FormView\DropdownField;
+use BaclucC5Crud\View\FormView\ValueTransformers\ValueTransformer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use stdClass;

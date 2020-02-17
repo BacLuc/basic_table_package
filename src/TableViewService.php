@@ -1,16 +1,16 @@
 <?php
 
 
-namespace BasicTablePackage;
+namespace BaclucC5Crud;
 
 
-use BasicTablePackage\Entity\Repository;
-use BasicTablePackage\View\TableView\Field;
-use BasicTablePackage\View\TableView\Row;
-use BasicTablePackage\View\TableView\TableView;
-use BasicTablePackage\View\TableView\TableViewFieldConfiguration;
+use BaclucC5Crud\Entity\Repository;
+use BaclucC5Crud\View\TableView\Field;
+use BaclucC5Crud\View\TableView\Row;
+use BaclucC5Crud\View\TableView\TableView;
+use BaclucC5Crud\View\TableView\TableViewFieldConfiguration;
 use Tightenco\Collect\Support\Collection;
-use function BasicTablePackage\Lib\collect as collect;
+use function BaclucC5Crud\Lib\collect as collect;
 
 class TableViewService
 {

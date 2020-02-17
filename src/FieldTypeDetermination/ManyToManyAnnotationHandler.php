@@ -1,11 +1,11 @@
 <?php
 
 
-namespace BasicTablePackage\FieldTypeDetermination;
+namespace BaclucC5Crud\FieldTypeDetermination;
 
 
-use BasicTablePackage\Entity\RepositoryFactory;
-use BasicTablePackage\Entity\RepositoryValueSupplier;
+use BaclucC5Crud\Entity\RepositoryFactory;
+use BaclucC5Crud\Entity\RepositoryValueSupplier;
 use Doctrine\ORM\Mapping\Annotation;
 use Doctrine\ORM\Mapping\ManyToMany;
 

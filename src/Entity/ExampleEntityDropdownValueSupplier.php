@@ -1,9 +1,9 @@
 <?php
 
 
-namespace BasicTablePackage\Entity;
+namespace BaclucC5Crud\Entity;
 
-use BasicTablePackage\Lib\ValueSupplierTrait;
+use BaclucC5Crud\Lib\ValueSupplierTrait;
 
 class ExampleEntityDropdownValueSupplier implements ValueSupplier
 {

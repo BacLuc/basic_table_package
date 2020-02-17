@@ -1,16 +1,16 @@
 <?php
 
 
-namespace BasicTablePackage;
+namespace BaclucC5Crud;
 
 
-use BasicTablePackage\Controller\Validation\ValidationResult;
-use BasicTablePackage\Controller\Validation\ValidationResultItem;
-use BasicTablePackage\View\FormView\FormView;
-use BasicTablePackage\View\FormView\PostFormViewConfigurationFactory;
+use BaclucC5Crud\Controller\Validation\ValidationResult;
+use BaclucC5Crud\Controller\Validation\ValidationResultItem;
+use BaclucC5Crud\View\FormView\FormView;
+use BaclucC5Crud\View\FormView\PostFormViewConfigurationFactory;
 use Error;
 use stdClass;
-use function BasicTablePackage\Lib\collect as collect;
+use function BaclucC5Crud\Lib\collect as collect;
 
 class FormViewAfterValidationFailedService
 {

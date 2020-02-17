@@ -1,7 +1,7 @@
 <?php
 
 
-namespace BasicTablePackage\FieldTypeDetermination;
+namespace BaclucC5Crud\FieldTypeDetermination;
 
 
 use ReflectionClass;

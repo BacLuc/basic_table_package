@@ -1,12 +1,12 @@
 <?php
 
 
-namespace BasicTablePackage\Controller\Validation;
+namespace BaclucC5Crud\Controller\Validation;
 
 
-use BasicTablePackage\Lib\IteratorTrait;
+use BaclucC5Crud\Lib\IteratorTrait;
 use Iterator;
-use function BasicTablePackage\Lib\collect as collect;
+use function BaclucC5Crud\Lib\collect as collect;
 
 class ValidationResult implements Iterator
 {

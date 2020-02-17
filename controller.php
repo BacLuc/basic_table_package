@@ -1,13 +1,13 @@
 <?php
 
-namespace Concrete\Package\BasicTablePackage;
+namespace Concrete\Package\BaclucC5Crud;
 
 defined('C5_EXECUTE') or die(_("Access Denied."));
 
 
 use Concrete\Core\Block\BlockType\BlockType;
 use Concrete\Core\Package\Package;
-use Concrete\Package\BasicTablePackage\Src\DiscriminatorEntry\DiscriminatorListener;
+use Concrete\Package\BaclucC5Crud\DiscriminatorEntry\DiscriminatorListener;
 use Core;
 use Doctrine\ORM\EntityManager;
 use Punic\Exception;
@@ -15,14 +15,14 @@ use Punic\Exception;
 class Controller extends Package
 {
 
-    protected $pkgHandle          = 'basic_table_package';
+    protected $pkgHandle          = 'bacluc_c5_crud';
     protected $appVersionRequired = '5.7.4';
     protected $pkgVersion         = '0.0.1';
 
 
     public static function getEntityManagerStatic()
     {
-        $pkg = Package::getByHandle("basic_table_package");
+        $pkg = Package::getByHandle("bacluc_c5_crud");
         return $pkg->getEntityManager();
     }
 
@@ -44,7 +44,7 @@ class Controller extends Package
 
     public function getPackageName()
     {
-        return t("BasicTablePackage");
+        return t("BaclucCrudPackage");
     }
 
     public function getPackageDescription()
@@ -54,7 +54,7 @@ class Controller extends Package
 
     public function getPackageAutoloaderRegistries()
     {
-        return ["src" => "BasicTablePackage"];
+        return ["src" => "BaclucC5Crud"];
     }
 
     public function install()
@@ -66,7 +66,7 @@ class Controller extends Package
 
             $pkg = parent::install();
             $em = $this->getEntityManager();
-            BlockType::installBlockType("basic_table_block_packaged", $pkg);
+            BlockType::installBlockType("bacluc_crud", $pkg);
 
             $em->getConnection()->commit();
         } catch (Exception $e) {
@@ -93,7 +93,7 @@ class Controller extends Package
 
     public function uninstall()
     {
-        $block = BlockType::getByHandle("basic_table_block_packaged");
+        $block = BlockType::getByHandle("bacluc_crud");
         $em = $this->getEntityManager();
 
         //begin transaction, so when block install fails, but parent::install was successfully, you don't have to uninstall the package

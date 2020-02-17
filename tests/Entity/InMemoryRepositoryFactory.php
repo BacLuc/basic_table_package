@@ -1,11 +1,11 @@
 <?php
 
 
-namespace BasicTablePackage\Test\Entity;
+namespace BaclucC5Crud\Test\Entity;
 
 
-use BasicTablePackage\Entity\Repository;
-use BasicTablePackage\Entity\RepositoryFactory;
+use BaclucC5Crud\Entity\Repository;
+use BaclucC5Crud\Entity\RepositoryFactory;
 use InvalidArgumentException;
 
 class InMemoryRepositoryFactory implements RepositoryFactory

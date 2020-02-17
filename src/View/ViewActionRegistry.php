@@ -1,11 +1,11 @@
 <?php
 
 
-namespace BasicTablePackage\View;
+namespace BaclucC5Crud\View;
 
 
 use Tightenco\Collect\Support\Collection;
-use function BasicTablePackage\Lib\collect as collect;
+use function BaclucC5Crud\Lib\collect as collect;
 
 class ViewActionRegistry
 {

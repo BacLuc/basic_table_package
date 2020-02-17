@@ -1,10 +1,10 @@
 <?php
 
 
-namespace BasicTablePackage\View\TableView;
+namespace BaclucC5Crud\View\TableView;
 
 
-use BasicTablePackage\Lib\IteratorTrait;
+use BaclucC5Crud\Lib\IteratorTrait;
 use Iterator;
 
 class Row implements Iterator

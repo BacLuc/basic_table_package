@@ -1,10 +1,10 @@
 <?php
 
 
-namespace BasicTablePackage\Controller\Validation;
+namespace BaclucC5Crud\Controller\Validation;
 
 
-use BasicTablePackage\Lib\IteratorTrait;
+use BaclucC5Crud\Lib\IteratorTrait;
 use Iterator;
 
 class ValidationConfiguration implements Iterator

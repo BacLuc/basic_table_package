@@ -1,11 +1,11 @@
 <?php
 
 
-namespace BasicTablePackage\Entity;
+namespace BaclucC5Crud\Entity;
 
-use BasicTablePackage\Lib\GetterTrait;
-use BasicTablePackage\Lib\SetterTrait;
-use Concrete\Package\BaclucExampleBasicTablePackage\Src\Example;
+use BaclucC5Crud\Lib\GetterTrait;
+use BaclucC5Crud\Lib\SetterTrait;
+use Concrete\Package\BaclucExampleBaclucC5Crud\Src\Example;
 use Doctrine\Common\Annotations\Annotation\IgnoreAnnotation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\Column;
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping\Table;
 /**
  * Class ExampleEntity
  * @IgnoreAnnotation("package")
- *  Concrete\Package\BasicTablePackage\Src
+ *  Concrete\Package\BaclucC5Crud\Src
  * @Entity
  * @Table(name="btExampleEntity")
  */
@@ -65,13 +65,13 @@ class ExampleEntity
 
     /**
      * @var ReferencedEntity
-     * @ManyToOne(targetEntity="BasicTablePackage\Entity\ReferencedEntity")
+     * @ManyToOne(targetEntity="BaclucC5Crud\Entity\ReferencedEntity")
      */
     protected $manyToOne;
 
     /**
      * @var ReferencedEntity[]
-     * @ManyToMany(targetEntity="BasicTablePackage\Entity\ReferencedEntity")
+     * @ManyToMany(targetEntity="BaclucC5Crud\Entity\ReferencedEntity")
      */
     protected $manyToMany;
 

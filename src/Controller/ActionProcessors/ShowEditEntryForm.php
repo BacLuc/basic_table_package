@@ -1,15 +1,15 @@
 <?php
 
 
-namespace BasicTablePackage\Controller\ActionProcessors;
+namespace BaclucC5Crud\Controller\ActionProcessors;
 
 
-use BasicTablePackage\Controller\ActionProcessor;
-use BasicTablePackage\Controller\ActionRegistryFactory;
-use BasicTablePackage\Controller\Renderer;
-use BasicTablePackage\Controller\VariableSetter;
-use BasicTablePackage\FormViewService;
-use BasicTablePackage\View\FormType;
+use BaclucC5Crud\Controller\ActionProcessor;
+use BaclucC5Crud\Controller\ActionRegistryFactory;
+use BaclucC5Crud\Controller\Renderer;
+use BaclucC5Crud\Controller\VariableSetter;
+use BaclucC5Crud\FormViewService;
+use BaclucC5Crud\View\FormType;
 
 class ShowEditEntryForm implements ActionProcessor
 {

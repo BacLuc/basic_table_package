@@ -1,8 +1,8 @@
 <?php
 
-namespace BasicTablePackage\Adapters;
+namespace BaclucC5Crud\Adapters;
 
-use BasicTablePackage\Test\Adapters\DefaultContext;
+use BaclucC5Crud\Test\Adapters\DefaultContext;
 use PHPUnit\Framework\TestCase;
 
 class DefaultContextTest extends TestCase

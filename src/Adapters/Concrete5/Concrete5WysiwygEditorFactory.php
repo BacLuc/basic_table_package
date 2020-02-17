@@ -1,11 +1,11 @@
 <?php
 
 
-namespace BasicTablePackage\Adapters\Concrete5;
+namespace BaclucC5Crud\Adapters\Concrete5;
 
 
-use BasicTablePackage\View\FormView\WysiwygEditor;
-use BasicTablePackage\View\FormView\WysiwygEditorFactory;
+use BaclucC5Crud\View\FormView\WysiwygEditor;
+use BaclucC5Crud\View\FormView\WysiwygEditorFactory;
 use Concrete\Core\Editor\EditorInterface;
 
 class Concrete5WysiwygEditorFactory implements WysiwygEditorFactory

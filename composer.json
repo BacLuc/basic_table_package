@@ -10,12 +10,12 @@
   },
   "autoload": {
     "psr-4": {
-      "BasicTablePackage\\": "src"
+      "BaclucC5Crud\\": "src"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "BasicTablePackage\\Test\\": "tests"
+      "BaclucC5Crud\\Test\\": "tests"
     },
     "files": [
       "src/Lib/CollectionHelper.php"

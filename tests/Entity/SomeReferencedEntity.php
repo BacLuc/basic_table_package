@@ -1,11 +1,11 @@
 <?php
 
 
-namespace BasicTablePackage\Test\Entity;
+namespace BaclucC5Crud\Test\Entity;
 
 
-use BasicTablePackage\Lib\GetterTrait;
-use BasicTablePackage\Lib\SetterTrait;
+use BaclucC5Crud\Lib\GetterTrait;
+use BaclucC5Crud\Lib\SetterTrait;
 use Doctrine\Common\Annotations\Annotation\IgnoreAnnotation;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping\Table;
 /**
  * Class ExampleEntity
  * @IgnoreAnnotation("package")
- *  Concrete\Package\BasicTablePackage\Src
+ *  Concrete\Package\BaclucC5Crud\Src
  * @Entity
  * @Table(name="btSomeReferencedEntity")
  */

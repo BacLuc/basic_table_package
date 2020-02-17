@@ -1,7 +1,7 @@
 <?php
 
 
-namespace BasicTablePackage\View;
+namespace BaclucC5Crud\View;
 
 
 class FormType

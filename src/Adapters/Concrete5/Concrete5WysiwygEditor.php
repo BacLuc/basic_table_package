@@ -1,10 +1,10 @@
 <?php
 
 
-namespace BasicTablePackage\Adapters\Concrete5;
+namespace BaclucC5Crud\Adapters\Concrete5;
 
 
-use BasicTablePackage\View\FormView\WysiwygEditor;
+use BaclucC5Crud\View\FormView\WysiwygEditor;
 use Concrete\Core\Editor\EditorInterface;
 use Concrete\Core\Editor\LinkAbstractor;
 

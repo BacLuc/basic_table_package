@@ -1,13 +1,13 @@
 <?php
 
-namespace BasicTablePackage\Test\Controller\ActionProcessors;
+namespace BaclucC5Crud\Test\Controller\ActionProcessors;
 
 
-use BasicTablePackage\Controller\ActionRegistryFactory;
-use BasicTablePackage\Controller\BasicTableController;
-use BasicTablePackage\Entity\ExampleEntity;
-use BasicTablePackage\Test\Constraints\Matchers;
-use BasicTablePackage\Test\DIContainerFactory;
+use BaclucC5Crud\Controller\ActionRegistryFactory;
+use BaclucC5Crud\Controller\CrudController;
+use BaclucC5Crud\Entity\ExampleEntity;
+use BaclucC5Crud\Test\Constraints\Matchers;
+use BaclucC5Crud\Test\DIContainerFactory;
 use DI\Container;
 use Doctrine\ORM\EntityManager;
 use PHPUnit\Framework\TestCase;
@@ -15,15 +15,15 @@ use PHPUnit\Framework\TestCase;
 class ShowNewEntryFormTest extends TestCase
 {
     /**
-     * @var BasicTableController
+     * @var CrudController
      */
-    private $basicTableController;
+    private $crudController;
 
     public function test_new_row_form_has_empty_fields()
     {
         ob_start();
-        $this->basicTableController->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM)
-                                   ->process([], []);
+        $this->crudController->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM)
+                             ->process([], []);
 
         $output = ob_get_clean();
         $this->assertStringNotContainsString(ExampleEntityConstants::TEXT_VAL_1, $output);
@@ -51,7 +51,7 @@ class ShowNewEntryFormTest extends TestCase
         /** @var Container $container */
         $container = DIContainerFactory::createContainer($entityManager, ExampleEntity::class);
         ExampleEntityConstants::addReferencedEntityTestValues($container);
-        $this->basicTableController = $container->get(BasicTableController::class);
+        $this->crudController = $container->get(CrudController::class);
     }
 
     /**

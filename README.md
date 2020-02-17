@@ -4,7 +4,7 @@ A Package for Concrete5 to enable easy CRUD funktionality for Doctrine Entities 
 Important Files/Folders:
 
 * [blocks](blocks/README.md)  
-  * [blocks/basic_table_block_packaged](blocks/basic_table_block_packaged/README.md)  
+  * [blocks/basic_table_block_packaged](blocks/bacluc_crud/README.md)  
 * [languages](languages/README.md)  
 * [src](src/README.md)  
   * [src/BlockOptions](src/BlockOptions/README.md)  
@@ -32,7 +32,7 @@ Use statements:
 use Concrete\Core\Block\BlockType\BlockType;
 use Concrete\Core\Package\Package;
 use Concrete\Core\Foundation\ClassLoader;
-use Concrete\Package\BasicTablePackage\Src\DiscriminatorEntry\DiscriminatorListener;
+use Concrete\Package\BaclucC5Crud\Src\DiscriminatorEntry\DiscriminatorListener;
 use Doctrine\ORM\EntityManager;
 use Punic\Exception;
 use Loader;

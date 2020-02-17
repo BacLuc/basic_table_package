@@ -1,11 +1,11 @@
 <?php
 
 
-namespace BasicTablePackage\FieldConfigurationOverride;
+namespace BaclucC5Crud\FieldConfigurationOverride;
 
 
 use ArrayAccess;
-use BasicTablePackage\Lib\ImmutableArrayAccessTrait;
+use BaclucC5Crud\Lib\ImmutableArrayAccessTrait;
 
 class FieldTypeOverride implements ArrayAccess
 {

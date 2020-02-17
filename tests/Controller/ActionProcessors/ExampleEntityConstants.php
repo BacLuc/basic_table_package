@@ -1,14 +1,14 @@
 <?php
 
 
-namespace BasicTablePackage\Test\Controller\ActionProcessors;
+namespace BaclucC5Crud\Test\Controller\ActionProcessors;
 
 
-use BasicTablePackage\Entity\ExampleEntityDropdownValueSupplier;
-use BasicTablePackage\Entity\ReferencedEntity;
-use BasicTablePackage\Entity\RepositoryFactory;
+use BaclucC5Crud\Entity\ExampleEntityDropdownValueSupplier;
+use BaclucC5Crud\Entity\ReferencedEntity;
+use BaclucC5Crud\Entity\RepositoryFactory;
 use DI\Container;
-use function BasicTablePackage\Lib\collect as collect;
+use function BaclucC5Crud\Lib\collect as collect;
 
 class ExampleEntityConstants
 {

@@ -37,7 +37,7 @@ The normal live cycle of a table package is as follows
     1. function __construct is called
         1. parent constructor is called
         2. Session is checked if editkey exists
-        3. model is found. If no Model is provided by child class, \Concrete\Package\BasicTablePackage\Src\ExampleEntity is taken
+        3. model is found. If no Model is provided by child class, \Concrete\Package\BaclucC5Crud\Src\ExampleEntity is taken
         4. If editkey is set, the right model is loaded, else a new one is generated
         5. Postfieldmap is generated. (a map where the key is the postname of a field, and the value is the sql fieldname)
         6. It is checked if the session variable set which indicates that we are in form view.

@@ -1,9 +1,9 @@
 <?php
 
-namespace BasicTablePackage\Test\Controller\Validation;
+namespace BaclucC5Crud\Test\Controller\Validation;
 
-use BasicTablePackage\Controller\Validation\DropdownFieldValidator;
-use BasicTablePackage\Entity\ValueSupplier;
+use BaclucC5Crud\Controller\Validation\DropdownFieldValidator;
+use BaclucC5Crud\Entity\ValueSupplier;
 use PHPUnit\Framework\TestCase;
 
 class DropdownFieldValidatorTest extends TestCase

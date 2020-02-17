@@ -1,10 +1,10 @@
 <?php
 
 
-namespace BasicTablePackage\Test\Adapters;
+namespace BaclucC5Crud\Test\Adapters;
 
 
-use BasicTablePackage\Controller\Renderer;
+use BaclucC5Crud\Controller\Renderer;
 
 class DefaultRenderer implements Renderer
 {

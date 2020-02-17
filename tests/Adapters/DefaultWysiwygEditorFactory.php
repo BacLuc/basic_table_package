@@ -1,11 +1,11 @@
 <?php
 
 
-namespace BasicTablePackage\Test\Adapters;
+namespace BaclucC5Crud\Test\Adapters;
 
 
-use BasicTablePackage\View\FormView\WysiwygEditor;
-use BasicTablePackage\View\FormView\WysiwygEditorFactory;
+use BaclucC5Crud\View\FormView\WysiwygEditor;
+use BaclucC5Crud\View\FormView\WysiwygEditorFactory;
 
 class DefaultWysiwygEditorFactory implements WysiwygEditorFactory
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace BasicTablePackage\Test\Controller\Validation;
+namespace BaclucC5Crud\Test\Controller\Validation;
 
-use BasicTablePackage\Controller\Validation\SelectMultipleFieldValidator;
-use BasicTablePackage\Entity\ValueSupplier;
+use BaclucC5Crud\Controller\Validation\SelectMultipleFieldValidator;
+use BaclucC5Crud\Entity\ValueSupplier;
 use PHPUnit\Framework\TestCase;
 
 class SelectMultipleFieldValidatorTest extends TestCase

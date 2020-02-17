@@ -1,15 +1,15 @@
 <?php
 
 
-namespace BasicTablePackage\Controller\Validation;
+namespace BaclucC5Crud\Controller\Validation;
 
 
-use BasicTablePackage\FieldConfigurationOverride\EntityFieldOverrides;
-use BasicTablePackage\FieldTypeDetermination\PersistenceFieldType;
-use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypeReader;
-use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypes;
-use BasicTablePackage\FieldTypeDetermination\ReferencingPersistenceFieldType;
-use function BasicTablePackage\Lib\collect as collect;
+use BaclucC5Crud\FieldConfigurationOverride\EntityFieldOverrides;
+use BaclucC5Crud\FieldTypeDetermination\PersistenceFieldType;
+use BaclucC5Crud\FieldTypeDetermination\PersistenceFieldTypeReader;
+use BaclucC5Crud\FieldTypeDetermination\PersistenceFieldTypes;
+use BaclucC5Crud\FieldTypeDetermination\ReferencingPersistenceFieldType;
+use function BaclucC5Crud\Lib\collect as collect;
 
 class ValidationConfigurationFactory
 {

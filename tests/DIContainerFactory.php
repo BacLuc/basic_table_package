@@ -1,29 +1,29 @@
 <?php
 
 
-namespace BasicTablePackage\Test;
+namespace BaclucC5Crud\Test;
 
 
-use BasicTablePackage\Adapters\Concrete5\DIContainerFactory as ProductionDefinition;
-use BasicTablePackage\Controller\Renderer;
-use BasicTablePackage\Controller\Validation\DropdownFieldValidator;
-use BasicTablePackage\Controller\Validation\FieldValidator;
-use BasicTablePackage\Controller\VariableSetter;
-use BasicTablePackage\Entity\ExampleEntity;
-use BasicTablePackage\Entity\ExampleEntityDropdownValueSupplier;
-use BasicTablePackage\Entity\Repository;
-use BasicTablePackage\Entity\RepositoryFactory;
-use BasicTablePackage\FieldConfigurationOverride\EntityFieldOverrideBuilder;
-use BasicTablePackage\Test\Adapters\DefaultContext;
-use BasicTablePackage\Test\Adapters\DefaultRenderer;
-use BasicTablePackage\Test\Adapters\DefaultWysiwygEditorFactory;
-use BasicTablePackage\Test\Entity\InMemoryRepository;
-use BasicTablePackage\Test\Entity\InMemoryRepositoryFactory;
-use BasicTablePackage\View\FormView\DropdownField as DropdownFormField;
-use BasicTablePackage\View\FormView\Field as FormField;
-use BasicTablePackage\View\FormView\WysiwygEditorFactory;
-use BasicTablePackage\View\TableView\DropdownField as DropdownTableField;
-use BasicTablePackage\View\TableView\Field as TableField;
+use BaclucC5Crud\Adapters\Concrete5\DIContainerFactory as ProductionDefinition;
+use BaclucC5Crud\Controller\Renderer;
+use BaclucC5Crud\Controller\Validation\DropdownFieldValidator;
+use BaclucC5Crud\Controller\Validation\FieldValidator;
+use BaclucC5Crud\Controller\VariableSetter;
+use BaclucC5Crud\Entity\ExampleEntity;
+use BaclucC5Crud\Entity\ExampleEntityDropdownValueSupplier;
+use BaclucC5Crud\Entity\Repository;
+use BaclucC5Crud\Entity\RepositoryFactory;
+use BaclucC5Crud\FieldConfigurationOverride\EntityFieldOverrideBuilder;
+use BaclucC5Crud\Test\Adapters\DefaultContext;
+use BaclucC5Crud\Test\Adapters\DefaultRenderer;
+use BaclucC5Crud\Test\Adapters\DefaultWysiwygEditorFactory;
+use BaclucC5Crud\Test\Entity\InMemoryRepository;
+use BaclucC5Crud\Test\Entity\InMemoryRepositoryFactory;
+use BaclucC5Crud\View\FormView\DropdownField as DropdownFormField;
+use BaclucC5Crud\View\FormView\Field as FormField;
+use BaclucC5Crud\View\FormView\WysiwygEditorFactory;
+use BaclucC5Crud\View\TableView\DropdownField as DropdownTableField;
+use BaclucC5Crud\View\TableView\Field as TableField;
 use DI\Container;
 use DI\ContainerBuilder;
 use Doctrine\Common\Annotations\AnnotationRegistry;

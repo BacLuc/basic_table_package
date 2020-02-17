@@ -1,19 +1,19 @@
 <?php
 
 
-namespace BasicTablePackage\Test\FieldTypeDetermination;
+namespace BaclucC5Crud\Test\FieldTypeDetermination;
 
 
-use BasicTablePackage\FieldTypeDetermination\ColumnAnnotationHandler;
-use BasicTablePackage\FieldTypeDetermination\ManyToManyAnnotationHandler;
-use BasicTablePackage\FieldTypeDetermination\ManyToOneAnnotationHandler;
-use BasicTablePackage\FieldTypeDetermination\PersistenceFieldType;
-use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypeReader;
-use BasicTablePackage\FieldTypeDetermination\PersistenceFieldTypes;
-use BasicTablePackage\Test\Entity\InMemoryRepositoryFactory;
-use BasicTablePackage\Test\Entity\SomeEntity;
+use BaclucC5Crud\FieldTypeDetermination\ColumnAnnotationHandler;
+use BaclucC5Crud\FieldTypeDetermination\ManyToManyAnnotationHandler;
+use BaclucC5Crud\FieldTypeDetermination\ManyToOneAnnotationHandler;
+use BaclucC5Crud\FieldTypeDetermination\PersistenceFieldType;
+use BaclucC5Crud\FieldTypeDetermination\PersistenceFieldTypeReader;
+use BaclucC5Crud\FieldTypeDetermination\PersistenceFieldTypes;
+use BaclucC5Crud\Test\Entity\InMemoryRepositoryFactory;
+use BaclucC5Crud\Test\Entity\SomeEntity;
 use PHPUnit\Framework\TestCase;
-use function BasicTablePackage\Lib\collect as collect;
+use function BaclucC5Crud\Lib\collect as collect;
 
 class PersistenceFieldTypeReaderTest extends TestCase
 {
