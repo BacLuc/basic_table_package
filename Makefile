@@ -20,11 +20,6 @@ composer-update:
 						concrete5 \
 						composer update --lock
 
-#to install the package, installation without dev is needed.
-#that doctrine is not getting in the way of installing the package
-composer-update-pord:
-	cd ../../../ && docker-compose exec -w /var/www/html/packages/bacluc_c5_crud --user www-data concrete5 composerpkg update --no-dev
-
 sync:
 	${CWD} && docker-compose exec rsync rsync --delete -rt /mnt/html/packages/bacluc_c5_crud/ /var/www/html/packages/bacluc_c5_crud/
 
