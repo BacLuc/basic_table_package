@@ -11,6 +11,10 @@
     "doctrine/lexer": "1.0.*",
     "symfony/inflector": "4.4.*"
   },
+  "require-dev": {
+    "php": ">=7",
+    "phpunit/phpunit": "^7.5.9"
+  },
   "autoload": {
     "psr-4": {
       "BaclucC5Crud\\": "src"
@@ -42,9 +46,5 @@
     "allow-subpatches": [
       "concrete5/dependency-patches"
     ]
-  },
-  "require-dev" : {
-    "php": ">=7",
-    "phpunit/phpunit": "^7.5.9"
   }
 }
