@@ -36,8 +36,9 @@ class TableViewConfigurationFactory
 
     public function createConfiguration(): TableViewFieldConfiguration
     {
+        $persistenceFieldTypes = $this->persistenceFieldTypeReader->getPersistenceFieldTypes();
         $fieldTypes =
-            collect($this->persistenceFieldTypeReader->getPersistenceFieldTypes())
+            collect($persistenceFieldTypes)
                 ->map(function ($persistenceFieldType) {
                     return self::createFieldTypeOf($persistenceFieldType);
                 });

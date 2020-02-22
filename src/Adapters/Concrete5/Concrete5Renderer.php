@@ -27,7 +27,7 @@ class Concrete5Renderer implements Renderer
 
     public function render(string $path)
     {
-        $this->blockController->render("../../resources/" . $path);
+        $this->blockController->render("../../../bacluc_c5_crud/resources/" . $path);
     }
 
     public function action(string $action)

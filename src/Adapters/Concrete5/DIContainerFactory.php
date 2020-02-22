@@ -20,6 +20,7 @@ use BaclucC5Crud\FieldConfigurationOverride\EntityFieldOverrides;
 use BaclucC5Crud\FieldTypeDetermination\ColumnAnnotationHandler;
 use BaclucC5Crud\FieldTypeDetermination\ManyToManyAnnotationHandler;
 use BaclucC5Crud\FieldTypeDetermination\ManyToOneAnnotationHandler;
+use BaclucC5Crud\FieldTypeDetermination\OneToManyAnnotationHandler;
 use BaclucC5Crud\FieldTypeDetermination\PersistenceFieldTypeReader;
 use BaclucC5Crud\View\FormType;
 use BaclucC5Crud\View\FormView\FormViewConfigurationFactory;
@@ -86,7 +87,8 @@ class DIContainerFactory
                     [
                         new ColumnAnnotationHandler(),
                         new ManyToOneAnnotationHandler($container->get(RepositoryFactory::class)),
-                        new ManyToManyAnnotationHandler($container->get(RepositoryFactory::class))
+                        new ManyToManyAnnotationHandler($container->get(RepositoryFactory::class)),
+                        new OneToManyAnnotationHandler($container->get(RepositoryFactory::class))
                     ]);
             }),
             EntityManager::class                 => value($entityManager),
