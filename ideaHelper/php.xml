@@ -63,7 +63,7 @@
       <phpunit_by_interpreter interpreter_id="aeb28985-0fc6-47b0-9867-b9e97b10d300" load_method="PHPUNIT_PHAR"
                               configuration_file_path="/opt/project/concrete5/packages/bacluc_c5_crud/tests/phpunit.xml"
                               custom_loader_path=""
-                              phpunit_phar_path="/opt/project/concrete5/packages/basic_table_package/vendor/bin/phpunit"
+                              phpunit_phar_path="/opt/project/concrete5/packages/bacluc_c5_crud/vendor/bin/phpunit"
                               use_configuration_file="true"/>
     </phpunit_settings>
   </component>

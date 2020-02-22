@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ec8a0e457b94923b66ff6292296dc3f8",
+    "content-hash": "66aa3f8b07b525fc9c747dc13f213ac5",
     "packages": [
         {
             "name": "anahkiasen/html-object",
@@ -49,73 +49,109 @@
             "time": "2017-05-31T07:52:45+00:00"
         },
         {
-            "name": "concrete5/dependency-patches",
-            "version": "1.5.0",
+            "name": "concrete5/core",
+            "version": "8.5.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/concrete5/dependency-patches.git",
-                "reference": "ab8d9078c862d0decf90dbca90de411fbb987fa7"
+                "url": "https://github.com/concrete5/concrete5-core.git",
+                "reference": "92310013031bd4c9a811a9430a3a97fd29fac98e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/concrete5/dependency-patches/zipball/ab8d9078c862d0decf90dbca90de411fbb987fa7",
-                "reference": "ab8d9078c862d0decf90dbca90de411fbb987fa7",
+                "url": "https://api.github.com/repos/concrete5/concrete5-core/zipball/92310013031bd4c9a811a9430a3a97fd29fac98e",
+                "reference": "92310013031bd4c9a811a9430a3a97fd29fac98e",
                 "shasum": ""
             },
             "require": {
-                "mlocati/composer-patcher": "^1.0.0"
+                "anahkiasen/html-object": "~1.4",
+                "concrete5/doctrine-xml": "^1.2.0",
+                "concrete5/oauth-user-data": "~1.0",
+                "concrete5/zend-queue": "0.9.*",
+                "dapphp/securimage": "3.*",
+                "doctrine/dbal": "~2.5",
+                "doctrine/migrations": "1.* <1.8",
+                "doctrine/orm": "~2.5",
+                "egulias/email-validator": "1.*",
+                "ext-pdo": "*",
+                "filp/whoops": "2.*",
+                "guzzlehttp/guzzle": "^6.3",
+                "hautelook/phpass": "0.3.*",
+                "htmlawed/htmlawed": "1.*",
+                "illuminate/config": "5.2.*",
+                "illuminate/container": "5.2.*",
+                "illuminate/filesystem": "5.2.*",
+                "imagine/imagine": "^1.1.0",
+                "indigophp/hash-compat": "^1.1",
+                "league/csv": "~8.2",
+                "league/flysystem": "1.*",
+                "league/flysystem-cached-adapter": "~1.0.3",
+                "league/fractal": "^0.17.0",
+                "league/oauth2-server": "^5.1.4",
+                "league/openid-connect-claims": "^1.1.0",
+                "league/url": "~3.3.5",
+                "lusitanian/oauth": "0.8.*",
+                "michelf/php-markdown": "1.*",
+                "mlocati/concrete5-translation-library": "1.5.*",
+                "mlocati/ip-lib": "^1.3.0",
+                "mobiledetect/mobiledetectlib": "2.*",
+                "monolog/monolog": "^1.5.0",
+                "natxet/cssmin": "3.*",
+                "nesbot/carbon": "~1.15",
+                "ocramius/proxy-manager": "^1.0",
+                "pagerfanta/pagerfanta": "~1.0.1 ~1.0",
+                "paragonie/random_compat": "^2.0",
+                "patchwork/utf8": "~1.2.3|~1.3",
+                "php": ">=5.5.9",
+                "phpseclib/phpseclib": "^2.0",
+                "primal/color": "1.0.*",
+                "punic/punic": "^3.0.1",
+                "sunra/php-simple-html-dom-parser": "1.*",
+                "symfony/class-loader": "3.*",
+                "symfony/console": "^3.2|^4.0",
+                "symfony/event-dispatcher": "3.*",
+                "symfony/http-foundation": "^3.4.17",
+                "symfony/http-kernel": "3.4.*",
+                "symfony/psr-http-message-bridge": "^1.0",
+                "symfony/routing": "3.*",
+                "symfony/serializer": "3.*",
+                "symfony/yaml": "3.*",
+                "tedivm/jshrink": "1.*",
+                "tedivm/stash": "0.14.*",
+                "theorchard/monolog-cascade": "0.5.*",
+                "voku/urlify": "~1.0.1",
+                "wikimedia/less.php": "^1.8.0",
+                "zendframework/zend-cache": "2.7.*",
+                "zendframework/zend-feed": "2.7.*",
+                "zendframework/zend-http": "2.6.*",
+                "zendframework/zend-i18n": "2.7.*",
+                "zendframework/zend-mail": "2.7.*"
             },
-            "type": "library",
+            "bin": [
+                "bin/concrete5"
+            ],
+            "type": "concrete5-core",
             "extra": {
-                "patches": {
-                    "doctrine/annotations:1.2.7": {
-                        "Fix access array offset on value of type null": "doctrine/annotations/access-array-offset-on-null.patch"
-                    },
-                    "doctrine/orm:2.5.14": {
-                        "Fix UnitOfWork::createEntity()": "doctrine/orm/UnitOfWork-createEntity-continue.patch"
-                    },
-                    "zendframework/zend-stdlib:2.7.7": {
-                        "Fix ArrayObject::unserialize()": "zendframework/zend-stdlib/ArrayObject-unserialize-continue.patch"
-                    },
-                    "sunra/php-simple-html-dom-parser:1.5.2": {
-                        "Fix minus in regular expressions": "sunra/php-simple-html-dom-parser/minus-in-regular-expressions.patch"
-                    },
-                    "phpunit/phpunit:4.8.36": {
-                        "Avoid each() in Getopt": "phpunit/phpunit/Getopt-each.patch"
-                    },
-                    "tedivm/jshrink:1.1.0": {
-                        "Fix continue switch in Minifier": "tedivm/jshrink/fix-minifier-loop.patch",
-                        "Update to upstream version 1.3.2": "tedivm/jshrink/update-upstream-1.3.2.patch"
-                    },
-                    "zendframework/zend-code:2.6.3": {
-                        "Fix continue switch in FileGenerator and MethodReflection": "zendframework/zend-code/switch-continue.patch"
-                    },
-                    "zendframework/zend-http:2.6.0": {
-                        "Remove support for the X-Original-Url and X-Rewrite-Url headers": "zendframework/zend-http/no-x-original-url-x-rewrite.patch"
-                    },
-                    "zendframework/zend-mail:2.7.3": {
-                        "Fix idn_to_ascii deprecation warning": "zendframework/zend-mail/fix-idn_to_ascii-deprecation-warning.patch"
-                    },
-                    "zendframework/zend-validator:2.8.2": {
-                        "Fix idn_to_ascii/idn_to_utf8 deprecation warning": "zendframework/zend-validator/fix-idn_to_-deprecation-warning.patch"
-                    }
+                "branch-alias": {
+                    "dev-develop": "8.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Concrete\\Core\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
-            "authors": [
-                {
-                    "name": "Michele Locati",
-                    "role": "author",
-                    "email": "michele@locati.it",
-                    "homepage": "https://mlocati.github.io"
-                }
+            "description": "concrete5 core subtree split",
+            "homepage": "https://www.concrete5.org/",
+            "keywords": [
+                "cms",
+                "concrete5",
+                "concreteCMS"
             ],
-            "description": "Patches required for concrete5 dependencies",
-            "homepage": "https://github.com/concrete5/dependency-patches",
-            "time": "2019-07-29T08:25:31+00:00"
+            "time": "2019-10-01T22:20:13+00:00"
         },
         {
             "name": "concrete5/doctrine-xml",
@@ -2971,64 +3007,6 @@
             "time": "2019-12-02T02:32:27+00:00"
         },
         {
-            "name": "mlocati/composer-patcher",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mlocati/composer-patcher.git",
-                "reference": "9a6ab04381f2507abf6bc7d742bf1b2051605924"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mlocati/composer-patcher/zipball/9a6ab04381f2507abf6bc7d742bf1b2051605924",
-                "reference": "9a6ab04381f2507abf6bc7d742bf1b2051605924",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^1.1.0",
-                "php": "^5.3.2 || ^7.0"
-            },
-            "conflict": {
-                "cweagans/composer-patches": "*"
-            },
-            "require-dev": {
-                "composer/composer": "^1.1.0",
-                "friendsofphp/php-cs-fixer": "2.2.*",
-                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5 || ^7.5 || ^8.4"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "ComposerPatcher\\Plugin"
-            },
-            "autoload": {
-                "psr-4": {
-                    "ComposerPatcher\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michele Locati",
-                    "email": "michele@locati.it",
-                    "homepage": "https://mlocati.github.io",
-                    "role": "author"
-                }
-            ],
-            "description": "A Composer plugin to patch Composer packages.",
-            "homepage": "https://github.com/mlocati/composer-patcher",
-            "keywords": [
-                "composer",
-                "patch",
-                "patcher",
-                "patches",
-                "plugin"
-            ],
-            "time": "2019-11-23T16:33:18+00:00"
-        },
-        {
             "name": "mlocati/concrete5-translation-library",
             "version": "1.5.13",
             "source": {
@@ -3265,7 +3243,7 @@
             "time": "2019-12-20T14:15:16+00:00"
         },
         {
-            "name": "natxet/CssMin",
+            "name": "natxet/cssmin",
             "version": "v3.0.6",
             "source": {
                 "type": "git",
@@ -4614,18 +4592,6 @@
                 "php": ">=5.3.2"
             },
             "type": "library",
-            "extra": {
-                "patches_applied": {
-                    "hash": "43699395013691839330f8406ee49fa752c163fb",
-                    "list": [
-                        {
-                            "from-package": "concrete5/dependency-patches 1.5.0",
-                            "path": "sunra/php-simple-html-dom-parser/minus-in-regular-expressions.patch",
-                            "description": "Fix minus in regular expressions"
-                        }
-                    ]
-                }
-            },
             "autoload": {
                 "psr-0": {
                     "Sunra\\PhpSimple\\HtmlDomParser": "Src/"
@@ -6706,55 +6672,6 @@
             "time": "2015-02-10T07:24:31+00:00"
         },
         {
-            "name": "wikimedia/composer-merge-plugin",
-            "version": "v1.4.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/wikimedia/composer-merge-plugin.git",
-                "reference": "81c6ac72a24a67383419c7eb9aa2b3437f2ab100"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/wikimedia/composer-merge-plugin/zipball/81c6ac72a24a67383419c7eb9aa2b3437f2ab100",
-                "reference": "81c6ac72a24a67383419c7eb9aa2b3437f2ab100",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^1.0",
-                "php": ">=5.3.2"
-            },
-            "require-dev": {
-                "composer/composer": "~1.0.0",
-                "jakub-onderka/php-parallel-lint": "~0.8",
-                "phpunit/phpunit": "~4.8|~5.0",
-                "squizlabs/php_codesniffer": "~2.1.0"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.3.x-dev"
-                },
-                "class": "Wikimedia\\Composer\\MergePlugin"
-            },
-            "autoload": {
-                "psr-4": {
-                    "Wikimedia\\Composer\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Bryan Davis",
-                    "email": "bd808@wikimedia.org"
-                }
-            ],
-            "description": "Composer plugin to merge multiple composer.json files",
-            "time": "2017-04-25T02:31:25+00:00"
-        },
-        {
             "name": "wikimedia/less.php",
             "version": "1.8.1",
             "source": {
@@ -6918,16 +6835,6 @@
                 "branch-alias": {
                     "dev-master": "2.6-dev",
                     "dev-develop": "2.7-dev"
-                },
-                "patches_applied": {
-                    "hash": "43aec57a6422c48c002031806c8a8ca01b6208cf",
-                    "list": [
-                        {
-                            "from-package": "concrete5/dependency-patches 1.5.0",
-                            "path": "zendframework/zend-code/switch-continue.patch",
-                            "description": "Fix continue switch in FileGenerator and MethodReflection"
-                        }
-                    ]
                 }
             },
             "autoload": {
@@ -7142,16 +7049,6 @@
                 "branch-alias": {
                     "dev-master": "2.6-dev",
                     "dev-develop": "2.7-dev"
-                },
-                "patches_applied": {
-                    "hash": "b1172d4359d8b116dcf51b148427b53e41d1ae2a",
-                    "list": [
-                        {
-                            "from-package": "concrete5/dependency-patches 1.5.0",
-                            "path": "zendframework/zend-http/no-x-original-url-x-rewrite.patch",
-                            "description": "Remove support for the X-Original-Url and X-Rewrite-Url headers"
-                        }
-                    ]
                 }
             },
             "autoload": {
@@ -7386,16 +7283,6 @@
                 "zf": {
                     "component": "Zend\\Mail",
                     "config-provider": "Zend\\Mail\\ConfigProvider"
-                },
-                "patches_applied": {
-                    "hash": "2eef0fc6a76db7a14e55b9d0717ffd9092bce7ce",
-                    "list": [
-                        {
-                            "from-package": "concrete5/dependency-patches 1.5.0",
-                            "path": "zendframework/zend-mail/fix-idn_to_ascii-deprecation-warning.patch",
-                            "description": "Fix idn_to_ascii deprecation warning"
-                        }
-                    ]
                 }
             },
             "autoload": {
@@ -7564,16 +7451,6 @@
                     "dev-release-2.7": "2.7-dev",
                     "dev-master": "3.0-dev",
                     "dev-develop": "3.1-dev"
-                },
-                "patches_applied": {
-                    "hash": "f247c9d47f2ba4ae8d9dfe6d1a25c8627e377753",
-                    "list": [
-                        {
-                            "from-package": "concrete5/dependency-patches 1.5.0",
-                            "path": "zendframework/zend-stdlib/ArrayObject-unserialize-continue.patch",
-                            "description": "Fix ArrayObject::unserialize()"
-                        }
-                    ]
                 }
             },
             "autoload": {
@@ -9077,10 +8954,7 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": {
-        "ext-pdo": "*",
-        "php": ">=5.5.9"
-    },
+    "platform": [],
     "platform-dev": {
         "php": ">=7"
     }
