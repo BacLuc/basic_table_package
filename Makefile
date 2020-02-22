@@ -1,20 +1,20 @@
 CWD=cd ../../../
 composer-install:
-	cd ../../../ && docker-compose exec \
+	${CWD} && docker-compose exec \
 						-w /var/www/html/packages/bacluc_c5_crud \
 						--user www-data \
 						concrete5 \
 						composer install
 
 composer-install-prod:
-	cd ../../../ && docker-compose exec \
+	${CWD} && docker-compose exec \
 						-w /var/www/html/packages/bacluc_c5_crud \
 						--user www-data \
 						concrete5 \
 						bash -c "composerpkg install --no-dev && rm composer-patched*.json || true"
 
 composer-update:
-	cd ../../../ && docker-compose exec \
+	${CWD} && docker-compose exec \
 						-w /var/www/html/packages/bacluc_c5_crud \
 						--user www-data \
 						concrete5 \
