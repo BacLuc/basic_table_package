@@ -18,7 +18,7 @@ composer-update:
 						-w /var/www/html/packages/bacluc_c5_crud \
 						--user www-data \
 						concrete5 \
-						composer update
+						composer update --lock
 
 #to install the package, installation without dev is needed.
 #that doctrine is not getting in the way of installing the package
