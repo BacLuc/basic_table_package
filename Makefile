@@ -1,17 +1,17 @@
 CWD=cd ../../../
 composer-install:
-	cd ../../../ && docker-compose exec -w /var/www/html/packages/bacluc_c5_crud concrete5 composer install
+	cd ../../../ && docker-compose exec -w /var/www/html/packages/bacluc_c5_crud concrete5 composerpkg install
 
 composer-install-prod:
-	cd ../../../ && docker-compose exec -w /var/www/html/packages/bacluc_c5_crud concrete5 composer install --no-dev
+	cd ../../../ && docker-compose exec -w /var/www/html/packages/bacluc_c5_crud concrete5 composerpkg install --no-dev
 
 composer-update:
-	cd ../../../ && docker-compose exec -w /var/www/html/packages/bacluc_c5_crud concrete5 composer update
+	cd ../../../ && docker-compose exec -w /var/www/html/packages/bacluc_c5_crud concrete5 composerpkg update
 
 #to install the package, installation without dev is needed.
 #that doctrine is not getting in the way of installing the package
 composer-update-pord:
-	cd ../../../ && docker-compose exec -w /var/www/html/packages/bacluc_c5_crud concrete5 composer update --no-dev
+	cd ../../../ && docker-compose exec -w /var/www/html/packages/bacluc_c5_crud concrete5 composerpkg update --no-dev
 
 sync:
 	${CWD} && docker-compose exec rsync rsync --delete -rt /mnt/html/packages/bacluc_c5_crud/ /var/www/html/packages/bacluc_c5_crud/
