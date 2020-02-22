@@ -29,7 +29,11 @@ run-tests: sync
 							-w /var/www/html/packages/bacluc_c5_crud \
 							--user www-data  \
 							concrete5 \
-							php vendor/phpunit/phpunit/phpunit --no-configuration /var/www/html/packages/bacluc_c5_crud/tests
+							php vendor/phpunit/phpunit/phpunit \
+							--configuration tests/phpunit.xml \
+							--coverage-html coverage \
+							/var/www/html/packages/bacluc_c5_crud/tests \
+
 
 update-schema: sync
 	${CWD} && docker-compose exec concrete5 su -s /bin/bash  www-data -c "concrete/bin/concrete5 c5:entities:refresh"
