@@ -24,7 +24,7 @@ class ShowTableTest extends TestCase
     public function test_sets_headers_and_rows_to_TableView_retrieved_from_TableViewService()
     {
         ob_start();
-        $this->crudController->getActionFor(ActionRegistryFactory::SHOW_TABLE)->process([], []);;
+        $this->crudController->getActionFor(ActionRegistryFactory::SHOW_TABLE, "1", "1")->process([], []);;
 
         $output = ob_get_clean();
         $this->assertThat($output, $this->stringContains("value"));
@@ -52,7 +52,7 @@ class ShowTableTest extends TestCase
         collect([self::TEST_1, self::TEST_2, self::TEST_3, self::TEST_4])->each(function (string $value) {
             $postValues = ExampleEntityConstants::ENTRY_1_POST;
             $postValues["value"] = $value;
-            $this->crudController->getActionFor(ActionRegistryFactory::POST_FORM)
+            $this->crudController->getActionFor(ActionRegistryFactory::POST_FORM, "1", "1")
                                  ->process([], $postValues);
         });
     }

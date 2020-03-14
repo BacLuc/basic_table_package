@@ -12,23 +12,22 @@ use DI\Container;
 use Doctrine\ORM\EntityManager;
 use PHPUnit\Framework\TestCase;
 
-class ShowEditEntryFormTest extends TestCase
+class WrongBlockIdTest extends TestCase
 {
     /**
      * @var CrudController
      */
     private $crudController;
 
-    public function test_edit_form_shows_value_of_existing_entry()
+    public function test_post_form_new_entry()
     {
         ob_start();
-        $this->crudController->getActionFor(ActionRegistryFactory::EDIT_ROW_FORM, "1", "1")
-                             ->process([], [], 1);
+        $this->crudController->getActionFor(ActionRegistryFactory::POST_FORM, "1", "2")
+                             ->process([], ExampleEntityConstants::ENTRY_1_POST);
 
         $output = ob_get_clean();
-        $this->assertThat($output,
-            Matchers::stringContainsKeysAndValuesRecursive(ExampleEntityConstants::ENTRY_1_POST));
-        $this->assertThat($output, $this->stringContains("action=\"post_form/1\""));
+        $this->assertStringNotContainsString(ExampleEntityConstants::DATE_VALUE_1, $output);
+        $this->assertThat($output, Matchers::stringContainsAll(array_keys(ExampleEntityConstants::ENTRY_1_POST)));
     }
 
     /**
@@ -43,7 +42,5 @@ class ShowEditEntryFormTest extends TestCase
         $container = DIContainerFactory::createContainer($entityManager, ExampleEntity::class);
         ExampleEntityConstants::addReferencedEntityTestValues($container);
         $this->crudController = $container->get(CrudController::class);
-        $this->crudController->getActionFor(ActionRegistryFactory::POST_FORM, "1", "1")
-                             ->process([], ExampleEntityConstants::ENTRY_1_POST);
     }
 }

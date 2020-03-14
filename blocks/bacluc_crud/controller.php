@@ -37,7 +37,8 @@ class Controller extends BlockController
      */
     public function view()
     {
-        $this->processAction($this->createCrudController()->getActionFor(ActionRegistryFactory::SHOW_TABLE));
+        $this->processAction($this->createCrudController()
+                                  ->getActionFor(ActionRegistryFactory::SHOW_TABLE, $this->bID, $this->bID));
     }
 
     private function processAction(ActionProcessor $actionProcessor, ...$additionalParams)
@@ -82,20 +83,20 @@ class Controller extends BlockController
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function action_add_new_row_form()
+    public function action_add_new_row_form($blockId)
     {
         $this->processAction($this->createCrudController()
-                                  ->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM));
+                                  ->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM, $this->bID, $blockId));
     }
 
     /**
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function action_edit_row_form($ignored, $editId)
+    public function action_edit_row_form($blockId, $editId)
     {
         $this->processAction($this->createCrudController()
-                                  ->getActionFor(ActionRegistryFactory::EDIT_ROW_FORM),
+                                  ->getActionFor(ActionRegistryFactory::EDIT_ROW_FORM, $this->bID, $blockId),
             $editId);
     }
 
@@ -105,9 +106,10 @@ class Controller extends BlockController
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function action_post_form($ignored, $editId = null)
+    public function action_post_form($blockId, $editId = null)
     {
-        $this->processAction($this->createCrudController()->getActionFor(ActionRegistryFactory::POST_FORM),
+        $this->processAction($this->createCrudController()
+                                  ->getActionFor(ActionRegistryFactory::POST_FORM, $this->bID, $blockId),
             $editId);
         if ($this->blockViewRenderOverride == null) {
             Redirect::page(Page::getCurrentPage())->send();
@@ -121,9 +123,10 @@ class Controller extends BlockController
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function action_delete_entry($ignored, $toDeleteId)
+    public function action_delete_entry($blockId, $toDeleteId)
     {
-        $this->processAction($this->createCrudController()->getActionFor(ActionRegistryFactory::DELETE_ENTRY),
+        $this->processAction($this->createCrudController()
+                                  ->getActionFor(ActionRegistryFactory::DELETE_ENTRY, $this->bID, $blockId),
             $toDeleteId);
         Redirect::page(Page::getCurrentPage())->send();
         exit();
@@ -133,9 +136,10 @@ class Controller extends BlockController
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function action_cancel_form()
+    public function action_cancel_form($blockId)
     {
-        $this->processAction($this->createCrudController()->getActionFor(ActionRegistryFactory::SHOW_TABLE));
+        $this->processAction($this->createCrudController()
+                                  ->getActionFor(ActionRegistryFactory::SHOW_TABLE, $this->bID, $blockId));
     }
 
     /**
@@ -144,10 +148,10 @@ class Controller extends BlockController
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function action_show_details($ignored, $toShowId)
+    public function action_show_details($blockId, $toShowId)
     {
         $this->processAction($this->createCrudController()
-                                  ->getActionFor(ActionRegistryFactory::SHOW_ENTRY_DETAILS),
+                                  ->getActionFor(ActionRegistryFactory::SHOW_ENTRY_DETAILS, $this->bID, $blockId),
             $toShowId);
     }
 
@@ -158,7 +162,7 @@ class Controller extends BlockController
     public function add()
     {
         $this->processAction($this->createConfigController()
-                                  ->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM));
+                                  ->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM, "", ""));
     }
 
     /**
@@ -168,7 +172,7 @@ class Controller extends BlockController
     public function edit()
     {
         $this->processAction($this->createConfigController()
-                                  ->getActionFor(ActionRegistryFactory::EDIT_ROW_FORM),
+                                  ->getActionFor(ActionRegistryFactory::EDIT_ROW_FORM, $this->bID, $this->bID),
             $this->bID);
     }
 
@@ -183,7 +187,9 @@ class Controller extends BlockController
 
         /** @var $validationResult ValidationResult */
         $validationResult = $this->processAction($this->createConfigController()
-                                                      ->getActionFor(ActionRegistryFactory::VALIDATE_FORM),
+                                                      ->getActionFor(ActionRegistryFactory::VALIDATE_FORM,
+                                                          $this->bID,
+                                                          $this->bID),
             $this->bID);
         /** @var $e ErrorList */
         $e = $this->app->make(ErrorList::class);
@@ -207,7 +213,7 @@ class Controller extends BlockController
     {
         parent::save($args);
         $this->processAction($this->createConfigController()
-                                  ->getActionFor(ActionRegistryFactory::POST_FORM),
+                                  ->getActionFor(ActionRegistryFactory::POST_FORM, $this->bID, $this->bID),
             $this->bID);
     }
 
@@ -219,7 +225,7 @@ class Controller extends BlockController
     {
         parent::delete();
         $this->processAction($this->createConfigController()
-                                  ->getActionFor(ActionRegistryFactory::DELETE_ENTRY),
+                                  ->getActionFor(ActionRegistryFactory::DELETE_ENTRY, $this->bID, $this->bID),
             $this->bID);
     }
 

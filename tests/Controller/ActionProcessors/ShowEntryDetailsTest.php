@@ -22,7 +22,7 @@ class ShowEntryDetailsTest extends TestCase
     public function test_show_details()
     {
         ob_start();
-        $this->crudController->getActionFor(ActionRegistryFactory::SHOW_ENTRY_DETAILS)
+        $this->crudController->getActionFor(ActionRegistryFactory::SHOW_ENTRY_DETAILS, "1", "1")
                              ->process([], [], 1);
 
         $output = ob_get_clean();
@@ -42,7 +42,7 @@ class ShowEntryDetailsTest extends TestCase
         $container = DIContainerFactory::createContainer($entityManager, ExampleEntity::class);
         ExampleEntityConstants::addReferencedEntityTestValues($container);
         $this->crudController = $container->get(CrudController::class);
-        $this->crudController->getActionFor(ActionRegistryFactory::POST_FORM)
+        $this->crudController->getActionFor(ActionRegistryFactory::POST_FORM, "1", "1")
                              ->process([], ExampleEntityConstants::ENTRY_1_POST);
     }
 
