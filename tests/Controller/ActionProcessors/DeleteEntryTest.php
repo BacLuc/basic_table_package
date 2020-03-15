@@ -21,11 +21,11 @@ class DeleteEntryTest extends TestCase
 
     public function test_delete_entry()
     {
-        $this->crudController->getActionFor(ActionRegistryFactory::DELETE_ENTRY, "1", "1")
+        $this->crudController->getActionFor(ActionRegistryFactory::DELETE_ENTRY, "0")
                              ->process([], [], 1);
 
         ob_start();
-        $this->crudController->getActionFor(ActionRegistryFactory::SHOW_TABLE, "1", "1")->process([], []);
+        $this->crudController->getActionFor(ActionRegistryFactory::SHOW_TABLE, "0")->process([], []);
         $output = ob_get_clean();
         $this->assertThat($output, $this->stringContains("value"));
         $this->assertStringNotContainsString(self::TEST_1, $output);
@@ -38,7 +38,7 @@ class DeleteEntryTest extends TestCase
         /** @var Container $container */
         $this->crudController =
             DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(CrudController::class);
-        $this->crudController->getActionFor(ActionRegistryFactory::POST_FORM, "1", "1")
+        $this->crudController->getActionFor(ActionRegistryFactory::POST_FORM, "0")
                              ->process([], ExampleEntityConstants::ENTRY_1_POST);
     }
 }

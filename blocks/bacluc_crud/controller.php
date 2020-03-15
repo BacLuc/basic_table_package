@@ -38,7 +38,7 @@ class Controller extends BlockController
     public function view()
     {
         $this->processAction($this->createCrudController()
-                                  ->getActionFor(ActionRegistryFactory::SHOW_TABLE, $this->bID, $this->bID));
+                                  ->getActionFor(ActionRegistryFactory::SHOW_TABLE, $this->bID));
     }
 
     private function processAction(ActionProcessor $actionProcessor, ...$additionalParams)
@@ -75,6 +75,7 @@ class Controller extends BlockController
             $entityManager,
             $entityClass,
             $entityFieldOverrides->build(),
+            $this->bID,
             FormType::$BLOCK_VIEW);
         return $container->get(CrudController::class);
     }
@@ -86,7 +87,7 @@ class Controller extends BlockController
     public function action_add_new_row_form($blockId)
     {
         $this->processAction($this->createCrudController()
-                                  ->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM, $this->bID, $blockId));
+                                  ->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM, $blockId));
     }
 
     /**
@@ -96,7 +97,7 @@ class Controller extends BlockController
     public function action_edit_row_form($blockId, $editId)
     {
         $this->processAction($this->createCrudController()
-                                  ->getActionFor(ActionRegistryFactory::EDIT_ROW_FORM, $this->bID, $blockId),
+                                  ->getActionFor(ActionRegistryFactory::EDIT_ROW_FORM, $blockId),
             $editId);
     }
 
@@ -109,7 +110,7 @@ class Controller extends BlockController
     public function action_post_form($blockId, $editId = null)
     {
         $this->processAction($this->createCrudController()
-                                  ->getActionFor(ActionRegistryFactory::POST_FORM, $this->bID, $blockId),
+                                  ->getActionFor(ActionRegistryFactory::POST_FORM, $blockId),
             $editId);
         if ($this->blockViewRenderOverride == null) {
             Redirect::page(Page::getCurrentPage())->send();
@@ -126,7 +127,7 @@ class Controller extends BlockController
     public function action_delete_entry($blockId, $toDeleteId)
     {
         $this->processAction($this->createCrudController()
-                                  ->getActionFor(ActionRegistryFactory::DELETE_ENTRY, $this->bID, $blockId),
+                                  ->getActionFor(ActionRegistryFactory::DELETE_ENTRY, $blockId),
             $toDeleteId);
         if ($this->blockViewRenderOverride == null) {
             Redirect::page(Page::getCurrentPage())->send();
@@ -141,7 +142,7 @@ class Controller extends BlockController
     public function action_cancel_form($blockId)
     {
         $this->processAction($this->createCrudController()
-                                  ->getActionFor(ActionRegistryFactory::SHOW_TABLE, $this->bID, $blockId));
+                                  ->getActionFor(ActionRegistryFactory::SHOW_TABLE, $blockId));
     }
 
     /**
@@ -153,7 +154,7 @@ class Controller extends BlockController
     public function action_show_details($blockId, $toShowId)
     {
         $this->processAction($this->createCrudController()
-                                  ->getActionFor(ActionRegistryFactory::SHOW_ENTRY_DETAILS, $this->bID, $blockId),
+                                  ->getActionFor(ActionRegistryFactory::SHOW_ENTRY_DETAILS, $blockId),
             $toShowId);
     }
 
@@ -164,7 +165,7 @@ class Controller extends BlockController
     public function add()
     {
         $this->processAction($this->createConfigController()
-                                  ->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM, "", ""));
+                                  ->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM, $this->bID));
     }
 
     /**
@@ -174,7 +175,7 @@ class Controller extends BlockController
     public function edit()
     {
         $this->processAction($this->createConfigController()
-                                  ->getActionFor(ActionRegistryFactory::EDIT_ROW_FORM, $this->bID, $this->bID),
+                                  ->getActionFor(ActionRegistryFactory::EDIT_ROW_FORM, $this->bID),
             $this->bID);
     }
 
@@ -190,7 +191,6 @@ class Controller extends BlockController
         /** @var $validationResult ValidationResult */
         $validationResult = $this->processAction($this->createConfigController()
                                                       ->getActionFor(ActionRegistryFactory::VALIDATE_FORM,
-                                                          $this->bID,
                                                           $this->bID),
             $this->bID);
         /** @var $e ErrorList */
@@ -215,7 +215,7 @@ class Controller extends BlockController
     {
         parent::save($args);
         $this->processAction($this->createConfigController()
-                                  ->getActionFor(ActionRegistryFactory::POST_FORM, $this->bID, $this->bID),
+                                  ->getActionFor(ActionRegistryFactory::POST_FORM, $this->bID),
             $this->bID);
     }
 
@@ -227,7 +227,7 @@ class Controller extends BlockController
     {
         parent::delete();
         $this->processAction($this->createConfigController()
-                                  ->getActionFor(ActionRegistryFactory::DELETE_ENTRY, $this->bID, $this->bID),
+                                  ->getActionFor(ActionRegistryFactory::DELETE_ENTRY, $this->bID),
             $this->bID);
     }
 
@@ -258,6 +258,7 @@ class Controller extends BlockController
             $entityManager,
             $entityClass,
             $entityFieldOverrides->build(),
+            $this->bID,
             FormType::$BLOCK_CONFIGURATION);
         return $container->get(CrudController::class);
     }

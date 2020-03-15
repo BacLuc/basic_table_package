@@ -22,7 +22,7 @@ class ShowNewEntryFormTest extends TestCase
     public function test_new_row_form_has_empty_fields()
     {
         ob_start();
-        $this->crudController->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM, "1", "1")
+        $this->crudController->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM, "0")
                              ->process([], []);
 
         $output = ob_get_clean();

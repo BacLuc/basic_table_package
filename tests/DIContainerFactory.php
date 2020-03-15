@@ -58,7 +58,8 @@ class DIContainerFactory
         $definitions = ProductionDefinition::createDefinition(
             $entityManager,
             $entityClass,
-            $entityFieldOverrides->build());
+            $entityFieldOverrides->build(),
+            "0");
 
         $definitions[VariableSetter::class] = autowire(DefaultContext::class);
         $definitions[DefaultContext::class] = get(VariableSetter::class);

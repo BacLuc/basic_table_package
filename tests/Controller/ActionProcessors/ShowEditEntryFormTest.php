@@ -22,7 +22,7 @@ class ShowEditEntryFormTest extends TestCase
     public function test_edit_form_shows_value_of_existing_entry()
     {
         ob_start();
-        $this->crudController->getActionFor(ActionRegistryFactory::EDIT_ROW_FORM, "1", "1")
+        $this->crudController->getActionFor(ActionRegistryFactory::EDIT_ROW_FORM, "0")
                              ->process([], [], 1);
 
         $output = ob_get_clean();
@@ -43,7 +43,7 @@ class ShowEditEntryFormTest extends TestCase
         $container = DIContainerFactory::createContainer($entityManager, ExampleEntity::class);
         ExampleEntityConstants::addReferencedEntityTestValues($container);
         $this->crudController = $container->get(CrudController::class);
-        $this->crudController->getActionFor(ActionRegistryFactory::POST_FORM, "1", "1")
+        $this->crudController->getActionFor(ActionRegistryFactory::POST_FORM, "0")
                              ->process([], ExampleEntityConstants::ENTRY_1_POST);
     }
 }

@@ -22,7 +22,7 @@ class WrongBlockIdTest extends TestCase
     public function test_post_form_new_entry()
     {
         ob_start();
-        $this->crudController->getActionFor(ActionRegistryFactory::POST_FORM, "1", "2")
+        $this->crudController->getActionFor(ActionRegistryFactory::POST_FORM, "1")
                              ->process([], ExampleEntityConstants::ENTRY_1_POST);
 
         $output = ob_get_clean();

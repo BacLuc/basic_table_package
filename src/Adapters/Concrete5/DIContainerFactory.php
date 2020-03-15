@@ -6,6 +6,7 @@ namespace BaclucC5Crud\Adapters\Concrete5;
 
 use BaclucC5Crud\Controller\ActionRegistry;
 use BaclucC5Crud\Controller\ActionRegistryFactory;
+use BaclucC5Crud\Controller\BlockIdSupplier;
 use BaclucC5Crud\Controller\Renderer;
 use BaclucC5Crud\Controller\Validation\ValidationConfiguration;
 use BaclucC5Crud\Controller\Validation\ValidationConfigurationFactory;
@@ -59,10 +60,11 @@ class DIContainerFactory
         EntityManager $entityManager,
         $entityClass,
         EntityFieldOverrides $entityFieldOverrides,
+        string $blockId,
         FormType $formType = null
     ): Container {
         $containerBuilder = new ContainerBuilder();
-        $definitions = self::createDefinition($entityManager, $entityClass, $entityFieldOverrides, $formType);
+        $definitions = self::createDefinition($entityManager, $entityClass, $entityFieldOverrides, $blockId, $formType);
         $definitions[BlockController::class] = value($controller);
         $containerBuilder->addDefinitions($definitions);
         return $containerBuilder->build();
@@ -79,6 +81,7 @@ class DIContainerFactory
         EntityManager $entityManager,
         $entityClass,
         EntityFieldOverrides $entityFieldOverrides,
+        string $blockId,
         FormType $formType = null
     ): array {
         $formType = $formType ? $formType : FormType::$BLOCK_VIEW;
@@ -121,7 +124,10 @@ class DIContainerFactory
             RepositoryFactory::class             => value(new EntityManagerRepositoryFactory($entityManager)),
             ValueTransformerConfiguration::class => autowire(PersistenceValueTransformerConfiguration::class),
             FormType::class                      => value($formType),
-            TableViewEntrySupplier::class        => autowire(AllValuesTableViewEntrySupplier::class)
+            TableViewEntrySupplier::class        => autowire(AllValuesTableViewEntrySupplier::class),
+            BlockIdSupplier::class               => factory(function () use ($blockId) {
+                return new BlockIdSupplier($blockId);
+            })
 
         ];
         return $definitions;
