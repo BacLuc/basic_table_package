@@ -6,7 +6,7 @@ namespace BaclucC5Crud\Entity;
 
 use Doctrine\ORM\EntityManager;
 
-class EntityManagerRepository implements Repository
+class EntityManagerRepository implements Repository, ConfigurationRepository
 {
     /**
      * @var EntityManager

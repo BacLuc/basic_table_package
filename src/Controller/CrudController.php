@@ -22,7 +22,7 @@ class CrudController
         $this->blockIdSupplier = $blockIdSupplier;
     }
 
-    public function getActionFor(string $string, string $blockIdOfRequest): ActionProcessor
+    public function getActionFor(string $string, $blockIdOfRequest): ActionProcessor
     {
         return
             new BlockIdAwareActionProcessor($this->blockIdSupplier,

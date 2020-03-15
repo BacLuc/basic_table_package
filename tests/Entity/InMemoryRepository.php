@@ -4,10 +4,11 @@
 namespace BaclucC5Crud\Test\Entity;
 
 
+use BaclucC5Crud\Entity\ConfigurationRepository;
 use BaclucC5Crud\Entity\Repository;
 use function BaclucC5Crud\Lib\collect as collect;
 
-class InMemoryRepository implements Repository
+class InMemoryRepository implements Repository, ConfigurationRepository
 {
     /**
      * @var int

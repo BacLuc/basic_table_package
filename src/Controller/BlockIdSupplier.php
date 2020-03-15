@@ -11,7 +11,7 @@ class BlockIdSupplier
      */
     private $blockId;
 
-    public function __construct(string $blockId)
+    public function __construct($blockId)
     {
         $this->blockId = $blockId;
     }

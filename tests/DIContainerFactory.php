@@ -9,6 +9,7 @@ use BaclucC5Crud\Controller\Renderer;
 use BaclucC5Crud\Controller\Validation\DropdownFieldValidator;
 use BaclucC5Crud\Controller\Validation\FieldValidator;
 use BaclucC5Crud\Controller\VariableSetter;
+use BaclucC5Crud\Entity\ExampleConfigurationEntity;
 use BaclucC5Crud\Entity\ExampleEntity;
 use BaclucC5Crud\Entity\ExampleEntityDropdownValueSupplier;
 use BaclucC5Crud\Entity\Repository;
@@ -58,6 +59,7 @@ class DIContainerFactory
         $definitions = ProductionDefinition::createDefinition(
             $entityManager,
             $entityClass,
+            ExampleConfigurationEntity::class,
             $entityFieldOverrides->build(),
             "0");
 

@@ -33,7 +33,7 @@ class BlockIdAwareActionProcessor implements ActionProcessor
 
     public function __construct(
         BlockIdSupplier $blockIdSupplier,
-        string $blockIdOfRequest,
+        $blockIdOfRequest,
         ActionProcessor $successAction,
         ActionProcessor $failAction
     ) {
