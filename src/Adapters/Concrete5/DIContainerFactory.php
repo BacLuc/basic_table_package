@@ -12,10 +12,12 @@ use BaclucC5Crud\Controller\Validation\ValidationConfigurationFactory;
 use BaclucC5Crud\Controller\ValuePersisters\PersistorConfiguration;
 use BaclucC5Crud\Controller\ValuePersisters\PersistorConfigurationFactory;
 use BaclucC5Crud\Controller\VariableSetter;
+use BaclucC5Crud\Entity\AllValuesTableViewEntrySupplier;
 use BaclucC5Crud\Entity\EntityManagerRepository;
 use BaclucC5Crud\Entity\EntityManagerRepositoryFactory;
 use BaclucC5Crud\Entity\Repository;
 use BaclucC5Crud\Entity\RepositoryFactory;
+use BaclucC5Crud\Entity\TableViewEntrySupplier;
 use BaclucC5Crud\FieldConfigurationOverride\EntityFieldOverrides;
 use BaclucC5Crud\FieldTypeDetermination\ColumnAnnotationHandler;
 use BaclucC5Crud\FieldTypeDetermination\ManyToManyAnnotationHandler;
@@ -118,7 +120,8 @@ class DIContainerFactory
             WysiwygEditorFactory::class          => value(new Concrete5WysiwygEditorFactory()),
             RepositoryFactory::class             => value(new EntityManagerRepositoryFactory($entityManager)),
             ValueTransformerConfiguration::class => autowire(PersistenceValueTransformerConfiguration::class),
-            FormType::class                      => value($formType)
+            FormType::class                      => value($formType),
+            TableViewEntrySupplier::class        => autowire(AllValuesTableViewEntrySupplier::class)
 
         ];
         return $definitions;

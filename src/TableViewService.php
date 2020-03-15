@@ -4,7 +4,7 @@
 namespace BaclucC5Crud;
 
 
-use BaclucC5Crud\Entity\Repository;
+use BaclucC5Crud\Entity\TableViewEntrySupplier;
 use BaclucC5Crud\View\TableView\Field;
 use BaclucC5Crud\View\TableView\Row;
 use BaclucC5Crud\View\TableView\TableView;
@@ -16,24 +16,27 @@ class TableViewService
 {
 
     /**
-     * @var Repository
+     * @var TableViewFieldConfiguration
      */
-    private $repository;
     private $tableViewFieldConfiguration;
-
     /**
-     * TableViewService constructor.
+     * @var TableViewEntrySupplier
      */
-    public function __construct(Repository $repository, TableViewFieldConfiguration $tableViewFieldConfiguration)
-    {
-        $this->repository = $repository;
+    private $tableViewEntrySupplier;
+
+    public function __construct(
+        TableViewEntrySupplier $tableViewEntrySupplier,
+        TableViewFieldConfiguration $tableViewFieldConfiguration
+    ) {
+
+        $this->tableViewEntrySupplier = $tableViewEntrySupplier;
         $this->tableViewFieldConfiguration = $tableViewFieldConfiguration;
     }
 
 
     public function getTableView(): TableView
     {
-        $result = $this->repository->getAll();
+        $result = $this->tableViewEntrySupplier->getEntries();
         $headers = collect($this->tableViewFieldConfiguration)->keys()->toArray();
         $tableView = new TableView($headers, []);
         if ($result != null) {
