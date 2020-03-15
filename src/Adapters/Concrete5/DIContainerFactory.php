@@ -63,6 +63,7 @@ class DIContainerFactory
         $configurationClass,
         EntityFieldOverrides $entityFieldOverrides,
         $blockId,
+        string $packagePath,
         FormType $formType = null
     ): Container {
         $containerBuilder = new ContainerBuilder();
@@ -74,6 +75,7 @@ class DIContainerFactory
                 $blockId,
                 $formType);
         $definitions[BlockController::class] = value($controller);
+        $definitions[Renderer::class] = create(Concrete5Renderer::class)->constructor($controller, $packagePath);
         $containerBuilder->addDefinitions($definitions);
         return $containerBuilder->build();
     }
@@ -105,7 +107,6 @@ class DIContainerFactory
                 ->parameter('className', $configurationClass),
             EntityFieldOverrides::class          => value($entityFieldOverrides),
             VariableSetter::class                => autowire(Concrete5VariableSetter::class),
-            Renderer::class                      => autowire(Concrete5Renderer::class),
             ViewActionRegistry::class            => factory([ViewActionRegistryFactory::class, "createActionRegistry"]),
             ActionRegistry::class                => factory([ActionRegistryFactory::class, "createActionRegistry"]),
             TableViewFieldConfiguration::class   => factory([

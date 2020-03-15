@@ -21,8 +21,10 @@ use BaclucC5Crud\View\TableView\DropdownField as DropdownTableField;
 use BaclucC5Crud\View\TableView\Field as TableField;
 use Concrete\Core\Block\BlockController;
 use Concrete\Core\Error\ErrorList\ErrorList;
+use Concrete\Core\Package\PackageService;
 use Concrete\Core\Page\Page;
 use Concrete\Core\Routing\Redirect;
+use Concrete\Core\Support\Facade\Application;
 use Concrete\Package\BaclucC5Crud\Controller as PackageController;
 use DI\DependencyException;
 use DI\NotFoundException;
@@ -71,12 +73,17 @@ class Controller extends BlockController
                              ->useFactory(DropdownFieldValidator::createDropdownFieldValidator($valueSupplier))
                              ->buildField();
 
+        $app = Application::getFacadeApplication();
+        /** @var PackageController $packageController */
+        $packageController = $app->make(PackageService::class)->getByHandle(PackageController::PACKAGE_HANDLE);
+
         $container = DIContainerFactory::createContainer($this,
             $entityManager,
             $entityClass,
             ExampleConfigurationEntity::class,
             $entityFieldOverrides->build(),
             $this->bID,
+            $packageController->getPackagePath(),
             FormType::$BLOCK_VIEW);
         return $container->get(CrudController::class);
     }
@@ -255,12 +262,16 @@ class Controller extends BlockController
                              ->useFactory(DropdownFieldValidator::createDropdownFieldValidator($valueSupplier))
                              ->buildField();
 
+        $app = Application::getFacadeApplication();
+        /** @var PackageController $packageController */
+        $packageController = $app->make(PackageService::class)->getByHandle(PackageController::PACKAGE_HANDLE);
         $container = DIContainerFactory::createContainer($this,
             $entityManager,
             $entityClass,
             "",
             $entityFieldOverrides->build(),
             $this->bID,
+            $packageController->getPackagePath(),
             FormType::$BLOCK_CONFIGURATION);
         return $container->get(CrudController::class);
     }

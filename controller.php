@@ -15,14 +15,15 @@ use Punic\Exception;
 class Controller extends Package
 {
 
-    protected $pkgHandle          = 'bacluc_c5_crud';
+    const PACKAGE_HANDLE = 'bacluc_c5_crud';
+    protected $pkgHandle          = self::PACKAGE_HANDLE;
     protected $appVersionRequired = '5.7.4';
     protected $pkgVersion         = '0.0.1';
 
 
     public static function getEntityManagerStatic()
     {
-        $pkg = Package::getByHandle("bacluc_c5_crud");
+        $pkg = Package::getByHandle(self::PACKAGE_HANDLE);
         return $pkg->getEntityManager();
     }
 
