@@ -10,15 +10,12 @@ use BaclucC5Crud\Controller\Validation\DropdownFieldValidator;
 use BaclucC5Crud\Controller\Validation\FieldValidator;
 use BaclucC5Crud\Controller\VariableSetter;
 use BaclucC5Crud\Entity\ExampleConfigurationEntity;
-use BaclucC5Crud\Entity\ExampleEntity;
 use BaclucC5Crud\Entity\ExampleEntityDropdownValueSupplier;
-use BaclucC5Crud\Entity\Repository;
 use BaclucC5Crud\Entity\RepositoryFactory;
 use BaclucC5Crud\FieldConfigurationOverride\EntityFieldOverrideBuilder;
 use BaclucC5Crud\Test\Adapters\DefaultContext;
 use BaclucC5Crud\Test\Adapters\DefaultRenderer;
 use BaclucC5Crud\Test\Adapters\DefaultWysiwygEditorFactory;
-use BaclucC5Crud\Test\Entity\InMemoryRepository;
 use BaclucC5Crud\Test\Entity\InMemoryRepositoryFactory;
 use BaclucC5Crud\View\FormView\DropdownField as DropdownFormField;
 use BaclucC5Crud\View\FormView\Field as FormField;
@@ -66,7 +63,6 @@ class DIContainerFactory
         $definitions[VariableSetter::class] = autowire(DefaultContext::class);
         $definitions[DefaultContext::class] = get(VariableSetter::class);
         $definitions[Renderer::class] = autowire(DefaultRenderer::class);
-        $definitions[Repository::class] = value(new InMemoryRepository(ExampleEntity::class));
         $definitions[WysiwygEditorFactory::class] = value(new DefaultWysiwygEditorFactory());
         $definitions[RepositoryFactory::class] = value(new InMemoryRepositoryFactory());
 
