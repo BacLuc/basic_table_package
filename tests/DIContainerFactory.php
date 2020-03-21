@@ -58,7 +58,7 @@ class DIContainerFactory
             $entityClass,
             ExampleConfigurationEntity::class,
             $entityFieldOverrides->build(),
-            "0");
+            0);
 
         $definitions[VariableSetter::class] = autowire(DefaultContext::class);
         $definitions[DefaultContext::class] = get(VariableSetter::class);

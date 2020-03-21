@@ -24,6 +24,10 @@ class CrudController
 
     public function getActionFor(string $string, $blockIdOfRequest): ActionProcessor
     {
+        $blockIdOfRequest = filter_var($blockIdOfRequest, FILTER_VALIDATE_INT);
+        if ($blockIdOfRequest === false) {
+            $blockIdOfRequest = null;
+        }
         return
             new BlockIdAwareActionProcessor($this->blockIdSupplier,
                 $blockIdOfRequest,
