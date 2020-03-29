@@ -41,6 +41,8 @@ class ValidationConfigurationFactory
                 ->map(function ($persistenceFieldType, $key) {
                     return self::createFieldTypeOf($persistenceFieldType,
                         $key);
+                })->filter(function ($value) {
+                    return $value != null;
                 });
         return new ValidationConfiguration($fieldTypes->toArray());
     }

@@ -46,6 +46,8 @@ class FormViewAfterValidationFailedService
                 $entity
             ) {
                 return call_user_func($fieldFactory, $entity);
+            })->filter(function ($value) {
+                return $value != null;
             });
         return new FormView($fields->toArray());
     }
