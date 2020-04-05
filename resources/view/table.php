@@ -14,7 +14,9 @@
     </div>
     <table class="table table-striped table-bordered table-hover">
         <thead>
-        <th><?= t("Actions") ?></th>
+        <?php if ($rowactions) { ?>
+            <th><?= t("Actions") ?></th>
+        <?php } ?>
         <?php foreach ($headers as $value) { ?>
             <th><?= $value ?></th>
         <?php } ?>
@@ -23,18 +25,21 @@
         <?php
         foreach ($rows as $row) { ?>
             <tr>
-                <td>
-                    <?php foreach ($rowactions as $rowaction) { ?>
-                        <a href="<?= $this->action($rowaction->getAction()) . "/" . $row->getId(); ?>">
-                            <button type="submit" class="btn inlinebtn actionbutton <?= $rowaction->getButtonClass() ?>"
-                                    aria-label="<?= t($rowaction->getAriaLabel()) ?>"
-                                    title="<?= t($rowaction->getTitle()) ?>">
-                                <i class="fa <?= $rowaction->getIconClass() ?>" aria-hidden="true"> </i>
-                            </button>
-                        </a>
-                    <?php } ?>
+                <?php if ($rowactions) { ?>
+                    <td>
+                        <?php foreach ($rowactions as $rowaction) { ?>
+                            <a href="<?= $this->action($rowaction->getAction()) . "/" . $row->getId(); ?>">
+                                <button type="submit"
+                                        class="btn inlinebtn actionbutton <?= $rowaction->getButtonClass() ?>"
+                                        aria-label="<?= t($rowaction->getAriaLabel()) ?>"
+                                        title="<?= t($rowaction->getTitle()) ?>">
+                                    <i class="fa <?= $rowaction->getIconClass() ?>" aria-hidden="true"> </i>
+                                </button>
+                            </a>
+                        <?php } ?>
 
-                </td>
+                    </td>
+                <?php } ?>
                 <?php foreach ($row as $value) { ?>
                     <td><?= $value ?></td>
                 <?php } ?>
