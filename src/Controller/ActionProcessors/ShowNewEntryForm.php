@@ -9,7 +9,9 @@ use BaclucC5Crud\Controller\ActionRegistryFactory;
 use BaclucC5Crud\Controller\Renderer;
 use BaclucC5Crud\Controller\VariableSetter;
 use BaclucC5Crud\FormViewService;
+use BaclucC5Crud\View\CancelFormViewAction;
 use BaclucC5Crud\View\FormType;
+use BaclucC5Crud\View\SubmitFormViewAction;
 
 class ShowNewEntryForm implements ActionProcessor
 {
@@ -30,6 +32,14 @@ class ShowNewEntryForm implements ActionProcessor
      * @var FormType
      */
     private $formType;
+    /**
+     * @var SubmitFormViewAction
+     */
+    private $submitFormAction;
+    /**
+     * @var CancelFormViewAction
+     */
+    private $cancelFormAction;
 
     /**
      * ShowFormActionProcessor constructor.
@@ -37,17 +47,23 @@ class ShowNewEntryForm implements ActionProcessor
      * @param VariableSetter $variableSetter
      * @param Renderer $renderer
      * @param FormType $formType
+     * @param SubmitFormViewAction $submitFormAction
+     * @param CancelFormViewAction $cancelFormAction
      */
     public function __construct(
         FormViewService $formViewService,
         VariableSetter $variableSetter,
         Renderer $renderer,
-        FormType $formType
+        FormType $formType,
+        SubmitFormViewAction $submitFormAction,
+        CancelFormViewAction $cancelFormAction
     ) {
         $this->formViewService = $formViewService;
         $this->variableSetter = $variableSetter;
         $this->renderer = $renderer;
         $this->formType = $formType;
+        $this->submitFormAction = $submitFormAction;
+        $this->cancelFormAction = $cancelFormAction;
     }
 
 
@@ -61,6 +77,8 @@ class ShowNewEntryForm implements ActionProcessor
         $formView = $this->formViewService->getFormView();
         $this->variableSetter->set("fields", $formView->getFields());
         $this->variableSetter->set("addFormTags", $this->formType === FormType::$BLOCK_VIEW);
+        $this->variableSetter->set("submitFormAction", $this->submitFormAction);
+        $this->variableSetter->set("cancelFormAction", $this->cancelFormAction);
         $this->renderer->render(self::FORM_VIEW);
     }
 

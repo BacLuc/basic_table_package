@@ -29,12 +29,16 @@ use BaclucC5Crud\FieldTypeDetermination\ManyToManyAnnotationHandler;
 use BaclucC5Crud\FieldTypeDetermination\ManyToOneAnnotationHandler;
 use BaclucC5Crud\FieldTypeDetermination\OneToManyAnnotationHandler;
 use BaclucC5Crud\FieldTypeDetermination\PersistenceFieldTypeReader;
+use BaclucC5Crud\View\CancelFormViewAction;
+use BaclucC5Crud\View\CancelFormViewActionSupplier;
 use BaclucC5Crud\View\FormType;
 use BaclucC5Crud\View\FormView\FormViewConfigurationFactory;
 use BaclucC5Crud\View\FormView\FormViewFieldConfiguration;
 use BaclucC5Crud\View\FormView\ValueTransformers\PersistenceValueTransformerConfiguration;
 use BaclucC5Crud\View\FormView\ValueTransformers\ValueTransformerConfiguration;
 use BaclucC5Crud\View\FormView\WysiwygEditorFactory;
+use BaclucC5Crud\View\SubmitFormViewAction;
+use BaclucC5Crud\View\SubmitFormViewActionSupplier;
 use BaclucC5Crud\View\TableView\TableViewConfigurationFactory;
 use BaclucC5Crud\View\TableView\TableViewFieldConfiguration;
 use BaclucC5Crud\View\ViewActionRegistry;
@@ -115,6 +119,8 @@ class DIContainerFactory
             ActionConfiguration::class           => autowire(DefaultActionConfiguration::class),
             RowActionConfiguration::class        => autowire(DefaultRowActionConfiguration::class),
             ActionRegistry::class                => factory([ActionRegistryFactory::class, "createActionRegistry"]),
+            SubmitFormViewAction::class          => factory([SubmitFormViewActionSupplier::class, "getAction"]),
+            CancelFormViewAction::class          => factory([CancelFormViewActionSupplier::class, "getAction"]),
             TableViewFieldConfiguration::class   => factory([
                 TableViewConfigurationFactory::class,
                 "createConfiguration"

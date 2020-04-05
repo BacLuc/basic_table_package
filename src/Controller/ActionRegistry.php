@@ -34,5 +34,7 @@ class ActionRegistry
         return $this->actions->get($name);
     }
 
-
+    public function getActions() {
+        return $this->actions->toArray();
+    }
 }

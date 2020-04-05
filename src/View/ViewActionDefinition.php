@@ -4,7 +4,7 @@
 namespace BaclucC5Crud\View;
 
 
-class ViewActionDefinition
+class ViewActionDefinition implements SubmitFormViewAction, CancelFormViewAction
 {
     /**
      * @var string

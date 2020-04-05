@@ -1,7 +1,8 @@
 <?php /** @noinspection ALL */ ?>
 <?php if ($addFormTags) { ?>
-    <form action="<?php echo $this->action('post_form') . (isset($editId) && $editId != null ? "/$editId" :
-            "") ?>" method='POST' enctype="multipart/form-data" novalidate>
+    <form action="<?php echo $this->action($submitFormAction->getAction()) .
+                             (isset($editId) && $editId != null ? "/$editId" :
+                                 "") ?>" method='POST' enctype="multipart/form-data" novalidate>
 <?php } ?>
 <?php foreach ($fields as $name => $field) { ?>
     <?php /** @var $field \BaclucC5Crud\View\FormView\Field */ ?>
@@ -35,7 +36,7 @@
                     value="save"><?= t("save") ?></button>
         </div>
         <div class="col-xs-6 col-sm-2">
-            <a href="<?php echo $this->action('cancel_form') ?>">
+            <a href="<?php echo $this->action($cancelFormAction->getAction()) ?>">
                 <button type="button" class="btn ccm-input-submit ccm-button btn-block">
                     <?= t("cancel") ?>
                 </button>

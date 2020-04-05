@@ -34,5 +34,9 @@ class ViewActionRegistry
         return $this->actions->get($name);
     }
 
+    public function getActions() : array {
+        return $this->actions->toArray();
+    }
+
 
 }

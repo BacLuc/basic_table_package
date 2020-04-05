@@ -14,7 +14,9 @@ use BaclucC5Crud\Controller\ValuePersisters\PersistorConfiguration;
 use BaclucC5Crud\Controller\VariableSetter;
 use BaclucC5Crud\Entity\Repository;
 use BaclucC5Crud\FormViewAfterValidationFailedService;
+use BaclucC5Crud\View\CancelFormViewAction;
 use BaclucC5Crud\View\FormType;
+use BaclucC5Crud\View\SubmitFormViewAction;
 use function BaclucC5Crud\Lib\collect as collect;
 
 class PostForm implements ActionProcessor
@@ -48,6 +50,14 @@ class PostForm implements ActionProcessor
      * @var FormType
      */
     private $formType;
+    /**
+     * @var SubmitFormViewAction
+     */
+    private $submitFormAction;
+    /**
+     * @var CancelFormViewAction
+     */
+    private $cancelFormAction;
 
     /**
      * PostFormActionProcessor constructor.
@@ -58,6 +68,8 @@ class PostForm implements ActionProcessor
      * @param VariableSetter $variableSetter
      * @param Renderer $renderer
      * @param FormType $formType
+     * @param SubmitFormViewAction $submitFormAction
+     * @param CancelFormViewAction $cancelFormAction
      */
     public function __construct(
         Validator $validator,
@@ -66,7 +78,9 @@ class PostForm implements ActionProcessor
         PersistorConfiguration $peristorConfiguration,
         VariableSetter $variableSetter,
         Renderer $renderer,
-        FormType $formType
+        FormType $formType,
+        SubmitFormViewAction $submitFormAction,
+        CancelFormViewAction $cancelFormAction
     ) {
         $this->validator = $validator;
         $this->formViewAfterValidationFailedService = $formViewAfterValidationFailedService;
@@ -75,6 +89,8 @@ class PostForm implements ActionProcessor
         $this->variableSetter = $variableSetter;
         $this->renderer = $renderer;
         $this->formType = $formType;
+        $this->submitFormAction = $submitFormAction;
+        $this->cancelFormAction = $cancelFormAction;
     }
 
     function getName(): string
@@ -127,6 +143,8 @@ class PostForm implements ActionProcessor
                 });
             $this->variableSetter->set("validationErrors", $validationErrors);
             $this->variableSetter->set("addFormTags", $this->formType === FormType::$BLOCK_VIEW);
+            $this->variableSetter->set("submitFormAction", $this->submitFormAction);
+            $this->variableSetter->set("cancelFormAction", $this->cancelFormAction);
             $this->renderer->render(self::FORM_VIEW);
         }
     }
