@@ -14,6 +14,7 @@ use BaclucC5Crud\Controller\ActionProcessors\ValidateForm;
 
 class ActionRegistryFactory
 {
+    const BACK_TO_MAIN       = "view";
     const SHOW_TABLE         = "show_table";
     const ADD_NEW_ROW_FORM   = "add_new_row_form";
     const EDIT_ROW_FORM      = "edit_row_form";

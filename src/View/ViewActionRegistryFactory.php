@@ -12,6 +12,11 @@ class ViewActionRegistryFactory
     public function createActionRegistry(): ViewActionRegistry
     {
         $actions = [
+            new ViewActionDefinition(ActionRegistryFactory::BACK_TO_MAIN,
+                "back",
+                "Back",
+                "Back",
+                "fa-arrow-left"),
             new ViewActionDefinition(ActionRegistryFactory::ADD_NEW_ROW_FORM,
                 "add",
                 "new Entry",
