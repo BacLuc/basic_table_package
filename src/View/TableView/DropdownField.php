@@ -20,7 +20,9 @@ class DropdownField implements Field
     public static function createDropdownField($valueSupplier): callable
     {
         return function ($value) use ($valueSupplier) {
-            return new DropdownField($value, $valueSupplier);
+            return function () use ($value, $valueSupplier) {
+                return new DropdownField($value, $valueSupplier);
+            };
         };
     }
 

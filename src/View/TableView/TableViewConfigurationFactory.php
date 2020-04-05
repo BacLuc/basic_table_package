@@ -52,26 +52,29 @@ class TableViewConfigurationFactory
             case PersistenceFieldTypes::INTEGER:
             case PersistenceFieldTypes::TEXT:
                 return function ($value, $key) {
-                    return $this->checkFieldOverride($value, $key) ?: new TextField($value);
+                    return $this->checkFieldOverride($value, $key) ? $this->checkFieldOverride($value, $key)() :
+                        new TextField($value);
                 };
             case PersistenceFieldTypes::DATE:
                 return function ($value, $key) {
-                    return $this->checkFieldOverride($value, $key) ?: new DateField($value);
+                    return $this->checkFieldOverride($value, $key) ? $this->checkFieldOverride($value, $key)() :
+                        new DateField($value);
                 };
             case PersistenceFieldTypes::DATETIME:
                 return function ($value, $key) {
-                    return $this->checkFieldOverride($value, $key) ?: new DateTimeField($value);
+                    return $this->checkFieldOverride($value, $key) ? $this->checkFieldOverride($value, $key)() :
+                        new DateTimeField($value);
                 };
             case PersistenceFieldTypes::MANY_TO_ONE:
                 return function ($value, $key) use ($persistenceFieldType) {
                     /** @var ReferencingPersistenceFieldType $persistenceFieldType */
-                    return $this->checkFieldOverride($value, $key) ?:
+                    return $this->checkFieldOverride($value, $key) ? $this->checkFieldOverride($value, $key)() :
                         new DropdownField($value, $persistenceFieldType->getValueSupplier());
                 };
             case PersistenceFieldTypes::MANY_TO_MANY:
                 return function ($value, $key) use ($persistenceFieldType) {
                     /** @var ReferencingPersistenceFieldType $persistenceFieldType */
-                    return $this->checkFieldOverride($value, $key) ?:
+                    return $this->checkFieldOverride($value, $key) ? $this->checkFieldOverride($value, $key)() :
                         new MultiSelectField($value, $persistenceFieldType->getValueSupplier());
                 };
             default:

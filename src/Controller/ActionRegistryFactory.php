@@ -22,6 +22,7 @@ class ActionRegistryFactory
     const DELETE_ENTRY       = "delete_entry";
     const CANCEL_FORM        = "cancel_form";
     const SHOW_ENTRY_DETAILS = "show_details";
+    const SHOW_ERROR         = "show_error";
 
     /**
      * @var ActionProcessor[]

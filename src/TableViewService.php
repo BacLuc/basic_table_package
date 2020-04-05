@@ -37,7 +37,15 @@ class TableViewService
     public function getTableView(): TableView
     {
         $result = $this->tableViewEntrySupplier->getEntries();
-        $headers = collect($this->tableViewFieldConfiguration)->keys()->toArray();
+        $headers = collect($this->tableViewFieldConfiguration)
+            ->map(function ($fieldFactory, $name) {
+                return call_user_func($fieldFactory, null, $name);
+            })
+            ->filter(function ($value) {
+                return $value !== null;
+            })
+            ->keys()
+            ->toArray();
         $tableView = new TableView($headers, []);
         if ($result != null) {
             $rows = collect($result)
@@ -48,7 +56,11 @@ class TableViewService
                     return collect($this->tableViewFieldConfiguration)
                         ->map(function ($fieldFactory, $name) use ($entity) {
                             return call_user_func($fieldFactory, $entity->{$name}, $name);
-                        })->map(function ($field) {
+                        })
+                        ->filter(function ($value) {
+                            return $value !== null;
+                        })
+                        ->map(function ($field) {
                             return self::toTableView($field);
                         });
                 })

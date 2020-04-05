@@ -1,0 +1,1 @@
+<?= t("An error happened, please press back") ?>
