@@ -4,12 +4,13 @@
 namespace BaclucC5Crud\Controller\ActionProcessors;
 
 
+use BaclucC5Crud\Controller\ActionConfiguration;
 use BaclucC5Crud\Controller\ActionProcessor;
 use BaclucC5Crud\Controller\ActionRegistryFactory;
 use BaclucC5Crud\Controller\Renderer;
+use BaclucC5Crud\Controller\RowActionConfiguration;
 use BaclucC5Crud\Controller\VariableSetter;
 use BaclucC5Crud\TableViewService;
-use BaclucC5Crud\View\ViewActionRegistry;
 
 class ShowTable implements ActionProcessor
 {
@@ -27,20 +28,26 @@ class ShowTable implements ActionProcessor
      */
     private $renderer;
     /**
-     * @var ViewActionRegistry
+     * @var ActionConfiguration
      */
-    private $viewActionRegistry;
+    private $actionConfiguration;
+    /**
+     * @var RowActionConfiguration
+     */
+    private $rowActionConfiguration;
 
     public function __construct(
         TableViewService $tableViewService,
         VariableSetter $variableSetter,
         Renderer $renderer,
-        ViewActionRegistry $viewActionRegistry
+        ActionConfiguration $actionConfiguration,
+        RowActionConfiguration $rowActionConfiguration
     ) {
         $this->tableViewService = $tableViewService;
         $this->variableSetter = $variableSetter;
         $this->renderer = $renderer;
-        $this->viewActionRegistry = $viewActionRegistry;
+        $this->actionConfiguration = $actionConfiguration;
+        $this->rowActionConfiguration = $rowActionConfiguration;
     }
 
     function getName(): string
@@ -54,14 +61,8 @@ class ShowTable implements ActionProcessor
         $tableView = $this->tableViewService->getTableView();
         $this->variableSetter->set("headers", $tableView->getHeaders());
         $this->variableSetter->set("rows", $tableView->getRows());
-        $this->variableSetter->set("actions",
-            [$this->viewActionRegistry->getByName(ActionRegistryFactory::ADD_NEW_ROW_FORM)]);
-        $this->variableSetter->set("rowactions",
-            [
-                $this->viewActionRegistry->getByName(ActionRegistryFactory::EDIT_ROW_FORM),
-                $this->viewActionRegistry->getByName(ActionRegistryFactory::DELETE_ENTRY),
-                $this->viewActionRegistry->getByName(ActionRegistryFactory::SHOW_ENTRY_DETAILS),
-            ]);
+        $this->variableSetter->set("actions", $this->actionConfiguration->getActions());
+        $this->variableSetter->set("rowactions", $this->rowActionConfiguration->getActions());
         $this->renderer->render(self::TABLE_VIEW);
     }
 

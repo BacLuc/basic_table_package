@@ -4,10 +4,14 @@
 namespace BaclucC5Crud\Adapters\Concrete5;
 
 
+use BaclucC5Crud\Controller\ActionConfiguration;
 use BaclucC5Crud\Controller\ActionRegistry;
 use BaclucC5Crud\Controller\ActionRegistryFactory;
 use BaclucC5Crud\Controller\BlockIdSupplier;
+use BaclucC5Crud\Controller\DefaultActionConfiguration;
+use BaclucC5Crud\Controller\DefaultRowActionConfiguration;
 use BaclucC5Crud\Controller\Renderer;
+use BaclucC5Crud\Controller\RowActionConfiguration;
 use BaclucC5Crud\Controller\Validation\ValidationConfiguration;
 use BaclucC5Crud\Controller\Validation\ValidationConfigurationFactory;
 use BaclucC5Crud\Controller\ValuePersisters\PersistorConfiguration;
@@ -108,6 +112,8 @@ class DIContainerFactory
             EntityFieldOverrides::class          => value($entityFieldOverrides),
             VariableSetter::class                => autowire(Concrete5VariableSetter::class),
             ViewActionRegistry::class            => factory([ViewActionRegistryFactory::class, "createActionRegistry"]),
+            ActionConfiguration::class           => autowire(DefaultActionConfiguration::class),
+            RowActionConfiguration::class        => autowire(DefaultRowActionConfiguration::class),
             ActionRegistry::class                => factory([ActionRegistryFactory::class, "createActionRegistry"]),
             TableViewFieldConfiguration::class   => factory([
                 TableViewConfigurationFactory::class,
