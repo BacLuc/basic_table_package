@@ -51,7 +51,7 @@ class InMemoryRepository implements Repository, ConfigurationRepository
 
     public function getAll(int $offset = 0, int $limit = null)
     {
-        return $this->entites->toArray();
+        return $this->entites->slice($offset, $limit)->toArray();
     }
 
     public function getById(int $id)
