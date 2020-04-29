@@ -40,9 +40,10 @@ class EntityManagerRepository implements Repository, ConfigurationRepository
 
     public function getAll()
     {
-        $query = $this->entityManager->createQuery(
-        /** @lang DQL */
-            "SELECT entity FROM $this->className entity");
+        $qb = $this->entityManager->createQueryBuilder();
+        $query = $qb->select("e")
+                    ->from($this->className, "e")
+                    ->getQuery();
         return $query->getResult();
     }
 
