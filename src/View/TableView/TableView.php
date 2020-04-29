@@ -15,21 +15,27 @@ class TableView
      * @var Row[]
      */
     private $rows;
+    /**
+     * @var int
+     */
+    private $count;
 
     /**
      * TableView constructor.
      * @param String[] $headers
      * @param Row[] $rows
+     * @param int $count
      */
-    public function __construct(array $headers, array $rows)
+    public function __construct(array $headers, array $rows, int $count)
     {
         $this->headers = $headers;
         $this->rows = $rows;
+        $this->count = $count;
     }
 
     public static function empty()
     {
-        return new TableView([], []);
+        return new TableView([], [], 0);
     }
 
     /**
@@ -47,4 +53,13 @@ class TableView
     {
         return $this->rows;
     }
+
+    /**
+     * @return int
+     */
+    public function getCount()
+    {
+        return $this->count;
+    }
+
 }

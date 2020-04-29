@@ -21,4 +21,9 @@ class AllValuesTableViewEntrySupplier implements TableViewEntrySupplier
     {
         return $this->repository->getAll();
     }
+
+    public function count()
+    {
+        return $this->repository->count();
+    }
 }

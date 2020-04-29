@@ -46,7 +46,7 @@ class TableViewService
             })
             ->keys()
             ->toArray();
-        $tableView = new TableView($headers, []);
+        $tableView = new TableView($headers, [], 0);
         if ($result != null) {
             $rows = collect($result)
                 ->keyBy(function ($entity) {
@@ -70,7 +70,7 @@ class TableViewService
                 ->map(function ($fields, $id) {
                     return new Row($id, $fields);
                 });
-            $tableView = new TableView($headers, $rows->toArray());
+            $tableView = new TableView($headers, $rows->toArray(), $this->tableViewEntrySupplier->count());
         }
         return $tableView;
     }

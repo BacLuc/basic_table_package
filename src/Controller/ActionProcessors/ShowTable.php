@@ -63,6 +63,7 @@ class ShowTable implements ActionProcessor
         $this->variableSetter->set("rows", $tableView->getRows());
         $this->variableSetter->set("actions", $this->actionConfiguration->getActions());
         $this->variableSetter->set("rowactions", $this->rowActionConfiguration->getActions());
+        $this->variableSetter->set("count", $tableView->getCount());
         $this->renderer->render(self::TABLE_VIEW);
     }
 

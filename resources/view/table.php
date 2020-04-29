@@ -12,6 +12,9 @@
             </a>
         <?php } ?>
     </div>
+    <div class="tablecount">
+        <span class="count-title"><?= t('Total entries:') ?></span><span><?= $count ?></span>
+    </div>
     <table class="table table-striped table-bordered table-hover">
         <thead>
         <?php if ($rowactions) { ?>
