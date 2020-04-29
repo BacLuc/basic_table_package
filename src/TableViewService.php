@@ -4,6 +4,7 @@
 namespace BaclucC5Crud;
 
 
+use BaclucC5Crud\Controller\PaginationConfiguration;
 use BaclucC5Crud\Entity\TableViewEntrySupplier;
 use BaclucC5Crud\View\TableView\Field;
 use BaclucC5Crud\View\TableView\Row;
@@ -34,9 +35,9 @@ class TableViewService
     }
 
 
-    public function getTableView(): TableView
+    public function getTableView(PaginationConfiguration $paginationConfiguration): TableView
     {
-        $result = $this->tableViewEntrySupplier->getEntries();
+        $result = $this->tableViewEntrySupplier->getEntries($paginationConfiguration);
         $headers = collect($this->tableViewFieldConfiguration)
             ->map(function ($fieldFactory, $name) {
                 return call_user_func($fieldFactory, null, $name);

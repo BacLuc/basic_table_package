@@ -6,6 +6,7 @@ namespace BaclucC5Crud\Controller\ActionProcessors;
 
 use BaclucC5Crud\Controller\ActionProcessor;
 use BaclucC5Crud\Controller\ActionRegistryFactory;
+use BaclucC5Crud\Controller\PaginationConfiguration;
 use BaclucC5Crud\Controller\Renderer;
 use BaclucC5Crud\Controller\VariableSetter;
 use BaclucC5Crud\TableViewService;
@@ -54,7 +55,7 @@ class ShowEntryDetails implements ActionProcessor
             $editId = intval($additionalParameters[0]);
         }
 
-        $tableView = $this->tableViewService->getTableView();
+        $tableView = $this->tableViewService->getTableView(new PaginationConfiguration(0, null));
         /**
          * @var Row $detailEntry
          */

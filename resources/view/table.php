@@ -50,5 +50,27 @@
         <?php } ?>
         </tbody>
     </table>
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-4 pull-right">
+            <form method="get" action="<?= $controller->getRequest()->getPathInfo() ?>">
+                <div>
+                    <div class="col-xs-12 col-md-5">
+                        <label><?= t($pageSizeField->getLabel()) ?></label>
+                    </div>
+                    <div class="col-xs-12 col-md-5">
+                        <?= $pageSizeField->getFormView() ?>
+                    </div>
+                    <div class="col-xs-12 col-md-2">
+                        <button type="submit"
+                                class="btn inlinebtn?>"
+                                aria-label="<?= t("Go") ?>"
+                                title="<?= t("Go") ?>">
+                            <?= t("Go") ?>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
 </div>
