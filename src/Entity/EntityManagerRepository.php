@@ -38,11 +38,13 @@ class EntityManagerRepository implements Repository, ConfigurationRepository
         });
     }
 
-    public function getAll()
+    public function getAll(int $offset = 0, int $limit = null)
     {
         $qb = $this->entityManager->createQueryBuilder();
         $query = $qb->select("e")
                     ->from($this->className, "e")
+                    ->setFirstResult($offset)
+                    ->setMaxResults($limit)
                     ->getQuery();
         return $query->getResult();
     }
@@ -64,6 +66,13 @@ class EntityManagerRepository implements Repository, ConfigurationRepository
         $this->entityManager->transactional(function (EntityManager $em) use ($toDeleteEntity) {
             $em->remove($toDeleteEntity);
         });
+    }
+
+    public function count()
+    {
+        $qb = $this->entityManager->createQueryBuilder();
+        return $qb->select("count(e)")
+                  ->from($this->className, "e")->getQuery()->getSingleScalarResult();
     }
 
 

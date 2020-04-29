@@ -49,7 +49,7 @@ class InMemoryRepository implements Repository, ConfigurationRepository
         $this->entites = $this->entites->add($entity);
     }
 
-    public function getAll()
+    public function getAll(int $offset = 0, int $limit = null)
     {
         return $this->entites->toArray();
     }
@@ -68,4 +68,8 @@ class InMemoryRepository implements Repository, ConfigurationRepository
         });
     }
 
+    public function count()
+    {
+        return $this->entites->count();
+    }
 }
