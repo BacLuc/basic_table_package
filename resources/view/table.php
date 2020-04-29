@@ -51,8 +51,21 @@
         </tbody>
     </table>
     <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <nav>
+                <ul class="pagination col-xs-9 pull-right">
+                    <?php for ($i = 0; $i * $pageSize < $count; $i++) { ?>
+                        <li class="page-item"><a class="page-link <?= $i == $currentPage ? "active" : "" ?>"
+                                                 href="<?= $currentURL .
+                                                           "?pageSize=$pageSize&currentPage=$i" ?>">
+                                <?= $i + 1 ?></a>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </nav>
+        </div>
         <div class="col-xs-12 col-sm-6 col-md-4 pull-right">
-            <form method="get" action="<?= $controller->getRequest()->getPathInfo() ?>">
+            <form method="get" action="<?= $currentURL ?>">
                 <div>
                     <div class="col-xs-12 col-md-5">
                         <label><?= t($pageSizeField->getLabel()) ?></label>
@@ -68,6 +81,7 @@
                             <?= t("Go") ?>
                         </button>
                     </div>
+                    <input type="hidden" name="currentPage" value="<?= $currentPage ?>">
                 </div>
             </form>
         </div>

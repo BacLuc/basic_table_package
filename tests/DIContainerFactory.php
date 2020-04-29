@@ -5,6 +5,7 @@ namespace BaclucC5Crud\Test;
 
 
 use BaclucC5Crud\Adapters\Concrete5\DIContainerFactory as ProductionDefinition;
+use BaclucC5Crud\Controller\CurrentUrlSupplier;
 use BaclucC5Crud\Controller\Renderer;
 use BaclucC5Crud\Controller\Validation\DropdownFieldValidator;
 use BaclucC5Crud\Controller\Validation\FieldValidator;
@@ -14,6 +15,7 @@ use BaclucC5Crud\Entity\ExampleEntityDropdownValueSupplier;
 use BaclucC5Crud\Entity\RepositoryFactory;
 use BaclucC5Crud\FieldConfigurationOverride\EntityFieldOverrideBuilder;
 use BaclucC5Crud\Test\Adapters\DefaultContext;
+use BaclucC5Crud\Test\Adapters\DefaultCurrentUrlSupplier;
 use BaclucC5Crud\Test\Adapters\DefaultRenderer;
 use BaclucC5Crud\Test\Adapters\DefaultWysiwygEditorFactory;
 use BaclucC5Crud\Test\Entity\InMemoryRepositoryFactory;
@@ -65,6 +67,7 @@ class DIContainerFactory
         $definitions[Renderer::class] = autowire(DefaultRenderer::class);
         $definitions[WysiwygEditorFactory::class] = value(new DefaultWysiwygEditorFactory());
         $definitions[RepositoryFactory::class] = value(new InMemoryRepositoryFactory());
+        $definitions[CurrentUrlSupplier::class] = autowire(DefaultCurrentUrlSupplier::class);
 
         $containerBuilder->addDefinitions($definitions);
         return $containerBuilder->build();

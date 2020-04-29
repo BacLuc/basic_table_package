@@ -8,6 +8,7 @@ use BaclucC5Crud\Controller\ActionConfiguration;
 use BaclucC5Crud\Controller\ActionRegistry;
 use BaclucC5Crud\Controller\ActionRegistryFactory;
 use BaclucC5Crud\Controller\BlockIdSupplier;
+use BaclucC5Crud\Controller\CurrentUrlSupplier;
 use BaclucC5Crud\Controller\DefaultActionConfiguration;
 use BaclucC5Crud\Controller\DefaultRowActionConfiguration;
 use BaclucC5Crud\Controller\Renderer;
@@ -83,6 +84,7 @@ class DIContainerFactory
                 $blockId,
                 $formType);
         $definitions[BlockController::class] = value($controller);
+        $definitions[CurrentUrlSupplier::class] = autowire(Concrete5CurrentUrlSupplier::class);
         $definitions[Renderer::class] = create(Concrete5Renderer::class)->constructor($controller, $packagePath);
         $containerBuilder->addDefinitions($definitions);
         return $containerBuilder->build();

@@ -7,6 +7,7 @@ namespace BaclucC5Crud\Controller\ActionProcessors;
 use BaclucC5Crud\Controller\ActionConfiguration;
 use BaclucC5Crud\Controller\ActionProcessor;
 use BaclucC5Crud\Controller\ActionRegistryFactory;
+use BaclucC5Crud\Controller\CurrentUrlSupplier;
 use BaclucC5Crud\Controller\PaginationParser;
 use BaclucC5Crud\Controller\Renderer;
 use BaclucC5Crud\Controller\RowActionConfiguration;
@@ -41,6 +42,10 @@ class ShowTable implements ActionProcessor
      * @var PaginationParser
      */
     private $paginationParser;
+    /**
+     * @var CurrentUrlSupplier
+     */
+    private $currentUrlSupplier;
 
     public function __construct(
         TableViewService $tableViewService,
@@ -48,7 +53,8 @@ class ShowTable implements ActionProcessor
         Renderer $renderer,
         ActionConfiguration $actionConfiguration,
         RowActionConfiguration $rowActionConfiguration,
-        PaginationParser $paginationParser
+        PaginationParser $paginationParser,
+        CurrentUrlSupplier $currentUrlSupplier
     ) {
         $this->tableViewService = $tableViewService;
         $this->variableSetter = $variableSetter;
@@ -56,6 +62,7 @@ class ShowTable implements ActionProcessor
         $this->actionConfiguration = $actionConfiguration;
         $this->rowActionConfiguration = $rowActionConfiguration;
         $this->paginationParser = $paginationParser;
+        $this->currentUrlSupplier = $currentUrlSupplier;
     }
 
     function getName(): string
@@ -77,6 +84,7 @@ class ShowTable implements ActionProcessor
         $this->variableSetter->set("pageSize", $paginationConfiguration->getPageSize());
         $pageSizeField = new IntegerField("Entries to display", "pageSize", $paginationConfiguration->getPageSize());
         $this->variableSetter->set("pageSizeField", $pageSizeField);
+        $this->variableSetter->set("currentURL", $this->currentUrlSupplier->getUrl());
         $this->renderer->render(self::TABLE_VIEW);
     }
 
