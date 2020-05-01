@@ -3,14 +3,11 @@
 namespace Concrete\Package\BaclucC5Crud\Block\BaclucCrud;
 
 use BaclucC5Crud\Adapters\Concrete5\Concrete5BlockConfigController;
+use BaclucC5Crud\Adapters\Concrete5\Concrete5CrudController;
 use BaclucC5Crud\Adapters\Concrete5\DIContainerFactory;
-use BaclucC5Crud\Controller\ActionProcessor;
-use BaclucC5Crud\Controller\ActionRegistryFactory;
 use BaclucC5Crud\Controller\CrudController;
 use BaclucC5Crud\Controller\Validation\DropdownFieldValidator;
 use BaclucC5Crud\Controller\Validation\FieldValidator;
-use BaclucC5Crud\Controller\Validation\ValidationResult;
-use BaclucC5Crud\Controller\Validation\ValidationResultItem;
 use BaclucC5Crud\Entity\ExampleConfigurationEntity;
 use BaclucC5Crud\Entity\ExampleEntity;
 use BaclucC5Crud\Entity\ExampleEntityDropdownValueSupplier;
@@ -21,10 +18,7 @@ use BaclucC5Crud\View\FormView\Field as FormField;
 use BaclucC5Crud\View\TableView\DropdownField as DropdownTableField;
 use BaclucC5Crud\View\TableView\Field as TableField;
 use Concrete\Core\Block\BlockController;
-use Concrete\Core\Error\ErrorList\ErrorList;
 use Concrete\Core\Package\PackageService;
-use Concrete\Core\Page\Page;
-use Concrete\Core\Routing\Redirect;
 use Concrete\Core\Support\Facade\Application;
 use Concrete\Package\BaclucC5Crud\Controller as PackageController;
 use DI\DependencyException;
@@ -34,33 +28,17 @@ use RuntimeException;
 
 class Controller extends BlockController
 {
-    use Concrete5BlockConfigController;
+    use Concrete5BlockConfigController, Concrete5CrudController;
 
     public function __construct($obj = null)
     {
         parent::__construct($obj);
         try {
             $this->initializeConfig($this, $this->createConfigController(), $this->bID);
+            $this->initializeCrud($this, $this->createCrudController(), $this->bID);
         } catch (DependencyException | NotFoundException $e) {
             throw new RuntimeException($e);
         }
-    }
-
-    /**
-     * @throws DependencyException
-     * @throws NotFoundException
-     */
-    public function view()
-    {
-        $this->processAction($this->createCrudController()
-                                  ->getActionFor(ActionRegistryFactory::SHOW_TABLE, $this->bID));
-    }
-
-    private function processAction(ActionProcessor $actionProcessor, ...$additionalParams)
-    {
-        return $actionProcessor->process($this->request->query->all() ?: [],
-            $this->request->post(null) ?: [],
-            array_key_exists(0, $additionalParams) ? $additionalParams[0] : null);
     }
 
     /**
@@ -101,83 +79,6 @@ class Controller extends BlockController
         return $container->get(CrudController::class);
     }
 
-    /**
-     * @throws DependencyException
-     * @throws NotFoundException
-     */
-    public function action_add_new_row_form($blockId)
-    {
-        $this->processAction($this->createCrudController()
-            ->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM, $blockId));
-    }
-
-    /**
-     * @throws DependencyException
-     * @throws NotFoundException
-     */
-    public function action_edit_row_form($blockId, $editId)
-    {
-        $this->processAction($this->createCrudController()
-            ->getActionFor(ActionRegistryFactory::EDIT_ROW_FORM, $blockId),
-            $editId);
-    }
-
-    /**
-     * Attention: all action method are called twice.
-     * Because this is a form submission, we stop after the function is executed
-     * @throws DependencyException
-     * @throws NotFoundException
-     */
-    public function action_post_form($blockId, $editId = null)
-    {
-        $this->processAction($this->createCrudController()
-            ->getActionFor(ActionRegistryFactory::POST_FORM, $blockId),
-            $editId);
-        if ($this->blockViewRenderOverride == null) {
-            Redirect::page(Page::getCurrentPage())->send();
-            exit();
-        }
-    }
-
-    /**
-     * @param $ignored
-     * @param $toDeleteId
-     * @throws DependencyException
-     * @throws NotFoundException
-     */
-    public function action_delete_entry($blockId, $toDeleteId)
-    {
-        $this->processAction($this->createCrudController()
-            ->getActionFor(ActionRegistryFactory::DELETE_ENTRY, $blockId),
-            $toDeleteId);
-        if ($this->blockViewRenderOverride == null) {
-            Redirect::page(Page::getCurrentPage())->send();
-            exit();
-        }
-    }
-
-    /**
-     * @throws DependencyException
-     * @throws NotFoundException
-     */
-    public function action_cancel_form($blockId)
-    {
-        $this->processAction($this->createCrudController()
-            ->getActionFor(ActionRegistryFactory::SHOW_TABLE, $blockId));
-    }
-
-    /**
-     * @param $ignored
-     * @param $toShowId
-     * @throws DependencyException
-     * @throws NotFoundException
-     */
-    public function action_show_details($blockId, $toShowId)
-    {
-        $this->processAction($this->createCrudController()
-            ->getActionFor(ActionRegistryFactory::SHOW_ENTRY_DETAILS, $blockId),
-            $toShowId);
-    }
     /**
      * @return CrudController
      * @throws DependencyException
