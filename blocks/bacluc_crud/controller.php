@@ -2,6 +2,7 @@
 
 namespace Concrete\Package\BaclucC5Crud\Block\BaclucCrud;
 
+use BaclucC5Crud\Adapters\Concrete5\Concrete5BlockConfigController;
 use BaclucC5Crud\Adapters\Concrete5\DIContainerFactory;
 use BaclucC5Crud\Controller\ActionProcessor;
 use BaclucC5Crud\Controller\ActionRegistryFactory;
@@ -29,9 +30,21 @@ use Concrete\Package\BaclucC5Crud\Controller as PackageController;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Exception;
+use RuntimeException;
 
 class Controller extends BlockController
 {
+    use Concrete5BlockConfigController;
+
+    public function __construct($obj = null)
+    {
+        parent::__construct($obj);
+        try {
+            $this->initializeConfig($this, $this->createConfigController(), $this->bID);
+        } catch (DependencyException | NotFoundException $e) {
+            throw new RuntimeException($e);
+        }
+    }
 
     /**
      * @throws DependencyException
@@ -65,13 +78,13 @@ class Controller extends BlockController
         $dropdownField = "dropdowncolumn";
         $valueSupplier = new ExampleEntityDropdownValueSupplier();
         $entityFieldOverrides->forField($dropdownField)
-                             ->forType(FormField::class)
-                             ->useFactory(DropdownField::createDropdownField($dropdownField, $valueSupplier))
-                             ->forType(TableField::class)
-                             ->useFactory(DropdownTableField::createDropdownField($valueSupplier))
-                             ->forType(FieldValidator::class)
-                             ->useFactory(DropdownFieldValidator::createDropdownFieldValidator($valueSupplier))
-                             ->buildField();
+            ->forType(FormField::class)
+            ->useFactory(DropdownField::createDropdownField($dropdownField, $valueSupplier))
+            ->forType(TableField::class)
+            ->useFactory(DropdownTableField::createDropdownField($valueSupplier))
+            ->forType(FieldValidator::class)
+            ->useFactory(DropdownFieldValidator::createDropdownFieldValidator($valueSupplier))
+            ->buildField();
 
         $app = Application::getFacadeApplication();
         /** @var PackageController $packageController */
@@ -95,7 +108,7 @@ class Controller extends BlockController
     public function action_add_new_row_form($blockId)
     {
         $this->processAction($this->createCrudController()
-                                  ->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM, $blockId));
+            ->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM, $blockId));
     }
 
     /**
@@ -105,7 +118,7 @@ class Controller extends BlockController
     public function action_edit_row_form($blockId, $editId)
     {
         $this->processAction($this->createCrudController()
-                                  ->getActionFor(ActionRegistryFactory::EDIT_ROW_FORM, $blockId),
+            ->getActionFor(ActionRegistryFactory::EDIT_ROW_FORM, $blockId),
             $editId);
     }
 
@@ -118,7 +131,7 @@ class Controller extends BlockController
     public function action_post_form($blockId, $editId = null)
     {
         $this->processAction($this->createCrudController()
-                                  ->getActionFor(ActionRegistryFactory::POST_FORM, $blockId),
+            ->getActionFor(ActionRegistryFactory::POST_FORM, $blockId),
             $editId);
         if ($this->blockViewRenderOverride == null) {
             Redirect::page(Page::getCurrentPage())->send();
@@ -135,7 +148,7 @@ class Controller extends BlockController
     public function action_delete_entry($blockId, $toDeleteId)
     {
         $this->processAction($this->createCrudController()
-                                  ->getActionFor(ActionRegistryFactory::DELETE_ENTRY, $blockId),
+            ->getActionFor(ActionRegistryFactory::DELETE_ENTRY, $blockId),
             $toDeleteId);
         if ($this->blockViewRenderOverride == null) {
             Redirect::page(Page::getCurrentPage())->send();
@@ -150,7 +163,7 @@ class Controller extends BlockController
     public function action_cancel_form($blockId)
     {
         $this->processAction($this->createCrudController()
-                                  ->getActionFor(ActionRegistryFactory::SHOW_TABLE, $blockId));
+            ->getActionFor(ActionRegistryFactory::SHOW_TABLE, $blockId));
     }
 
     /**
@@ -162,83 +175,9 @@ class Controller extends BlockController
     public function action_show_details($blockId, $toShowId)
     {
         $this->processAction($this->createCrudController()
-                                  ->getActionFor(ActionRegistryFactory::SHOW_ENTRY_DETAILS, $blockId),
+            ->getActionFor(ActionRegistryFactory::SHOW_ENTRY_DETAILS, $blockId),
             $toShowId);
     }
-
-    /**
-     * @throws DependencyException
-     * @throws NotFoundException
-     */
-    public function add()
-    {
-        $this->processAction($this->createConfigController()
-                                  ->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM, $this->bID));
-    }
-
-    /**
-     * @throws DependencyException
-     * @throws NotFoundException
-     */
-    public function edit()
-    {
-        $this->processAction($this->createConfigController()
-                                  ->getActionFor(ActionRegistryFactory::EDIT_ROW_FORM, $this->bID),
-            $this->bID);
-    }
-
-    /**
-     * @param array|string|null $args
-     * @return bool|ErrorList|void
-     * @throws DependencyException
-     * @throws NotFoundException
-     */
-    public function validate($args)
-    {
-
-        /** @var $validationResult ValidationResult */
-        $validationResult = $this->processAction($this->createConfigController()
-                                                      ->getActionFor(ActionRegistryFactory::VALIDATE_FORM,
-                                                          $this->bID),
-            $this->bID);
-        /** @var $e ErrorList */
-        $e = $this->app->make(ErrorList::class);
-        foreach ($validationResult as $validationResultItem) {
-            /** @var $validationResultItem ValidationResultItem */
-            foreach ($validationResultItem->getMessages() as $message) {
-                $e->add($validationResultItem->getName() . ": " . $message,
-                    $validationResultItem->getName(),
-                    $validationResultItem->getName());
-            }
-        }
-        return $e;
-    }
-
-    /**
-     * @param array $args
-     * @throws DependencyException
-     * @throws NotFoundException
-     */
-    public function save($args)
-    {
-        parent::save($args);
-        $this->processAction($this->createConfigController()
-                                  ->getActionFor(ActionRegistryFactory::POST_FORM, $this->bID),
-            $this->bID);
-    }
-
-    /**
-     * @throws DependencyException
-     * @throws NotFoundException
-     */
-    public function delete()
-    {
-        parent::delete();
-        $this->processAction($this->createConfigController()
-                                  ->getActionFor(ActionRegistryFactory::DELETE_ENTRY, $this->bID),
-            $this->bID);
-    }
-
     /**
      * @return CrudController
      * @throws DependencyException
@@ -254,13 +193,13 @@ class Controller extends BlockController
         $dropdownField = "dropdowncolumn";
         $valueSupplier = new ExampleEntityDropdownValueSupplier();
         $entityFieldOverrides->forField($dropdownField)
-                             ->forType(FormField::class)
-                             ->useFactory(DropdownField::createDropdownField($dropdownField, $valueSupplier))
-                             ->forType(TableField::class)
-                             ->useFactory(DropdownTableField::createDropdownField($valueSupplier))
-                             ->forType(FieldValidator::class)
-                             ->useFactory(DropdownFieldValidator::createDropdownFieldValidator($valueSupplier))
-                             ->buildField();
+            ->forType(FormField::class)
+            ->useFactory(DropdownField::createDropdownField($dropdownField, $valueSupplier))
+            ->forType(TableField::class)
+            ->useFactory(DropdownTableField::createDropdownField($valueSupplier))
+            ->forType(FieldValidator::class)
+            ->useFactory(DropdownFieldValidator::createDropdownFieldValidator($valueSupplier))
+            ->buildField();
 
         $app = Application::getFacadeApplication();
         /** @var PackageController $packageController */
