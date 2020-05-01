@@ -5,7 +5,6 @@ namespace BaclucC5Crud\Adapters\Concrete5;
 
 
 use BaclucC5Crud\Controller\ActionRegistryFactory;
-use BaclucC5Crud\Controller\CrudController;
 use BaclucC5Crud\Controller\Validation\ValidationResult;
 use BaclucC5Crud\Controller\Validation\ValidationResultItem;
 use Concrete\Core\Block\BlockController;
@@ -20,13 +19,13 @@ trait Concrete5BlockConfigController
      */
     private $blockController;
     /**
-     * @var CrudController
+     * @var callable
      */
     private $crudController;
 
     private $blockId;
 
-    private function initializeConfig($blockController, $crudController, $blockId)
+    private function initializeConfig($blockController, callable $crudController, $blockId)
     {
         $this->blockController = $blockController;
         $this->crudController = $crudController;
@@ -40,7 +39,7 @@ trait Concrete5BlockConfigController
     public function add()
     {
         ProcessAction::processAction($this->blockController,
-            $this->crudController
+            call_user_func($this->crudController)
                 ->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM, $this->blockId));
     }
 
@@ -51,7 +50,7 @@ trait Concrete5BlockConfigController
     public function edit()
     {
         ProcessAction::processAction($this->blockController,
-            $this->crudController
+            call_user_func($this->crudController)
                 ->getActionFor(ActionRegistryFactory::EDIT_ROW_FORM, $this->blockId));
     }
 
@@ -66,7 +65,7 @@ trait Concrete5BlockConfigController
 
         /** @var $validationResult ValidationResult */
         $validationResult = ProcessAction::processAction($this->blockController,
-            $this->crudController
+            call_user_func($this->crudController)
                 ->getActionFor(ActionRegistryFactory::VALIDATE_FORM, $this->blockId),
             $this->blockId);
         /** @var $e ErrorList */
@@ -91,7 +90,7 @@ trait Concrete5BlockConfigController
     {
         parent::save($args);
         ProcessAction::processAction($this->blockController,
-            $this->crudController
+            call_user_func($this->crudController)
                 ->getActionFor(ActionRegistryFactory::POST_FORM, $this->blockId),
             $this->blockId);
     }
@@ -104,7 +103,7 @@ trait Concrete5BlockConfigController
     {
         parent::delete();
         ProcessAction::processAction($this->blockController,
-            $this->crudController
+            call_user_func($this->crudController)
                 ->getActionFor(ActionRegistryFactory::DELETE_ENTRY, $this->blockId),
             $this->blockId);
     }

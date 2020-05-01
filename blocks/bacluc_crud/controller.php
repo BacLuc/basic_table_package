@@ -24,7 +24,6 @@ use Concrete\Package\BaclucC5Crud\Controller as PackageController;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Exception;
-use RuntimeException;
 
 class Controller extends BlockController
 {
@@ -33,12 +32,8 @@ class Controller extends BlockController
     public function __construct($obj = null)
     {
         parent::__construct($obj);
-        try {
-            $this->initializeConfig($this, $this->createConfigController(), $this->bID);
-            $this->initializeCrud($this, $this->createCrudController(), $this->bID);
-        } catch (DependencyException | NotFoundException $e) {
-            throw new RuntimeException($e);
-        }
+        $this->initializeConfig($this, [$this, "createConfigController"], $this->bID);
+        $this->initializeCrud($this, [$this, "createCrudController"], $this->bID);
     }
 
     /**
