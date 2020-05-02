@@ -1,4 +1,6 @@
-<?php /** @noinspection ALL */ ?>
+<?php /** @noinspection ALL */
+$maxPageNum = floor($count / $pageSize);
+?>
 <div class="table-responsive bacluc_c5_crud">
     <div class="tablecontrols">
         <?php foreach ($actions as $action) { ?>
@@ -50,21 +52,49 @@
         <?php } ?>
         </tbody>
     </table>
-    <div class="row">
-        <div class="col-xs-12 col-sm-6 col-md-4">
-            <nav>
-                <ul class="pagination col-xs-9 pull-right">
-                    <?php for ($i = 0; $i * $pageSize < $count; $i++) { ?>
-                        <li class="page-item"><a class="page-link <?= $i == $currentPage ? "active" : "" ?>"
-                                                 href="<?= $currentURL .
-                                                           "?pageSize=$pageSize&currentPage=$i" ?>">
-                                <?= $i + 1 ?></a>
-                        </li>
-                    <?php } ?>
-                </ul>
-            </nav>
+    <div>
+        <div class="col-xs-12 col-sm-6">
+            <ul class="pagination">
+                <li class="page-item <?= $currentPage == 0 ? "disabled" : "" ?>">
+                    <a href="<?= $currentURL . "?pageSize=$pageSize&currentPage=0" ?>"
+                       aria-label="<?= t('First') ?>">
+                        <span aria-hidden="true">«</span>
+                    </a>
+                </li>
+                <li class="page-item <?= $currentPage == 0 ? "disabled" : "" ?>">
+                    <a href="<?= $currentURL . "?pageSize=$pageSize&currentPage=" . ($currentPage - 1) ?>"
+                       aria-label="<?= t('Previous') ?>">
+                        <span aria-hidden="true">&lt;</span>
+                    </a>
+                </li>
+                <?php for ($i = max(0, $currentPage - 3); $i <= min(($currentPage + 3), $maxPageNum); $i++) { ?>
+
+                    <li class="page-item <?= $currentPage == $i ? "disabled" : "" ?>"><a
+                                class="page-link <?= $i == $currentPage ? "active" : "" ?>"
+                                href="<?= $currentURL .
+                                          "?pageSize=$pageSize&currentPage=$i" ?>">
+                            <?= $i + 1 ?></a>
+                    </li>
+                <?php } ?>
+                <li class="page-item <?= $currentPage == $maxPageNum ? "disabled" : "" ?>">
+                    <a href="<?= $currentURL .
+                                 "?pageSize=$pageSize&currentPage=" .
+                                 ($currentPage +
+                                  1) ?>"
+                       aria-label="<?= t('Next') ?>">
+                        <span aria-hidden="true">&gt;</span>
+                    </a>
+                </li>
+                <li class="page-item<?= $currentPage == $maxPageNum ? "disabled" : "" ?>">
+                    <a href="<?= $currentURL .
+                                 "?pageSize=$pageSize&currentPage=$maxPageNum" ?>"
+                       aria-label="<?= t('Last') ?>">
+                        <span aria-hidden="true">»</span>
+                    </a>
+                </li>
+            </ul>
         </div>
-        <div class="col-xs-12 col-sm-6 col-md-4 pull-right">
+        <div class="col-xs-12 col-sm-6">
             <form method="get" action="<?= $currentURL ?>">
                 <div>
                     <div class="col-xs-12 col-md-5">
