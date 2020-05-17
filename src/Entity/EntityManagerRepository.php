@@ -38,14 +38,19 @@ class EntityManagerRepository implements Repository, ConfigurationRepository
         });
     }
 
-    public function getAll(int $offset = 0, int $limit = null)
+    public function getAll(int $offset = 0, int $limit = null, array $orderEntries = [])
     {
         $qb = $this->entityManager->createQueryBuilder();
-        $query = $qb->select("e")
-                    ->from($this->className, "e")
-                    ->setFirstResult($offset)
-                    ->setMaxResults($limit)
-                    ->getQuery();
+        $unorderedQuery = $qb->select("e")
+                             ->from($this->className, "e")
+                             ->setFirstResult($offset)
+                             ->setMaxResults($limit);
+        /** @var OrderConfigEntry $entry */
+        foreach ($orderEntries as $entry) {
+            $unorderedQuery = $unorderedQuery->addOrderBy($entry->getSqlFieldName(), $entry->isAsc() ? 'ASC' : 'DESC');
+        }
+        $query = $unorderedQuery
+            ->getQuery();
         return $query->getResult();
     }
 
