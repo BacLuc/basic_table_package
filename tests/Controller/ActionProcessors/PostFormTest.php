@@ -38,8 +38,8 @@ class PostFormTest extends TestCase
         $secondPostArray = [
             "value"          => "changed_value",
             "intcolumn"      => 203498,
-            "datecolumn"     => '2020-12-13',
-            "datetimecolumn" => '2020-12-13 18:43',
+            "datecolumn"     => '13.12.2020',
+            "datetimecolumn" => '13.12.2020 18:43',
             "wysiwygcolumn"  => BigTestValues::WYSIWYGVALUE2,
             "dropdowncolumn" => ExampleEntityDropdownValueSupplier::KEY_6,
             "manyToOne"      => ExampleEntityConstants::REFERENCED_ENTITY_ID_2,

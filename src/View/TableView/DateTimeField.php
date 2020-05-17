@@ -24,6 +24,6 @@ class DateTimeField implements Field
 
     public function getTableView(): string
     {
-        return $this->sqlValue ? $this->sqlValue->format('Y-m-d H:i') : "";
+        return $this->sqlValue ? $this->sqlValue->format('d.m.Y H:i') : "";
     }
 }
