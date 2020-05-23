@@ -4,8 +4,13 @@
     "php-di/php-di": "6.*",
     "tightenco/collect": "6.0.*",
     "php-ds/php-ds": "1.2.*",
-    "doctrine/dbal": "~2.5",
+    "doctrine/annotations": "1.2.7",
+    "doctrine/common": "2.6.2",
+    "doctrine/dbal": "2.5.13",
+    "doctrine/instantiator": "1.0.5",
     "doctrine/lexer": "1.0.*",
+    "doctrine/migrations": "1.5.0",
+    "doctrine/orm": "2.5.14",
     "symfony/inflector": "4.4.*"
   },
   "require-dev": {
