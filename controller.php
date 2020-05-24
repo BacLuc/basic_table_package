@@ -60,6 +60,7 @@ class Controller extends Package
 
     public function install()
     {
+        require_once $this->getPackagePath() . '/vendor/autoload.php';
         $em = $this->getEntityManager();
         //begin transaction, so when block install fails, but parent::install was successfully, you don't have to uninstall the package
         $em->getConnection()->beginTransaction();
@@ -113,6 +114,11 @@ class Controller extends Package
 
             throw $e;
         }
+    }
+
+    public function on_start()
+    {
+        require_once $this->getPackagePath() . '/vendor/autoload.php';
     }
 
 
