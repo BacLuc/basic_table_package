@@ -20,8 +20,8 @@ class RepositoryValueSupplier implements ValueSupplier
     function getValues(): array
     {
         return collect($this->repository->getAll())
-            ->keyBy(function ($value) {
-                return $value->id;
+            ->keyBy(function (Identifiable $value) {
+                return $value->getId();
             })
             ->toArray();
     }

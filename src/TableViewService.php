@@ -5,6 +5,7 @@ namespace BaclucC5Crud;
 
 
 use BaclucC5Crud\Controller\PaginationConfiguration;
+use BaclucC5Crud\Entity\Identifiable;
 use BaclucC5Crud\Entity\TableViewEntrySupplier;
 use BaclucC5Crud\View\TableView\Field;
 use BaclucC5Crud\View\TableView\Row;
@@ -50,8 +51,8 @@ class TableViewService
         $tableView = new TableView($headers, [], 0);
         if ($result != null) {
             $rows = collect($result)
-                ->keyBy(function ($entity) {
-                    return $entity->id;
+                ->keyBy(function (Identifiable $entity) {
+                    return $entity->getId();
                 })
                 ->map(function ($entity) {
                     return collect($this->tableViewFieldConfiguration)

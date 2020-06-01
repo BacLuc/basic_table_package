@@ -31,7 +31,7 @@ class EntityManagerRepository implements Repository, ConfigurationRepository
         return new $this->className();
     }
 
-    public function persist($entity)
+    public function persist(Identifiable $entity)
     {
         $this->entityManager->transactional(function (EntityManager $em) use ($entity) {
             $em->persist($entity);
@@ -57,16 +57,17 @@ class EntityManagerRepository implements Repository, ConfigurationRepository
     public function getById(int $id)
     {
         $qb = $this->entityManager->createQueryBuilder();
+        $idFieldName = call_user_func($this->className . '::getIdFieldName');
         $result = $qb->select("e")
                      ->from($this->className, "e")
-                     ->where($qb->expr()->eq("e.id", ":id"))
+                     ->where($qb->expr()->eq("e." . $idFieldName, ":id"))
                      ->setParameter(":id", $id)
                      ->getQuery()
                      ->getResult();
         return $result != null && is_array($result) && array_key_exists(0, $result) ? $result[0] : null;
     }
 
-    public function delete($toDeleteEntity)
+    public function delete(Identifiable $toDeleteEntity)
     {
         $this->entityManager->transactional(function (EntityManager $em) use ($toDeleteEntity) {
             $em->remove($toDeleteEntity);

@@ -3,6 +3,7 @@
 
 namespace BaclucC5Crud\Test\Entity;
 
+use BaclucC5Crud\Entity\Identifiable;
 use BaclucC5Crud\Lib\GetterTrait;
 use BaclucC5Crud\Lib\SetterTrait;
 use Doctrine\Common\Annotations\Annotation\IgnoreAnnotation;
@@ -22,9 +23,10 @@ use Doctrine\ORM\Mapping\Table;
  * @Entity
  * @Table(name="btExampleEntity")
  */
-class SomeEntity
+class SomeEntity implements Identifiable
 {
     use GetterTrait, SetterTrait;
+
     /**
      * @var int
      * @Id @Column(type="integer")
@@ -73,5 +75,20 @@ class SomeEntity
     public function __construct()
     {
         $this->manyToMany = new ArrayCollection();
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id)
+    {
+        $this->id = $id;
+    }
+
+    public static function getIdFieldName(): string
+    {
+        return "id";
     }
 }

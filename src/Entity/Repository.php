@@ -8,7 +8,7 @@ interface Repository
 {
     public function create();
 
-    public function persist($entity);
+    public function persist(Identifiable $entity);
 
     /**
      * @param int $offset
@@ -20,7 +20,7 @@ interface Repository
 
     public function getById(int $id);
 
-    public function delete($toDeleteEntity);
+    public function delete(Identifiable $toDeleteEntity);
 
     public function count();
 }

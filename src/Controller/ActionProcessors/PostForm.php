@@ -12,6 +12,7 @@ use BaclucC5Crud\Controller\Validation\Validator;
 use BaclucC5Crud\Controller\ValuePersisters\FieldPersistor;
 use BaclucC5Crud\Controller\ValuePersisters\PersistorConfiguration;
 use BaclucC5Crud\Controller\VariableSetter;
+use BaclucC5Crud\Entity\Identifiable;
 use BaclucC5Crud\Entity\Repository;
 use BaclucC5Crud\FormViewAfterValidationFailedService;
 use BaclucC5Crud\View\CancelFormViewAction;
@@ -113,6 +114,7 @@ class PostForm implements ActionProcessor
                 ->map(function (ValidationResultItem $validationResultItem) {
                     return $validationResultItem->getPostValue();
                 });
+            /** @var $entity Identifiable */
             if ($editId != null) {
                 $entity = $this->repository->getById($editId);
                 if ($entity === null && $this->formType === FormType::$BLOCK_CONFIGURATION) {
@@ -122,7 +124,7 @@ class PostForm implements ActionProcessor
                 $entity = $this->repository->create();
             }
             if ($this->formType === FormType::$BLOCK_CONFIGURATION) {
-                $entity->id = $editId;
+                $entity->setId($editId);
             }
             /**
              * @var FieldPersistor $persistor

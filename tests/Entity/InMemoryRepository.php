@@ -5,6 +5,7 @@ namespace BaclucC5Crud\Test\Entity;
 
 
 use BaclucC5Crud\Entity\ConfigurationRepository;
+use BaclucC5Crud\Entity\Identifiable;
 use BaclucC5Crud\Entity\Repository;
 use function BaclucC5Crud\Lib\collect as collect;
 
@@ -34,17 +35,17 @@ class InMemoryRepository implements Repository, ConfigurationRepository
         return new $this->classname();
     }
 
-    public function persist($entity)
+    public function persist(Identifiable $entity)
     {
-        $foundEntity = $this->entites->first(function ($persistedEntity) use ($entity) {
-            return $persistedEntity->id === $entity->id;
+        $foundEntity = $this->entites->first(function (Identifiable $persistedEntity) use ($entity) {
+            return $persistedEntity->getId() === $entity->getId();
         });
         if ($foundEntity != null) {
             return;
         }
 
-        if ($entity->id == null) {
-            $entity->id = ++$this->autoIncrement;
+        if ($entity->getId() == null) {
+            $entity->setId(++$this->autoIncrement);
         }
         $this->entites = $this->entites->add($entity);
     }
@@ -56,15 +57,15 @@ class InMemoryRepository implements Repository, ConfigurationRepository
 
     public function getById(int $id)
     {
-        return $this->entites->first(function ($entity) use ($id) {
-            return $entity->id === $id;
+        return $this->entites->first(function (Identifiable $entity) use ($id) {
+            return $entity->getId() === $id;
         });
     }
 
-    public function delete($toDeleteEntity)
+    public function delete(Identifiable $toDeleteEntity)
     {
-        $this->entites = $this->entites->filter(function ($entity) use ($toDeleteEntity) {
-            return $entity->id !== $toDeleteEntity->id;
+        $this->entites = $this->entites->filter(function (Identifiable $entity) use ($toDeleteEntity) {
+            return $entity->getId() !== $toDeleteEntity->getId();
         });
     }
 

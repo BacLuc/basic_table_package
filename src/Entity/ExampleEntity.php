@@ -23,9 +23,10 @@ use Doctrine\ORM\Mapping\Table;
  * @Entity
  * @Table(name="btExampleEntity")
  */
-class ExampleEntity
+class ExampleEntity implements Identifiable
 {
     use GetterTrait, SetterTrait;
+
     /**
      * @var int
      * @Id @Column(type="integer")
@@ -84,4 +85,18 @@ class ExampleEntity
     }
 
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id)
+    {
+        $this->id = $id;
+    }
+
+    public static function getIdFieldName(): string
+    {
+        return "id";
+    }
 }

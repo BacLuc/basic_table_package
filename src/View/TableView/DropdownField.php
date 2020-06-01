@@ -4,6 +4,7 @@
 namespace BaclucC5Crud\View\TableView;
 
 
+use BaclucC5Crud\Entity\Identifiable;
 use BaclucC5Crud\Entity\ValueSupplier;
 
 class DropdownField implements Field
@@ -42,7 +43,8 @@ class DropdownField implements Field
         $values = $this->valueSupplier->getValues();
         $sqlValue = $this->sqlValue;
         if (is_object($sqlValue)) {
-            $sqlValue = $sqlValue->id;
+            /** @var  $sqlValue Identifiable */
+            $sqlValue = $sqlValue->getId();
         }
         return isset($values[$sqlValue]) ? $values[$sqlValue] : "";
     }

@@ -4,6 +4,8 @@
 namespace BaclucC5Crud\View\FormView\ValueTransformers;
 
 
+use BaclucC5Crud\Entity\Identifiable;
+
 class DropdownValueTransformer implements ValueTransformer
 {
 
@@ -12,6 +14,11 @@ class DropdownValueTransformer implements ValueTransformer
      */
     public function transform($persistenceValue)
     {
-        return is_object($persistenceValue) ? $persistenceValue->id : $persistenceValue;
+        if (is_object($persistenceValue)) {
+            /** @var $persistenceValue Identifiable */
+            return $persistenceValue->getId();
+        } else {
+            return $persistenceValue;
+        }
     }
 }

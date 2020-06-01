@@ -4,6 +4,7 @@
 namespace BaclucC5Crud\View\TableView;
 
 
+use BaclucC5Crud\Entity\Identifiable;
 use BaclucC5Crud\Entity\ValueSupplier;
 use BaclucC5Crud\Entity\WithUniqueStringRepresentation;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -35,9 +36,9 @@ class MultiSelectField implements Field
     {
         $values = $this->valueSupplier->getValues();
         return collect($this->sqlValue->toArray())
-            ->map(function ($value) use ($values) {
-                if (isset($values[$value->id])) {
-                    return $values[$value->id];
+            ->map(function (Identifiable $value) use ($values) {
+                if (isset($values[$value->getId()])) {
+                    return $values[$value->getId()];
                 }
                 return null;
             })
