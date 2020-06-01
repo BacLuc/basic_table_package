@@ -7,7 +7,6 @@ use BaclucC5Crud\Controller\ActionRegistryFactory;
 use BaclucC5Crud\Controller\CrudController;
 use BaclucC5Crud\Entity\ExampleEntity;
 use BaclucC5Crud\Test\DIContainerFactory;
-use DI\Container;
 use Doctrine\ORM\EntityManager;
 use PHPUnit\Framework\TestCase;
 
@@ -35,9 +34,10 @@ class DeleteEntryTest extends TestCase
     {
         /** @var EntityManager $entityManager */
         $entityManager = $this->createMock(EntityManager::class);
-        /** @var Container $container */
+        $container = DIContainerFactory::createContainer($entityManager, ExampleEntity::class);
         $this->crudController =
-            DIContainerFactory::createContainer($entityManager, ExampleEntity::class)->get(CrudController::class);
+            $container->get(CrudController::class);
+        ExampleEntityConstants::addReferencedEntityTestValues($container);
         $this->crudController->getActionFor(ActionRegistryFactory::POST_FORM, "0")
                              ->process([], ExampleEntityConstants::ENTRY_1_POST);
     }
