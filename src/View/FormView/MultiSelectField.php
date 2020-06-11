@@ -5,7 +5,9 @@ namespace BaclucC5Crud\View\FormView;
 
 
 use BaclucC5Crud\Entity\ValueSupplier;
+use BaclucC5Crud\Entity\WithUniqueStringRepresentation;
 use Doctrine\Common\Collections\ArrayCollection;
+use function BaclucC5Crud\Lib\collect as collect;
 
 class MultiSelectField implements Field
 {
@@ -53,10 +55,15 @@ class MultiSelectField implements Field
     public function getFormView(): string
     {
 
+        $values = $this->valueSupplier->getValues();
+        $values = collect($values)
+            ->map(function (WithUniqueStringRepresentation $value) {
+                return $value->createUniqueString();
+            });
         $variables = array(
             "postname" => $this->postname,
             "sqlValue" => $this->value,
-            "options"  => $this->valueSupplier->getValues(),
+            "options"  => $values,
         );
         extract($variables);
         ob_start();
