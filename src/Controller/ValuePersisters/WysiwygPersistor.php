@@ -4,7 +4,7 @@
 namespace BaclucC5Crud\Controller\ValuePersisters;
 
 
-class TextFieldPersistor implements FieldPersistor
+class WysiwygPersistor implements FieldPersistor
 {
     /**
      * @var string
@@ -21,7 +21,7 @@ class TextFieldPersistor implements FieldPersistor
 
     public function persist($valueMap, $toEntity)
     {
-        $toEntity->{$this->name} = htmlspecialchars($valueMap[$this->name]);
+        $toEntity->{$this->name} = $valueMap[$this->name];
     }
 
 }

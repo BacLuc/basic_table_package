@@ -53,9 +53,10 @@ class PersistorConfigurationFactory
         }
         switch ($persistenceFieldType->getType()) {
             case PersistenceFieldTypes::STRING:
-            case PersistenceFieldTypes::TEXT:
             case PersistenceFieldTypes::INTEGER:
                 return new TextFieldPersistor($key);
+            case PersistenceFieldTypes::TEXT:
+                return new WysiwygPersistor($key);
             case PersistenceFieldTypes::DATE:
                 return new DatePersistor($key);
             case PersistenceFieldTypes::DATETIME:
