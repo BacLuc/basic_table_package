@@ -1,4 +1,5 @@
 <?php /** @noinspection ALL */ ?>
+<div class="bacluc_c5_crud">
 <?php if ($addFormTags) { ?>
     <form action="<?php echo $this->action($submitFormAction->getAction()) .
                              (isset($editId) && $editId != null ? "/$editId" :
@@ -30,19 +31,20 @@
     </div>
 <?php } ?>
 <?php if ($addFormTags) { ?>
-    <div class="row">
-        <div class="col-xs-6 col-sm-2">
-            <button type="submit" class="btn ccm-input-submit btn-primary btn-block" name="submit"
-                    value="save"><?= t("save") ?></button>
-        </div>
-        <div class="col-xs-6 col-sm-2">
-            <a href="<?php echo $this->action($cancelFormAction->getAction()) ?>">
-                <button type="button" class="btn ccm-input-submit ccm-button btn-block">
-                    <?= t("cancel") ?>
-                </button>
-            </a>
+        <div class="row button-row">
+            <div class="col-xs-6 col-sm-4">
+                <button type="submit" class="btn ccm-input-submit btn-primary btn-block" name="submit"
+                        value="save"><?= t("save") ?></button>
+            </div>
+            <div class="col-xs-6 col-sm-4">
+                <a href="<?php echo $this->action($cancelFormAction->getAction()) ?>">
+                    <button type="button" class="btn ccm-input-submit ccm-button btn-block">
+                        <?= t("cancel") ?>
+                    </button>
+                </a>
 
+            </div>
         </div>
-    </div>
     </form>
 <?php } ?>
+</div>
