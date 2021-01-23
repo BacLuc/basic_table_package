@@ -1,6 +1,5 @@
 <?php
 
-
 namespace BaclucC5Crud\Entity;
 
 use BaclucC5Crud\Lib\GetterTrait;
@@ -15,47 +14,21 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\Table;
 
 /**
- * Class ExampleEntity
+ * Class ExampleEntity.
+ *
  * @IgnoreAnnotation("package")
  *  Concrete\Package\BaclucC5Crud\Src
  * @Entity
  * @Table(name="btExampleConfigurationEntity")
  */
-class ExampleConfigurationEntity implements Identifiable
-{
-    use GetterTrait, SetterTrait;
-    /**
-     * Id of the block the configuration references
-     * @var int
-     * @Id @Column(type="integer")
-     */
-    private $id;
-
-    /**
-     * @var string
-     * @Column(type="string")
-     */
-    private $value;
+class ExampleConfigurationEntity implements Identifiable {
+    use GetterTrait;
+    use SetterTrait;
 
     /**
      * @Column(type="integer", nullable=true)
      */
     protected $intcolumn;
-
-    /**
-     * @Column(type="date", nullable=true)
-     */
-    private $datecolumn;
-
-    /**
-     * @Column(type="datetime", nullable=true)
-     */
-    private $datetimecolumn;
-
-    /**
-     * @Column(type="text")
-     */
-    private $wysiwygcolumn;
 
     /**
      * @Column(type="string", nullable=true)
@@ -73,28 +46,51 @@ class ExampleConfigurationEntity implements Identifiable
      * @ManyToMany(targetEntity="BaclucC5Crud\Entity\ReferencedEntity")
      */
     protected $manyToMany;
+    /**
+     * Id of the block the configuration references.
+     *
+     * @var int
+     * @Id @Column(type="integer")
+     */
+    private $id;
+
+    /**
+     * @var string
+     * @Column(type="string")
+     */
+    private $value;
+
+    /**
+     * @Column(type="date", nullable=true)
+     */
+    private $datecolumn;
+
+    /**
+     * @Column(type="datetime", nullable=true)
+     */
+    private $datetimecolumn;
+
+    /**
+     * @Column(type="text")
+     */
+    private $wysiwygcolumn;
 
     /**
      * ExampleEntity constructor.
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->manyToMany = new ArrayCollection();
     }
 
-    public static function getIdFieldName(): string
-    {
-        return "id";
+    public static function getIdFieldName(): string {
+        return 'id';
     }
 
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
-    public function setId(int $id)
-    {
+    public function setId(int $id) {
         $this->id = $id;
     }
-
 }

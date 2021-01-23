@@ -1,14 +1,10 @@
 <?php
 
-
 namespace BaclucC5Crud\Entity;
-
 
 use BaclucC5Crud\Controller\BlockIdSupplier;
 
-class ConfigurationSupplier
-{
-
+class ConfigurationSupplier {
     /**
      * @var ConfigurationRepository
      */
@@ -18,14 +14,12 @@ class ConfigurationSupplier
      */
     private $blockIdSupplier;
 
-    public function __construct(ConfigurationRepository $configurationRepository, BlockIdSupplier $blockIdSupplier)
-    {
+    public function __construct(ConfigurationRepository $configurationRepository, BlockIdSupplier $blockIdSupplier) {
         $this->configurationRepository = $configurationRepository;
         $this->blockIdSupplier = $blockIdSupplier;
     }
 
-    public function getConfiguration()
-    {
+    public function getConfiguration() {
         return $this->configurationRepository->getById($this->blockIdSupplier->getBlockId());
     }
 }

@@ -1,11 +1,8 @@
 <?php
 
-
 namespace BaclucC5Crud\Entity;
 
-
-interface Identifiable
-{
+interface Identifiable {
     public function getId();
 
     public function setId(int $id);

@@ -25,30 +25,31 @@ use DI\DependencyException;
 use DI\NotFoundException;
 use Exception;
 
-class Controller extends BlockController
-{
-    use Concrete5BlockConfigController, Concrete5CrudController;
+class Controller extends BlockController {
+    use Concrete5BlockConfigController;
+    use Concrete5CrudController;
 
-    public function __construct($obj = null)
-    {
+    public function __construct($obj = null) {
         parent::__construct($obj);
-        $this->initializeConfig($this, [$this, "createConfigController"], $this->bID);
-        $this->initializeCrud($this, [$this, "createCrudController"], $this->bID);
+        $this->initializeConfig($this, [$this, 'createConfigController'], $this->bID);
+        $this->initializeCrud($this, [$this, 'createCrudController'], $this->bID);
+    }
+
+    public function getBlockTypeName() {
+        return 'bacluc_crud';
     }
 
     /**
-     * @return CrudController
      * @throws DependencyException
      * @throws NotFoundException
      * @throws Exception
      */
-    private function createCrudController(): CrudController
-    {
+    private function createCrudController(): CrudController {
         $entityManager = PackageController::getEntityManagerStatic();
         $entityClass = ExampleEntity::class;
         $entityFieldOverrides = new EntityFieldOverrideBuilder($entityClass);
 
-        $dropdownField = "dropdowncolumn";
+        $dropdownField = 'dropdowncolumn';
         $valueSupplier = new ExampleEntityDropdownValueSupplier();
         $entityFieldOverrides->forField($dropdownField)
             ->forType(FormField::class)
@@ -57,36 +58,38 @@ class Controller extends BlockController
             ->useFactory(DropdownTableField::createDropdownField($valueSupplier))
             ->forType(FieldValidator::class)
             ->useFactory(DropdownFieldValidator::createDropdownFieldValidator($valueSupplier))
-            ->buildField();
+            ->buildField()
+        ;
 
         $app = Application::getFacadeApplication();
         /** @var PackageController $packageController */
         $packageController = $app->make(PackageService::class)->getByHandle(PackageController::PACKAGE_HANDLE);
 
-        $container = DIContainerFactory::createContainer($this,
+        $container = DIContainerFactory::createContainer(
+            $this,
             $entityManager,
             $entityClass,
             ExampleConfigurationEntity::class,
             $entityFieldOverrides->build(),
             $this->bID,
             $packageController->getPackagePath(),
-            FormType::$BLOCK_VIEW);
+            FormType::$BLOCK_VIEW
+        );
+
         return $container->get(CrudController::class);
     }
 
     /**
-     * @return CrudController
      * @throws DependencyException
      * @throws NotFoundException
      * @throws Exception
      */
-    private function createConfigController(): CrudController
-    {
+    private function createConfigController(): CrudController {
         $entityManager = PackageController::getEntityManagerStatic();
         $entityClass = ExampleConfigurationEntity::class;
         $entityFieldOverrides = new EntityFieldOverrideBuilder($entityClass);
 
-        $dropdownField = "dropdowncolumn";
+        $dropdownField = 'dropdowncolumn';
         $valueSupplier = new ExampleEntityDropdownValueSupplier();
         $entityFieldOverrides->forField($dropdownField)
             ->forType(FormField::class)
@@ -95,26 +98,23 @@ class Controller extends BlockController
             ->useFactory(DropdownTableField::createDropdownField($valueSupplier))
             ->forType(FieldValidator::class)
             ->useFactory(DropdownFieldValidator::createDropdownFieldValidator($valueSupplier))
-            ->buildField();
+            ->buildField()
+        ;
 
         $app = Application::getFacadeApplication();
         /** @var PackageController $packageController */
         $packageController = $app->make(PackageService::class)->getByHandle(PackageController::PACKAGE_HANDLE);
-        $container = DIContainerFactory::createContainer($this,
+        $container = DIContainerFactory::createContainer(
+            $this,
             $entityManager,
             $entityClass,
-            "",
+            '',
             $entityFieldOverrides->build(),
             $this->bID,
             $packageController->getPackagePath(),
-            FormType::$BLOCK_CONFIGURATION);
+            FormType::$BLOCK_CONFIGURATION
+        );
+
         return $container->get(CrudController::class);
     }
-
-    public function getBlockTypeName()
-    {
-        return "bacluc_crud";
-    }
-
-
 }

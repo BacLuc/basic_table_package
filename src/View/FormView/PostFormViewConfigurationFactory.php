@@ -1,18 +1,14 @@
 <?php
 
-
 namespace BaclucC5Crud\View\FormView;
-
 
 use BaclucC5Crud\FieldConfigurationOverride\EntityFieldOverrides;
 use BaclucC5Crud\FieldTypeDetermination\PersistenceFieldTypeReader;
+use function BaclucC5Crud\Lib\collect as collect;
 use BaclucC5Crud\View\FormView\ValueTransformers\IdentityValueTransformer;
 use BaclucC5Crud\View\FormView\ValueTransformers\PostValueTransformerConfiguration;
-use function BaclucC5Crud\Lib\collect as collect;
 
-class PostFormViewConfigurationFactory
-{
-
+class PostFormViewConfigurationFactory {
     /**
      * @var EntityFieldOverrides
      */
@@ -22,12 +18,6 @@ class PostFormViewConfigurationFactory
      */
     private $formViewConfigurationFactory;
 
-    /**
-     * @param PersistenceFieldTypeReader $persistenceFieldTypeReader
-     * @param WysiwygEditorFactory $wysiwygEditorFactory
-     * @param EntityFieldOverrides $entityFieldOverrides
-     * @param PostValueTransformerConfiguration $valueTransformerConfiguration
-     */
     public function __construct(
         PersistenceFieldTypeReader $persistenceFieldTypeReader,
         WysiwygEditorFactory $wysiwygEditorFactory,
@@ -35,26 +25,28 @@ class PostFormViewConfigurationFactory
         PostValueTransformerConfiguration $valueTransformerConfiguration
     ) {
         $this->entityFieldOverrides = $entityFieldOverrides;
-        $this->formViewConfigurationFactory = new FormViewConfigurationFactory($persistenceFieldTypeReader,
+        $this->formViewConfigurationFactory = new FormViewConfigurationFactory(
+            $persistenceFieldTypeReader,
             $wysiwygEditorFactory,
             $this->entityFieldOverrides,
-            $valueTransformerConfiguration);
+            $valueTransformerConfiguration
+        );
     }
 
-    public function createConfiguration(): FormViewFieldConfiguration
-    {
+    public function createConfiguration(): FormViewFieldConfiguration {
         $formViewFieldConfiguration = $this->formViewConfigurationFactory->createConfiguration();
         $fieldTypes =
             collect($formViewFieldConfiguration)
                 ->map(function ($existingFactory, $key) {
-                    if (isset($this->entityFieldOverrides[$key]) &&
-                        isset($this->entityFieldOverrides[$key][Field::class])) {
+                    if (isset($this->entityFieldOverrides[$key], $this->entityFieldOverrides[$key][Field::class])
+                        ) {
                         return $this->entityFieldOverrides[$key][Field::class](new IdentityValueTransformer());
-                    } else {
-                        return $existingFactory;
                     }
-                });
+
+                    return $existingFactory;
+                })
+            ;
+
         return new FormViewFieldConfiguration($fieldTypes->toArray());
     }
-
 }

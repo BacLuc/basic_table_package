@@ -1,11 +1,8 @@
 <?php
 
-
 namespace BaclucC5Crud\FieldTypeDetermination;
 
-
-interface PersistenceFieldType
-{
+interface PersistenceFieldType {
     public function getType(): string;
 
     /**

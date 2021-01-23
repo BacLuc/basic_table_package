@@ -1,14 +1,11 @@
 <?php
 
-
 namespace BaclucC5Crud\View;
 
-
-use Tightenco\Collect\Support\Collection;
 use function BaclucC5Crud\Lib\collect as collect;
+use Tightenco\Collect\Support\Collection;
 
-class ViewActionRegistry
-{
+class ViewActionRegistry {
     /**
      * @var Collection
      */
@@ -16,27 +13,23 @@ class ViewActionRegistry
 
     /**
      * ActionRegistry constructor.
+     *
      * @param ViewActionDefinition[] $actions
      */
-    public function __construct(array $actions)
-    {
+    public function __construct(array $actions) {
         $this->actions = collect($actions)->keyBy(function (ViewActionDefinition $item) {
             return $item->getAction();
         });
     }
 
     /**
-     * @param String $name
-     * @return ViewActionDefinition|null
+     * @return null|ViewActionDefinition
      */
-    public function getByName(String $name): ViewActionDefinition
-    {
+    public function getByName(string $name): ViewActionDefinition {
         return $this->actions->get($name);
     }
 
-    public function getActions() : array {
+    public function getActions(): array {
         return $this->actions->toArray();
     }
-
-
 }

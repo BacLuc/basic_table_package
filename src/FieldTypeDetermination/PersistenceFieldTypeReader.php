@@ -1,19 +1,16 @@
 <?php
 
-
 namespace BaclucC5Crud\FieldTypeDetermination;
 
-
+use function BaclucC5Crud\Lib\collect as collect;
 use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\Mapping\Annotation;
 use ReflectionClass;
 use ReflectionProperty;
 use Tightenco\Collect\Support\Collection;
-use function BaclucC5Crud\Lib\collect as collect;
 
-class PersistenceFieldTypeReader
-{
+class PersistenceFieldTypeReader {
     /**
      * @var string
      */
@@ -23,18 +20,15 @@ class PersistenceFieldTypeReader
      */
     private $persistenceFieldTypeHandlers;
 
-    public function __construct(string $className, array $persistenceFieldTypeHandlers)
-    {
+    public function __construct(string $className, array $persistenceFieldTypeHandlers) {
         $this->className = $className;
         $this->persistenceFieldTypeHandlers = $persistenceFieldTypeHandlers;
     }
 
     /**
-     * @return array
      * @throws \RuntimeException
      */
-    public function getPersistenceFieldTypes(): array
-    {
+    public function getPersistenceFieldTypes(): array {
         try {
             $annotationReader = new AnnotationReader();
             $entity = new $this->className();
@@ -42,13 +36,14 @@ class PersistenceFieldTypeReader
         } catch (\ReflectionException | AnnotationException $e) {
             throw new \RuntimeException($e);
         }
+
         return
             collect($reflectionClass->getProperties())
                 ->keyBy(function (ReflectionProperty $reflectionProperty) {
                     return $reflectionProperty->getName();
                 })
                 ->filter(function ($__, $key) {
-                    return $key !== "id";
+                    return 'id' !== $key;
                 })
                 ->map(function (ReflectionProperty $reflectionProperty) use ($annotationReader) {
                     return $annotationReader->getPropertyAnnotations($reflectionProperty);
@@ -56,19 +51,20 @@ class PersistenceFieldTypeReader
                 ->map(function (array $propertyAnnotations) {
                     return collect($propertyAnnotations)->filter(function (Annotation $annotation) {
                         return collect($this->persistenceFieldTypeHandlers)
-                                   ->filter(function (PersistenceFieldTypeHandler $handler) use ($annotation) {
-                                       return $handler->canHandle($annotation);
-                                   })->count() > 0;
+                            ->filter(function (PersistenceFieldTypeHandler $handler) use ($annotation) {
+                                return $handler->canHandle($annotation);
+                            })->count() > 0;
                     });
                 })
                 ->map(function (Collection $propertyAnnotations) {
                     return collect($propertyAnnotations)
                         ->map(function (Annotation $annotation) {
-                            /**@var PersistenceFieldTypeHandler $handler */
+                            // @var PersistenceFieldTypeHandler $handler
                             $handler = collect($this->persistenceFieldTypeHandlers)
                                 ->filter(function (PersistenceFieldTypeHandler $handler) use ($annotation) {
                                     return $handler->canHandle($annotation);
                                 })->first();
+
                             return $handler->getFieldTypeOf($annotation);
                         })->first();
                 })->toArray();

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BaclucC5Crud\Test;
-
 
 use BaclucC5Crud\Adapters\Concrete5\DIContainerFactory as ProductionDefinition;
 use BaclucC5Crud\Controller\CurrentUrlSupplier;
@@ -24,34 +22,34 @@ use BaclucC5Crud\View\FormView\Field as FormField;
 use BaclucC5Crud\View\FormView\WysiwygEditorFactory;
 use BaclucC5Crud\View\TableView\DropdownField as DropdownTableField;
 use BaclucC5Crud\View\TableView\Field as TableField;
+use function DI\autowire;
 use DI\Container;
 use DI\ContainerBuilder;
+use function DI\get;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\ORM\EntityManager;
 use ReflectionException;
 use RuntimeException;
-use function DI\autowire;
-use function DI\get;
 
-class DIContainerFactory
-{
-    public static function createContainer(EntityManager $entityManager, string $entityClass): Container
-    {
-        AnnotationRegistry::registerLoader("class_exists");
+class DIContainerFactory {
+    public static function createContainer(EntityManager $entityManager, string $entityClass): Container {
+        AnnotationRegistry::registerLoader('class_exists');
         $containerBuilder = new ContainerBuilder();
+
         try {
             $entityFieldOverrides = new EntityFieldOverrideBuilder($entityClass);
 
-            $dropdownField = "dropdowncolumn";
+            $dropdownField = 'dropdowncolumn';
             $valueSupplier = new ExampleEntityDropdownValueSupplier();
             $entityFieldOverrides->forField($dropdownField)
-                                 ->forType(FormField::class)
-                                 ->useFactory(DropdownFormField::createDropdownField($dropdownField, $valueSupplier))
-                                 ->forType(TableField::class)
-                                 ->useFactory(DropdownTableField::createDropdownField($valueSupplier))
-                                 ->forType(FieldValidator::class)
-                                 ->useFactory(DropdownFieldValidator::createDropdownFieldValidator($valueSupplier))
-                                 ->buildField();
+                ->forType(FormField::class)
+                ->useFactory(DropdownFormField::createDropdownField($dropdownField, $valueSupplier))
+                ->forType(TableField::class)
+                ->useFactory(DropdownTableField::createDropdownField($valueSupplier))
+                ->forType(FieldValidator::class)
+                ->useFactory(DropdownFieldValidator::createDropdownFieldValidator($valueSupplier))
+                ->buildField()
+            ;
         } catch (ReflectionException $e) {
             throw new RuntimeException($e);
         }
@@ -60,7 +58,8 @@ class DIContainerFactory
             $entityClass,
             ExampleConfigurationEntity::class,
             $entityFieldOverrides->build(),
-            0);
+            0
+        );
 
         $definitions[VariableSetter::class] = autowire(DefaultContext::class);
         $definitions[DefaultContext::class] = get(VariableSetter::class);
@@ -70,6 +69,7 @@ class DIContainerFactory
         $definitions[CurrentUrlSupplier::class] = autowire(DefaultCurrentUrlSupplier::class);
 
         $containerBuilder->addDefinitions($definitions);
+
         return $containerBuilder->build();
     }
 }

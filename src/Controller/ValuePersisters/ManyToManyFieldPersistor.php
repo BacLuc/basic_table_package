@@ -1,15 +1,12 @@
 <?php
 
-
 namespace BaclucC5Crud\Controller\ValuePersisters;
 
-
 use BaclucC5Crud\Entity\ValueSupplier;
-use Doctrine\Common\Collections\ArrayCollection;
 use function BaclucC5Crud\Lib\collect as collect;
+use Doctrine\Common\Collections\ArrayCollection;
 
-class ManyToManyFieldPersistor implements FieldPersistor
-{
+class ManyToManyFieldPersistor implements FieldPersistor {
     /**
      * @var string
      */
@@ -21,20 +18,16 @@ class ManyToManyFieldPersistor implements FieldPersistor
 
     /**
      * TextFieldPersistor constructor.
-     * @param string $name
-     * @param ValueSupplier $valueSupplier
      */
-    public function __construct(string $name, ValueSupplier $valueSupplier)
-    {
+    public function __construct(string $name, ValueSupplier $valueSupplier) {
         $this->name = $name;
         $this->valueSupplier = $valueSupplier;
     }
 
-    public function persist($valueMap, $toEntity)
-    {
+    public function persist($valueMap, $toEntity) {
         $values = $this->valueSupplier->getValues();
         $postvalues = $valueMap[$this->name];
-        if (filter_var($postvalues, FILTER_VALIDATE_INT) !== false || is_string($postvalues)) {
+        if (false !== filter_var($postvalues, FILTER_VALIDATE_INT) || is_string($postvalues)) {
             $postvalues = [$postvalues];
         }
 
@@ -42,13 +35,16 @@ class ManyToManyFieldPersistor implements FieldPersistor
             ->map(function ($postValue) use ($values) {
                 return $values[$postValue];
             })
-            ->reduce(function (ArrayCollection $collection, $item) {
-                $collection->add($item);
-                return $collection;
-            },
-                new ArrayCollection());
+            ->reduce(
+                function (ArrayCollection $collection, $item) {
+                    $collection->add($item);
+
+                    return $collection;
+                },
+                new ArrayCollection()
+            )
+        ;
 
         $toEntity->{$this->name} = $newCollection;
     }
-
 }

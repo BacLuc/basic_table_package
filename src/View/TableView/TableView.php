@@ -1,13 +1,10 @@
 <?php
 
-
 namespace BaclucC5Crud\View\TableView;
 
-
-class TableView
-{
+class TableView {
     /**
-     * @var String[]
+     * @var string[]
      */
     private $headers;
 
@@ -22,44 +19,38 @@ class TableView
 
     /**
      * TableView constructor.
-     * @param String[] $headers
-     * @param Row[] $rows
-     * @param int $count
+     *
+     * @param string[] $headers
+     * @param Row[]    $rows
      */
-    public function __construct(array $headers, array $rows, int $count)
-    {
+    public function __construct(array $headers, array $rows, int $count) {
         $this->headers = $headers;
         $this->rows = $rows;
         $this->count = $count;
     }
 
-    public static function empty()
-    {
+    public static function empty() {
         return new TableView([], [], 0);
     }
 
     /**
-     * @return String[]
+     * @return string[]
      */
-    public function getHeaders()
-    {
+    public function getHeaders() {
         return $this->headers;
     }
 
     /**
      * @return Row[]
      */
-    public function getRows()
-    {
+    public function getRows() {
         return $this->rows;
     }
 
     /**
      * @return int
      */
-    public function getCount()
-    {
+    public function getCount() {
         return $this->count;
     }
-
 }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BaclucC5Crud\Controller\ActionProcessors;
-
 
 use BaclucC5Crud\Controller\ActionProcessor;
 use BaclucC5Crud\Controller\ActionRegistryFactory;
@@ -15,14 +13,13 @@ use BaclucC5Crud\Controller\VariableSetter;
 use BaclucC5Crud\Entity\Identifiable;
 use BaclucC5Crud\Entity\Repository;
 use BaclucC5Crud\FormViewAfterValidationFailedService;
+use function BaclucC5Crud\Lib\collect as collect;
 use BaclucC5Crud\View\CancelFormViewAction;
 use BaclucC5Crud\View\FormType;
 use BaclucC5Crud\View\SubmitFormViewAction;
-use function BaclucC5Crud\Lib\collect as collect;
 
-class PostForm implements ActionProcessor
-{
-    const FORM_VIEW = "view/form";
+class PostForm implements ActionProcessor {
+    const FORM_VIEW = 'view/form';
     /**
      * @var Validator
      */
@@ -62,15 +59,6 @@ class PostForm implements ActionProcessor
 
     /**
      * PostFormActionProcessor constructor.
-     * @param Validator $validator
-     * @param FormViewAfterValidationFailedService $formViewAfterValidationFailedService
-     * @param Repository $repository
-     * @param PersistorConfiguration $peristorConfiguration
-     * @param VariableSetter $variableSetter
-     * @param Renderer $renderer
-     * @param FormType $formType
-     * @param SubmitFormViewAction $submitFormAction
-     * @param CancelFormViewAction $cancelFormAction
      */
     public function __construct(
         Validator $validator,
@@ -94,16 +82,14 @@ class PostForm implements ActionProcessor
         $this->cancelFormAction = $cancelFormAction;
     }
 
-    function getName(): string
-    {
+    public function getName(): string {
         return ActionRegistryFactory::POST_FORM;
     }
 
-    function process(array $get, array $post, ...$additionalParameters)
-    {
+    public function process(array $get, array $post, ...$additionalParameters) {
         $validationResult = $this->validator->validate($post);
         $editId = null;
-        if (count($additionalParameters) == 1 && $additionalParameters[0] != null) {
+        if (1 == count($additionalParameters) && null != $additionalParameters[0]) {
             $editId = $additionalParameters[0];
         }
         if (!$validationResult->isError()) {
@@ -113,11 +99,12 @@ class PostForm implements ActionProcessor
                 })
                 ->map(function (ValidationResultItem $validationResultItem) {
                     return $validationResultItem->getPostValue();
-                });
-            /** @var $entity Identifiable */
-            if ($editId != null) {
+                })
+            ;
+            // @var $entity Identifiable
+            if (null != $editId) {
                 $entity = $this->repository->getById($editId);
-                if ($entity === null && $this->formType === FormType::$BLOCK_CONFIGURATION) {
+                if (null === $entity && $this->formType === FormType::$BLOCK_CONFIGURATION) {
                     $entity = $this->repository->create();
                 }
             } else {
@@ -135,20 +122,19 @@ class PostForm implements ActionProcessor
             $this->repository->persist($entity);
         } else {
             $formView = $this->formViewAfterValidationFailedService->getFormView($validationResult);
-            $this->variableSetter->set("fields", $formView->getFields());
-            $this->variableSetter->set("editId", $editId);
+            $this->variableSetter->set('fields', $formView->getFields());
+            $this->variableSetter->set('editId', $editId);
             $validationErrors = collect($validationResult)
                 ->keyBy(function (ValidationResultItem $resultItem) {
                     return $resultItem->getName();
                 })->map(function (ValidationResultItem $resultItem) {
                     return $resultItem->getMessages();
                 });
-            $this->variableSetter->set("validationErrors", $validationErrors);
-            $this->variableSetter->set("addFormTags", $this->formType === FormType::$BLOCK_VIEW);
-            $this->variableSetter->set("submitFormAction", $this->submitFormAction);
-            $this->variableSetter->set("cancelFormAction", $this->cancelFormAction);
+            $this->variableSetter->set('validationErrors', $validationErrors);
+            $this->variableSetter->set('addFormTags', $this->formType === FormType::$BLOCK_VIEW);
+            $this->variableSetter->set('submitFormAction', $this->submitFormAction);
+            $this->variableSetter->set('cancelFormAction', $this->cancelFormAction);
             $this->renderer->render(self::FORM_VIEW);
         }
     }
-
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace BaclucC5Crud\Test\Entity;
 
 use BaclucC5Crud\Entity\Identifiable;
@@ -17,15 +16,33 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\Table;
 
 /**
- * Class ExampleEntity
+ * Class ExampleEntity.
+ *
  * @IgnoreAnnotation("package")
  *  Concrete\Package\BaclucC5Crud\Src
  * @Entity
  * @Table(name="btExampleEntity")
  */
-class SomeEntity implements Identifiable
-{
-    use GetterTrait, SetterTrait;
+class SomeEntity implements Identifiable {
+    use GetterTrait;
+    use SetterTrait;
+
+    /**
+     * @Column(type="integer", nullable=true)
+     */
+    protected $intcolumn;
+
+    /**
+     * @var SomeReferencedEntity
+     * @ManyToOne(targetEntity="BaclucC5Crud\Test\Entity\SomeReferencedEntity")
+     */
+    protected $manyToOne;
+
+    /**
+     * @var SomeReferencedEntity[]
+     * @ManyToMany(targetEntity="BaclucC5Crud\Test\Entity\SomeReferencedEntity")
+     */
+    protected $manyToMany;
 
     /**
      * @var int
@@ -38,11 +55,6 @@ class SomeEntity implements Identifiable
      * @Column(type="string")
      */
     private $value;
-
-    /**
-     * @Column(type="integer", nullable=true)
-     */
-    protected $intcolumn;
 
     /**
      * @Column(type="date", nullable=true)
@@ -59,36 +71,19 @@ class SomeEntity implements Identifiable
      */
     private $wysiwygcolumn;
 
-
-    /**
-     * @var SomeReferencedEntity
-     * @ManyToOne(targetEntity="BaclucC5Crud\Test\Entity\SomeReferencedEntity")
-     */
-    protected $manyToOne;
-
-    /**
-     * @var SomeReferencedEntity[]
-     * @ManyToMany(targetEntity="BaclucC5Crud\Test\Entity\SomeReferencedEntity" )
-     */
-    protected $manyToMany;
-
-    public function __construct()
-    {
+    public function __construct() {
         $this->manyToMany = new ArrayCollection();
     }
 
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
-    public function setId(int $id)
-    {
+    public function setId(int $id) {
         $this->id = $id;
     }
 
-    public static function getIdFieldName(): string
-    {
-        return "id";
+    public static function getIdFieldName(): string {
+        return 'id';
     }
 }

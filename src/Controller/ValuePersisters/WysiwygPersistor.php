@@ -1,11 +1,8 @@
 <?php
 
-
 namespace BaclucC5Crud\Controller\ValuePersisters;
 
-
-class WysiwygPersistor implements FieldPersistor
-{
+class WysiwygPersistor implements FieldPersistor {
     /**
      * @var string
      */
@@ -14,14 +11,11 @@ class WysiwygPersistor implements FieldPersistor
     /**
      * TextFieldPersistor constructor.
      */
-    public function __construct(string $name)
-    {
+    public function __construct(string $name) {
         $this->name = $name;
     }
 
-    public function persist($valueMap, $toEntity)
-    {
+    public function persist($valueMap, $toEntity) {
         $toEntity->{$this->name} = $valueMap[$this->name];
     }
-
 }

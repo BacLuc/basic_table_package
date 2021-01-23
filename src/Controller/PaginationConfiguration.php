@@ -1,11 +1,8 @@
 <?php
 
-
 namespace BaclucC5Crud\Controller;
 
-
-class PaginationConfiguration
-{
+class PaginationConfiguration {
     /**
      * @var int
      */
@@ -15,8 +12,7 @@ class PaginationConfiguration
      */
     private $pageSize;
 
-    public function __construct(int $currentPage, $pageSize)
-    {
+    public function __construct(int $currentPage, $pageSize) {
         $this->currentPage = $currentPage;
         $this->pageSize = $pageSize;
     }
@@ -24,24 +20,22 @@ class PaginationConfiguration
     /**
      * @return int
      */
-    public function getCurrentPage()
-    {
+    public function getCurrentPage() {
         return $this->currentPage;
     }
 
     /**
      * @return int
      */
-    public function getPageSize()
-    {
+    public function getPageSize() {
         return $this->pageSize;
     }
 
-    public function getOffset()
-    {
-        if ($this->pageSize == null) {
+    public function getOffset() {
+        if (null == $this->pageSize) {
             return 0;
         }
+
         return $this->currentPage * $this->pageSize;
     }
 }

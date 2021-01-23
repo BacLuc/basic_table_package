@@ -1,9 +1,9 @@
 <?php /** @noinspection ALL */ ?>
-<select name="<?= $postname ?>">
-    <option <?= $sqlValue === null ? "selected" : "" ?>/>
+<select name="<?php echo $postname; ?>">
+    <option <?php echo null === $sqlValue ? 'selected' : ''; ?>/>
     <?php foreach ($options as $key => $optionValue) { ?>
-        <option value="<?= $key ?>" <?= $key === $sqlValue ? "selected" : "" ?>>
-            <?= t($optionValue) ?>
+        <option value="<?php echo $key; ?>" <?php echo $key === $sqlValue ? 'selected' : ''; ?>>
+            <?php echo t($optionValue); ?>
         </option>
     <?php } ?>
 </select>

@@ -1,29 +1,23 @@
 <?php
 
-
 namespace BaclucC5Crud\View\TableView;
-
 
 use DateTime;
 
-class DateTimeField implements Field
-{
+class DateTimeField implements Field {
     /**
-     * @var DateTime|null
+     * @var null|DateTime
      */
     private $sqlValue;
 
     /**
      * TextField constructor.
-     * @param DateTime|null $sqlValue
      */
-    public function __construct(?DateTime $sqlValue)
-    {
+    public function __construct(?DateTime $sqlValue) {
         $this->sqlValue = $sqlValue;
     }
 
-    public function getTableView(): string
-    {
-        return $this->sqlValue ? $this->sqlValue->format('d.m.Y H:i') : "";
+    public function getTableView(): string {
+        return $this->sqlValue ? $this->sqlValue->format('d.m.Y H:i') : '';
     }
 }

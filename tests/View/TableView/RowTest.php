@@ -2,13 +2,14 @@
 
 namespace BaclucC5Crud\View\TableView;
 
-use PHPUnit\Framework\TestCase;
 use function BaclucC5Crud\Lib\collect as collect;
+use PHPUnit\Framework\TestCase;
 
-class RowTest extends TestCase
-{
-    public function test_foreach_works()
-    {
+/**
+ * @internal
+ */
+class RowTest extends TestCase {
+    public function testForeachWorks() {
         $values = [1, 2, 3];
         $row = new Row(1, $values);
         foreach ($row as $value) {
@@ -17,8 +18,7 @@ class RowTest extends TestCase
         }
     }
 
-    public function test_collect_works()
-    {
+    public function testCollectWorks() {
         $values = [1, 2, 3];
         $row = new Row(1, $values);
 

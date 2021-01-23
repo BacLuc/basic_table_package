@@ -1,19 +1,16 @@
 <?php
 
-
 namespace BaclucC5Crud;
-
 
 use BaclucC5Crud\Controller\Validation\ValidationResult;
 use BaclucC5Crud\Controller\Validation\ValidationResultItem;
+use function BaclucC5Crud\Lib\collect as collect;
 use BaclucC5Crud\View\FormView\FormView;
 use BaclucC5Crud\View\FormView\PostFormViewConfigurationFactory;
 use Error;
 use stdClass;
-use function BaclucC5Crud\Lib\collect as collect;
 
-class FormViewAfterValidationFailedService
-{
+class FormViewAfterValidationFailedService {
     /**
      * @var PostFormViewConfigurationFactory
      */
@@ -21,7 +18,6 @@ class FormViewAfterValidationFailedService
 
     /**
      * ShowFormActionProcessor constructor.
-     * @param PostFormViewConfigurationFactory $postFormViewConfigurationFactory
      */
     public function __construct(
         PostFormViewConfigurationFactory $postFormViewConfigurationFactory
@@ -29,8 +25,7 @@ class FormViewAfterValidationFailedService
         $this->postFormViewConfigurationFactory = $postFormViewConfigurationFactory;
     }
 
-    function getFormView(ValidationResult $validationResult)
-    {
+    public function getFormView(ValidationResult $validationResult) {
         $entity = new stdClass();
         /**
          * @var ValidationResultItem $validationResultItem
@@ -47,9 +42,9 @@ class FormViewAfterValidationFailedService
             ) {
                 return call_user_func($fieldFactory, $entity);
             })->filter(function ($value) {
-                return $value != null;
+                return null != $value;
             });
+
         return new FormView($fields->toArray());
     }
-
 }

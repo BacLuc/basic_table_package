@@ -1,10 +1,7 @@
 <?php
 
-
 namespace BaclucC5Crud\View\FormView;
 
-
-interface WysiwygEditorFactory
-{
-    function createEditor(): WysiwygEditor;
+interface WysiwygEditorFactory {
+    public function createEditor(): WysiwygEditor;
 }

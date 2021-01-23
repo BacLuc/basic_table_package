@@ -1,24 +1,20 @@
 <?php
 
-
 namespace BaclucC5Crud\View\TableView;
-
 
 use BaclucC5Crud\Lib\IteratorTrait;
 use Iterator;
 
-class Row implements Iterator
-{
+class Row implements Iterator {
     use IteratorTrait;
     private $id;
 
     /**
      * Row constructor.
-     * @param int $id
-     * @param String[] $values
+     *
+     * @param string[] $values
      */
-    public function __construct(int $id, array $values)
-    {
+    public function __construct(int $id, array $values) {
         $this->id = $id;
         $this->initialize($values);
     }
@@ -26,8 +22,7 @@ class Row implements Iterator
     /**
      * @return int
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 }

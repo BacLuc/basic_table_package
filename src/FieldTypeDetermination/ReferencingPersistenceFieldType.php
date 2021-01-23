@@ -1,13 +1,10 @@
 <?php
 
-
 namespace BaclucC5Crud\FieldTypeDetermination;
-
 
 use BaclucC5Crud\Entity\ValueSupplier;
 
-class ReferencingPersistenceFieldType implements PersistenceFieldType
-{
+class ReferencingPersistenceFieldType implements PersistenceFieldType {
     /**
      * @var string
      */
@@ -17,29 +14,20 @@ class ReferencingPersistenceFieldType implements PersistenceFieldType
      */
     private $valueSupplier;
 
-    public function __construct(string $type, ValueSupplier $valueSupplier)
-    {
+    public function __construct(string $type, ValueSupplier $valueSupplier) {
         $this->type = $type;
         $this->valueSupplier = $valueSupplier;
     }
 
-    public function getType(): string
-    {
+    public function getType(): string {
         return $this->type;
     }
 
-    /**
-     * @return ValueSupplier
-     */
-    public function getValueSupplier(): ValueSupplier
-    {
+    public function getValueSupplier(): ValueSupplier {
         return $this->valueSupplier;
     }
 
-    public function isNullable()
-    {
+    public function isNullable() {
         return true;
     }
-
-
 }

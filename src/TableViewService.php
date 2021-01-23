@@ -1,22 +1,18 @@
 <?php
 
-
 namespace BaclucC5Crud;
-
 
 use BaclucC5Crud\Controller\PaginationConfiguration;
 use BaclucC5Crud\Entity\Identifiable;
 use BaclucC5Crud\Entity\TableViewEntrySupplier;
+use function BaclucC5Crud\Lib\collect as collect;
 use BaclucC5Crud\View\TableView\Field;
 use BaclucC5Crud\View\TableView\Row;
 use BaclucC5Crud\View\TableView\TableView;
 use BaclucC5Crud\View\TableView\TableViewFieldConfiguration;
 use Tightenco\Collect\Support\Collection;
-use function BaclucC5Crud\Lib\collect as collect;
 
-class TableViewService
-{
-
+class TableViewService {
     /**
      * @var TableViewFieldConfiguration
      */
@@ -30,26 +26,24 @@ class TableViewService
         TableViewEntrySupplier $tableViewEntrySupplier,
         TableViewFieldConfiguration $tableViewFieldConfiguration
     ) {
-
         $this->tableViewEntrySupplier = $tableViewEntrySupplier;
         $this->tableViewFieldConfiguration = $tableViewFieldConfiguration;
     }
 
-
-    public function getTableView(PaginationConfiguration $paginationConfiguration): TableView
-    {
+    public function getTableView(PaginationConfiguration $paginationConfiguration): TableView {
         $result = $this->tableViewEntrySupplier->getEntries($paginationConfiguration);
         $headers = collect($this->tableViewFieldConfiguration)
             ->map(function ($fieldFactory, $name) {
                 return call_user_func($fieldFactory, null, $name);
             })
             ->filter(function ($value) {
-                return $value !== null;
+                return null !== $value;
             })
             ->keys()
-            ->toArray();
+            ->toArray()
+        ;
         $tableView = new TableView($headers, [], 0);
-        if ($result != null) {
+        if (null != $result) {
             $rows = collect($result)
                 ->keyBy(function (Identifiable $entity) {
                     return $entity->getId();
@@ -60,30 +54,31 @@ class TableViewService
                             return call_user_func($fieldFactory, $entity->{$name}, $name);
                         })
                         ->filter(function ($value) {
-                            return $value !== null;
+                            return null !== $value;
                         })
                         ->map(function ($field) {
                             return self::toTableView($field);
-                        });
+                        })
+                    ;
                 })
                 ->map(function ($collection) {
                     return self::asArray($collection);
                 })
                 ->map(function ($fields, $id) {
                     return new Row($id, $fields);
-                });
+                })
+            ;
             $tableView = new TableView($headers, $rows->toArray(), $this->tableViewEntrySupplier->count());
         }
+
         return $tableView;
     }
 
-    private static function toTableView(Field $field)
-    {
+    private static function toTableView(Field $field) {
         return $field->getTableView();
     }
 
-    private static function asArray(Collection $collection)
-    {
+    private static function asArray(Collection $collection) {
         return $collection->toArray();
     }
 }

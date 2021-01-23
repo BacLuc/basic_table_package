@@ -1,12 +1,9 @@
 <?php
 
-
 namespace BaclucC5Crud\Controller\Validation;
 
-
-class IntegerFieldValidator implements FieldValidator
-{
-    const NOINTERRORMSG = "This is not a valid number";
+class IntegerFieldValidator implements FieldValidator {
+    const NOINTERRORMSG = 'This is not a valid number';
 
     /**
      * @var string
@@ -16,17 +13,16 @@ class IntegerFieldValidator implements FieldValidator
     /**
      * TextFieldValidator constructor.
      */
-    public function __construct(string $name)
-    {
+    public function __construct(string $name) {
         $this->name = $name;
     }
 
-    public function validate($post): ValidationResultItem
-    {
+    public function validate($post): ValidationResultItem {
         $postValue = key_exists($this->name, $post) ? $post[$this->name] : null;
-        if (filter_var($postValue, FILTER_VALIDATE_INT) === false && $postValue != null) {
+        if (false === filter_var($postValue, FILTER_VALIDATE_INT) && null != $postValue) {
             return new ValidationResultItem($this->name, $postValue, [self::NOINTERRORMSG]);
         }
+
         return new ValidationResultItem($this->name, $postValue, []);
     }
 }

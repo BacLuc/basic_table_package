@@ -1,15 +1,12 @@
 <?php
 
-
 namespace BaclucC5Crud\View\FormView;
-
 
 use BaclucC5Crud\Entity\ValueSupplier;
 use BaclucC5Crud\View\FormView\ValueTransformers\DropdownValueTransformer;
 use BaclucC5Crud\View\FormView\ValueTransformers\ValueTransformer;
 
-class DropdownField implements Field
-{
+class DropdownField implements Field {
     /**
      * @var string
      */
@@ -28,11 +25,17 @@ class DropdownField implements Field
     private $valueSupplier;
 
     /**
-     * @param string $fieldName
-     * @param ValueSupplier $valueSupplier
-     * @param ValueTransformer|null $dropdownValueTransformer
-     * @return \Closure
+     * TextField constructor.
+     *
+     * @param string $value
      */
+    public function __construct(string $label, string $postName, $value, ValueSupplier $valueSupplier) {
+        $this->label = $label;
+        $this->value = $value;
+        $this->postName = $postName;
+        $this->valueSupplier = $valueSupplier;
+    }
+
     public static function createDropdownField(
         string $fieldName,
         ValueSupplier $valueSupplier,
@@ -43,53 +46,38 @@ class DropdownField implements Field
             $persistenceValue = FormViewConfigurationFactory::extractSqlValueOfEntity($entity, $fieldName);
 
             $valueTransformer = $overrideValueTransformer ?: $dropdownValueTransformer;
+
             return $valueTransformer->transform($persistenceValue);
         };
+
         return function ($overrideValueTransformer) use ($fieldName, $valueSupplier, $getValue) {
             return function ($entity) use ($fieldName, $valueSupplier, $getValue, $overrideValueTransformer) {
-                return new DropdownField($fieldName,
+                return new DropdownField(
+                    $fieldName,
                     $fieldName,
                     $getValue($entity, $overrideValueTransformer),
-                    $valueSupplier);
+                    $valueSupplier
+                );
             };
         };
     }
 
-    /**
-     * TextField constructor.
-     * @param string $label
-     * @param string $postName
-     * @param string $value
-     * @param ValueSupplier $valueSupplier
-     */
-    public function __construct(string $label, string $postName, $value, ValueSupplier $valueSupplier)
-    {
-        $this->label = $label;
-        $this->value = $value;
-        $this->postName = $postName;
-        $this->valueSupplier = $valueSupplier;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLabel(): string
-    {
+    public function getLabel(): string {
         return $this->label;
     }
 
-
-    public function getFormView(): string
-    {
-        $variables = array(
-            "postname" => $this->postName,
-            "sqlValue" => $this->value,
-            "options"  => $this->valueSupplier->getValues(),
-        );
+    public function getFormView(): string {
+        $variables = [
+            'postname' => $this->postName,
+            'sqlValue' => $this->value,
+            'options' => $this->valueSupplier->getValues(),
+        ];
         extract($variables);
         ob_start();
-        include __DIR__ . "/../../../resources/formfields/dropdownfield.php";
+
+        include __DIR__.'/../../../resources/formfields/dropdownfield.php';
         $content = ob_get_clean();
+
         return $content;
     }
 }

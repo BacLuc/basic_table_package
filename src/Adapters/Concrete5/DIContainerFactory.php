@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BaclucC5Crud\Adapters\Concrete5;
-
 
 use BaclucC5Crud\Controller\ActionConfiguration;
 use BaclucC5Crud\Controller\ActionRegistry;
@@ -45,24 +43,22 @@ use BaclucC5Crud\View\TableView\TableViewFieldConfiguration;
 use BaclucC5Crud\View\ViewActionRegistry;
 use BaclucC5Crud\View\ViewActionRegistryFactory;
 use Concrete\Core\Block\BlockController;
+use function DI\autowire;
 use DI\Container;
 use DI\ContainerBuilder;
-use Doctrine\Common\Annotations\AnnotationRegistry;
-use Doctrine\ORM\EntityManager;
-use function DI\autowire;
 use function DI\create;
 use function DI\factory;
 use function DI\value;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\ORM\EntityManager;
 
-class DIContainerFactory
-{
+class DIContainerFactory {
     /**
-     * @param BlockController $controller
-     * @param EntityManager $entityManager
      * @param $entityClass
-     * @param EntityFieldOverrides $entityFieldOverrides
      * @param FormType $formType
-     * @return Container
+     * @param mixed    $configurationClass
+     * @param mixed    $blockId
+     *
      * @throws \Exception
      */
     public static function createContainer(
@@ -77,16 +73,19 @@ class DIContainerFactory
     ): Container {
         $containerBuilder = new ContainerBuilder();
         $definitions =
-            self::createDefinition($entityManager,
+            self::createDefinition(
+                $entityManager,
                 $entityClass,
                 $configurationClass,
                 $entityFieldOverrides,
                 $blockId,
-                $formType);
+                $formType
+            );
         $definitions[BlockController::class] = value($controller);
         $definitions[CurrentUrlSupplier::class] = autowire(Concrete5CurrentUrlSupplier::class);
         $definitions[Renderer::class] = create(Concrete5Renderer::class)->constructor($controller, $packagePath);
         $containerBuilder->addDefinitions($definitions);
+
         return $containerBuilder->build();
     }
 
@@ -99,54 +98,56 @@ class DIContainerFactory
         FormType $formType = null
     ): array {
         $formType = $formType ? $formType : FormType::$BLOCK_VIEW;
-        AnnotationRegistry::registerLoader("class_exists");
+        AnnotationRegistry::registerLoader('class_exists');
         $definitions = [
-            PersistenceFieldTypeReader::class    => factory(function (Container $container) use ($entityClass) {
-                return new PersistenceFieldTypeReader($entityClass,
+            PersistenceFieldTypeReader::class => factory(function (Container $container) use ($entityClass) {
+                return new PersistenceFieldTypeReader(
+                    $entityClass,
                     [
                         new ColumnAnnotationHandler(),
                         new ManyToOneAnnotationHandler($container->get(RepositoryFactory::class)),
                         new ManyToManyAnnotationHandler($container->get(RepositoryFactory::class)),
-                        new OneToManyAnnotationHandler($container->get(RepositoryFactory::class))
-                    ]);
+                        new OneToManyAnnotationHandler($container->get(RepositoryFactory::class)),
+                    ]
+                );
             }),
-            EntityManager::class                 => value($entityManager),
-            Repository::class                    => factory([RepositoryFactory::class, "createRepositoryFor"])
+            EntityManager::class => value($entityManager),
+            Repository::class => factory([RepositoryFactory::class, 'createRepositoryFor'])
                 ->parameter('className', $entityClass),
-            ConfigurationRepository::class       => factory([RepositoryFactory::class, "createRepositoryFor"])
+            ConfigurationRepository::class => factory([RepositoryFactory::class, 'createRepositoryFor'])
                 ->parameter('className', $configurationClass),
-            EntityFieldOverrides::class          => value($entityFieldOverrides),
-            VariableSetter::class                => autowire(Concrete5VariableSetter::class),
-            ViewActionRegistry::class            => factory([ViewActionRegistryFactory::class, "createActionRegistry"]),
-            ActionConfiguration::class           => autowire(DefaultActionConfiguration::class),
-            RowActionConfiguration::class        => autowire(DefaultRowActionConfiguration::class),
-            ActionRegistry::class                => factory([ActionRegistryFactory::class, "createActionRegistry"]),
-            SubmitFormViewAction::class          => factory([SubmitFormViewActionSupplier::class, "getAction"]),
-            CancelFormViewAction::class          => factory([CancelFormViewActionSupplier::class, "getAction"]),
-            TableViewFieldConfiguration::class   => factory([
+            EntityFieldOverrides::class => value($entityFieldOverrides),
+            VariableSetter::class => autowire(Concrete5VariableSetter::class),
+            ViewActionRegistry::class => factory([ViewActionRegistryFactory::class, 'createActionRegistry']),
+            ActionConfiguration::class => autowire(DefaultActionConfiguration::class),
+            RowActionConfiguration::class => autowire(DefaultRowActionConfiguration::class),
+            ActionRegistry::class => factory([ActionRegistryFactory::class, 'createActionRegistry']),
+            SubmitFormViewAction::class => factory([SubmitFormViewActionSupplier::class, 'getAction']),
+            CancelFormViewAction::class => factory([CancelFormViewActionSupplier::class, 'getAction']),
+            TableViewFieldConfiguration::class => factory([
                 TableViewConfigurationFactory::class,
-                "createConfiguration"
+                'createConfiguration',
             ]),
-            ValidationConfiguration::class       => factory([
+            ValidationConfiguration::class => factory([
                 ValidationConfigurationFactory::class,
-                "createConfiguration"
+                'createConfiguration',
             ]),
-            FormViewFieldConfiguration::class    => factory([
+            FormViewFieldConfiguration::class => factory([
                 FormViewConfigurationFactory::class,
-                "createConfiguration"
+                'createConfiguration',
             ]),
-            PersistorConfiguration::class        => factory([
+            PersistorConfiguration::class => factory([
                 PersistorConfigurationFactory::class,
-                "createConfiguration"
+                'createConfiguration',
             ]),
-            WysiwygEditorFactory::class          => value(new Concrete5WysiwygEditorFactory()),
-            RepositoryFactory::class             => value(new EntityManagerRepositoryFactory($entityManager)),
+            WysiwygEditorFactory::class => value(new Concrete5WysiwygEditorFactory()),
+            RepositoryFactory::class => value(new EntityManagerRepositoryFactory($entityManager)),
             ValueTransformerConfiguration::class => autowire(PersistenceValueTransformerConfiguration::class),
-            FormType::class                      => value($formType),
-            TableViewEntrySupplier::class        => autowire(AllValuesTableViewEntrySupplier::class),
-            BlockIdSupplier::class               => create()->constructor($blockId)
-
+            FormType::class => value($formType),
+            TableViewEntrySupplier::class => autowire(AllValuesTableViewEntrySupplier::class),
+            BlockIdSupplier::class => create()->constructor($blockId),
         ];
+
         return $definitions;
     }
 }

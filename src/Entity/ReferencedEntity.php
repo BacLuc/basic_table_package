@@ -1,6 +1,5 @@
 <?php
 
-
 namespace BaclucC5Crud\Entity;
 
 use BaclucC5Crud\Lib\GetterTrait;
@@ -13,15 +12,21 @@ use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Table;
 
 /**
- * Class ExampleEntity
+ * Class ExampleEntity.
+ *
  * @IgnoreAnnotation("package")
  *  Concrete\Package\BaclucC5Crud\Src
  * @Entity
  * @Table(name="btReferencedEntity")
  */
-class ReferencedEntity implements WithUniqueStringRepresentation, Identifiable
-{
-    use GetterTrait, SetterTrait;
+class ReferencedEntity implements WithUniqueStringRepresentation, Identifiable {
+    use GetterTrait;
+    use SetterTrait;
+
+    /**
+     * @Column(type="integer", nullable=true)
+     */
+    protected $intcolumn;
 
     /**
      * @var int
@@ -35,35 +40,23 @@ class ReferencedEntity implements WithUniqueStringRepresentation, Identifiable
      */
     private $value;
 
-    /**
-     * @Column(type="integer", nullable=true)
-     */
-    protected $intcolumn;
-
-
-    public function createUniqueString(): string
-    {
-        return $this->id . " " . $this->value . " " . $this->intcolumn;
-    }
-
-    public function __toString()
-    {
+    public function __toString() {
         return $this->createUniqueString();
     }
 
-    public function getId()
-    {
+    public function createUniqueString(): string {
+        return $this->id.' '.$this->value.' '.$this->intcolumn;
+    }
+
+    public function getId() {
         return $this->id;
     }
 
-    public function setId(int $id)
-    {
+    public function setId(int $id) {
         $this->id = $id;
     }
 
-    public static function getIdFieldName(): string
-    {
-        return "id";
+    public static function getIdFieldName(): string {
+        return 'id';
     }
-
 }

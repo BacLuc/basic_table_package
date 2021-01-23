@@ -1,10 +1,7 @@
 <?php
 
-
 namespace BaclucC5Crud\Controller;
 
-
-interface CurrentUrlSupplier
-{
-    function getUrl();
+interface CurrentUrlSupplier {
+    public function getUrl();
 }

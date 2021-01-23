@@ -1,12 +1,9 @@
 <?php
 
-
 namespace BaclucC5Crud\Controller;
 
+interface ActionProcessor {
+    public function getName(): string;
 
-interface ActionProcessor
-{
-    function getName(): string;
-
-    function process(array $get, array $post, ...$additionalParameters);
+    public function process(array $get, array $post, ...$additionalParameters);
 }

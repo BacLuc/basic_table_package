@@ -1,10 +1,7 @@
 <?php
 
-
 namespace BaclucC5Crud\Controller\Validation;
 
-
-interface FieldValidator
-{
+interface FieldValidator {
     public function validate($post): ValidationResultItem;
 }

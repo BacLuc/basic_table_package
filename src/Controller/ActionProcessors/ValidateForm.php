@@ -1,15 +1,12 @@
 <?php
 
-
 namespace BaclucC5Crud\Controller\ActionProcessors;
-
 
 use BaclucC5Crud\Controller\ActionProcessor;
 use BaclucC5Crud\Controller\ActionRegistryFactory;
 use BaclucC5Crud\Controller\Validation\Validator;
 
-class ValidateForm implements ActionProcessor
-{
+class ValidateForm implements ActionProcessor {
     /**
      * @var Validator
      */
@@ -17,7 +14,6 @@ class ValidateForm implements ActionProcessor
 
     /**
      * PostFormActionProcessor constructor.
-     * @param Validator $validator
      */
     public function __construct(
         Validator $validator
@@ -25,14 +21,11 @@ class ValidateForm implements ActionProcessor
         $this->validator = $validator;
     }
 
-    function getName(): string
-    {
+    public function getName(): string {
         return ActionRegistryFactory::VALIDATE_FORM;
     }
 
-    function process(array $get, array $post, ...$additionalParameters)
-    {
+    public function process(array $get, array $post, ...$additionalParameters) {
         return $this->validator->validate($post);
     }
-
 }

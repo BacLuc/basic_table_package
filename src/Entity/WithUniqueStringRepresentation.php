@@ -1,10 +1,7 @@
 <?php
 
-
 namespace BaclucC5Crud\Entity;
 
-
-interface WithUniqueStringRepresentation
-{
+interface WithUniqueStringRepresentation {
     public function createUniqueString(): string;
 }
