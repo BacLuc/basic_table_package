@@ -21,7 +21,7 @@ use Doctrine\ORM\Mapping\Table;
  * @Entity
  * @Table(name="btExampleConfigurationEntity")
  */
-class ExampleConfigurationEntity
+class ExampleConfigurationEntity implements Identifiable
 {
     use GetterTrait, SetterTrait;
     /**
@@ -81,4 +81,20 @@ class ExampleConfigurationEntity
     {
         $this->manyToMany = new ArrayCollection();
     }
+
+    public static function getIdFieldName(): string
+    {
+        return "id";
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id)
+    {
+        $this->id = $id;
+    }
+
 }
