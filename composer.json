@@ -1,6 +1,5 @@
 {
   "require": {
-    "concrete5/core": "^8.5.2",
     "php-di/php-di": "6.*",
     "tightenco/collect": "6.0.*",
     "php-ds/php-ds": "1.2.*",
@@ -14,20 +13,21 @@
     "symfony/inflector": "4.4.*"
   },
   "require-dev": {
+    "concrete5/core": "^8.5.2",
     "php": ">=7",
     "phpunit/phpunit": "7.5.*"
   },
   "autoload": {
     "psr-4": {
       "BaclucC5Crud\\": "src"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "BaclucC5Crud\\Test\\": "tests"
     },
     "files": [
       "src/Lib/CollectionHelper.php"
     ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "BaclucC5Crud\\Test\\": "tests"
+    }
   }
 }
