@@ -21,5 +21,8 @@
     "psr-4": {
       "BaclucC5Crud\\Test\\": "tests"
     }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit -d memory_limit=-1 tests"
   }
 }
