@@ -2,15 +2,7 @@
   "require": {
     "php-di/php-di": "6.0.11",
     "tightenco/collect": "6.0.4",
-    "php-ds/php-ds": "1.2.0",
-    "doctrine/annotations": "1.2.7",
-    "doctrine/common": "2.6.2",
-    "doctrine/dbal": "2.5.13",
-    "doctrine/instantiator": "1.3.0",
-    "doctrine/lexer": "1.0.2",
-    "doctrine/migrations": "1.5.0",
-    "doctrine/orm": "2.5.14",
-    "symfony/inflector": "4.4.8"
+    "php-ds/php-ds": "1.2.0"
   },
   "require-dev": {
     "concrete5/core": "8.5.4",
