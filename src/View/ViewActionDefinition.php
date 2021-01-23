@@ -1,11 +1,8 @@
 <?php
 
-
 namespace BaclucC5Crud\View;
 
-
-class ViewActionDefinition implements SubmitFormViewAction, CancelFormViewAction
-{
+class ViewActionDefinition implements SubmitFormViewAction, CancelFormViewAction {
     /**
      * @var string
      */
@@ -27,7 +24,6 @@ class ViewActionDefinition implements SubmitFormViewAction, CancelFormViewAction
      */
     private $iconClass;
 
-
     /**
      * Action constructor.
      */
@@ -48,40 +44,35 @@ class ViewActionDefinition implements SubmitFormViewAction, CancelFormViewAction
     /**
      * @return string
      */
-    public function getAction()
-    {
+    public function getAction() {
         return $this->action;
     }
 
     /**
      * @return string
      */
-    public function getButtonClass()
-    {
+    public function getButtonClass() {
         return $this->buttonClass;
     }
 
     /**
      * @return string
      */
-    public function getAriaLabel()
-    {
+    public function getAriaLabel() {
         return $this->ariaLabel;
     }
 
     /**
      * @return string
      */
-    public function getTitle()
-    {
+    public function getTitle() {
         return $this->title;
     }
 
     /**
      * @return string
      */
-    public function getIconClass()
-    {
+    public function getIconClass() {
         return $this->iconClass;
     }
 }

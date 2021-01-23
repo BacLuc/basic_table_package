@@ -1,20 +1,15 @@
 <?php
 
-
 namespace BaclucC5Crud\View\FormView\ValueTransformers;
-
 
 use DateTime;
 
-class DateValueTransformer implements ValueTransformer
-{
-
+class DateValueTransformer implements ValueTransformer {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function transform($persistenceValue)
-    {
-        /** @var DateTime $persistenceValue */
-        return $persistenceValue ? $persistenceValue->format("Y-m-d") : "";
+    public function transform($persistenceValue) {
+        // @var DateTime $persistenceValue
+        return $persistenceValue ? $persistenceValue->format('Y-m-d') : '';
     }
 }

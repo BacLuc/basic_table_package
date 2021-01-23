@@ -1,11 +1,8 @@
 <?php
 
-
 namespace BaclucC5Crud\View;
 
-
-class FormType
-{
+class FormType {
     /**
      * dont change these fields.
      */

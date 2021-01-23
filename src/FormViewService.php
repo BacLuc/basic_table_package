@@ -1,18 +1,15 @@
 <?php
 
-
 namespace BaclucC5Crud;
 
-
 use BaclucC5Crud\Entity\Repository;
+use function BaclucC5Crud\Lib\collect as collect;
 use BaclucC5Crud\View\FormType;
 use BaclucC5Crud\View\FormView\FormView;
 use BaclucC5Crud\View\FormView\FormViewFieldConfiguration;
 use stdClass;
-use function BaclucC5Crud\Lib\collect as collect;
 
-class FormViewService
-{
+class FormViewService {
     /**
      * @var FormViewFieldConfiguration
      */
@@ -36,12 +33,11 @@ class FormViewService
         $this->formType = $formType;
     }
 
-    public function getFormView($editId = null): FormView
-    {
+    public function getFormView($editId = null): FormView {
         $entity = new stdClass();
-        if ($editId != null) {
+        if (null != $editId) {
             $entity = $this->repository->getById($editId);
-            if ($entity === null && $this->formType === FormType::$BLOCK_CONFIGURATION) {
+            if (null === $entity && $this->formType === FormType::$BLOCK_CONFIGURATION) {
                 $entity = $this->repository->create();
             }
         }
@@ -49,8 +45,9 @@ class FormViewService
             collect($this->formViewFieldConfiguration)->map(function ($fieldFactory) use ($entity) {
                 return call_user_func($fieldFactory, $entity);
             })->filter(function ($value) {
-                return $value != null;
+                return null != $value;
             });
+
         return new FormView($fields->toArray());
     }
 }

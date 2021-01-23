@@ -1,14 +1,11 @@
 <?php
 
-
 namespace BaclucC5Crud\Controller;
 
-
-use Tightenco\Collect\Support\Collection;
 use function BaclucC5Crud\Lib\collect as collect;
+use Tightenco\Collect\Support\Collection;
 
-class ActionRegistry
-{
+class ActionRegistry {
     /**
      * @var Collection
      */
@@ -16,21 +13,19 @@ class ActionRegistry
 
     /**
      * ActionRegistry constructor.
+     *
      * @param ActionProcessor[] $actions
      */
-    public function __construct(array $actions)
-    {
+    public function __construct(array $actions) {
         $this->actions = collect($actions)->keyBy(function (ActionProcessor $item) {
             return $item->getName();
         });
     }
 
     /**
-     * @param String $name
-     * @return ActionProcessor|null
+     * @return null|ActionProcessor
      */
-    public function getByName(String $name): ActionProcessor
-    {
+    public function getByName(string $name): ActionProcessor {
         return $this->actions->get($name);
     }
 

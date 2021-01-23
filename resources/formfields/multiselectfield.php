@@ -1,8 +1,8 @@
 <?php /** @noinspection ALL */ ?>
-<select name="<?= $postname ?>[]" multiple>
+<select name="<?php echo $postname; ?>[]" multiple>
     <?php foreach ($options as $key => $optionValue) { ?>
-        <option value="<?= $key ?>" <?= isset($sqlValue[$key]) ? "selected" : "" ?>>
-            <?= t($optionValue) ?>
+        <option value="<?php echo $key; ?>" <?php echo isset($sqlValue[$key]) ? 'selected' : ''; ?>>
+            <?php echo t($optionValue); ?>
         </option>
     <?php } ?>
 </select>

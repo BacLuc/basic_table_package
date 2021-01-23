@@ -2,24 +2,27 @@
 
 namespace BaclucC5Crud\Controller\Validation;
 
-use PHPUnit\Framework\TestCase;
 use function BaclucC5Crud\Lib\collect as collect;
+use PHPUnit\Framework\TestCase;
 
-class DateValidatorTest extends TestCase
-{
+/**
+ * @internal
+ */
+class DateValidatorTest extends TestCase {
     /**
      * @dataProvider getFormats
+     *
+     * @param mixed $date
+     * @param mixed $isValid
      */
-    public function test_date_formats($date, $isValid)
-    {
-        $fieldName = "test";
+    public function testDateFormats($date, $isValid) {
+        $fieldName = 'test';
         $dateValidator = new DateValidator($fieldName);
         $postvalues[$fieldName] = $date;
         self::assertThat($dateValidator->validate($postvalues)->isError(), $isValid ? self::isFalse() : self::isTrue());
     }
 
-    public function getFormats()
-    {
+    public function getFormats() {
         return $this->describeDataSet([
             ['1980-05-31', true],
             ['1980/05/31', true],
@@ -57,30 +60,24 @@ class DateValidatorTest extends TestCase
             [-1, false],
             [1.2, false],
             [null, true],
-            ["", true],
+            ['', true],
         ]);
-    }
-
-    private function describeDataSet(array $data)
-    {
-        return collect($data)->keyBy(function ($dataRow) {
-            return "[" . collect($dataRow)->join(", ") . "]";
-        });
     }
 
     /**
      * @dataProvider getRanges
+     *
+     * @param mixed $date
+     * @param mixed $isValid
      */
-    public function test_date_ranges($date, $isValid)
-    {
-        $fieldName = "test";
+    public function testDateRanges($date, $isValid) {
+        $fieldName = 'test';
         $dateValidator = new DateValidator($fieldName);
         $postvalues[$fieldName] = $date;
         self::assertThat($dateValidator->validate($postvalues)->isError(), $isValid ? self::isFalse() : self::isTrue());
     }
 
-    public function getRanges()
-    {
+    public function getRanges() {
         return $this->describeDataSet([
             ['01.01.1900', true],
             ['31.12.2050', true],
@@ -89,5 +86,11 @@ class DateValidatorTest extends TestCase
             ['31.11.2050', true],
             ['31.02.2050', true],
         ]);
+    }
+
+    private function describeDataSet(array $data) {
+        return collect($data)->keyBy(function ($dataRow) {
+            return '['.collect($dataRow)->join(', ').']';
+        });
     }
 }

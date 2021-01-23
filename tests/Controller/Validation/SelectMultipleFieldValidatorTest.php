@@ -6,61 +6,61 @@ use BaclucC5Crud\Controller\Validation\SelectMultipleFieldValidator;
 use BaclucC5Crud\Entity\ValueSupplier;
 use PHPUnit\Framework\TestCase;
 
-class SelectMultipleFieldValidatorTest extends TestCase
-{
+/**
+ * @internal
+ */
+class SelectMultipleFieldValidatorTest extends TestCase {
     private $valueSupplier;
     private $dropdownFieldValidator;
 
-    function setUp()
-    {
+    public function setUp() {
         $this->valueSupplier = $this->createMock(ValueSupplier::class);
-        $this->dropdownFieldValidator = new SelectMultipleFieldValidator("test", $this->valueSupplier);
+        $this->dropdownFieldValidator = new SelectMultipleFieldValidator('test', $this->valueSupplier);
     }
 
-    public function test_fails_for_unknown_value()
-    {
-        $this->assertThat($this->dropdownFieldValidator->validate(["test" => "unkown"])->isError(), $this->isTrue());
+    public function testFailsForUnknownValue() {
+        $this->assertThat($this->dropdownFieldValidator->validate(['test' => 'unkown'])->isError(), $this->isTrue());
     }
 
-    public function test_return_valid_for_null()
-    {
+    public function testReturnValidForNull() {
         $this->assertThat($this->dropdownFieldValidator->validate([])->isError(), $this->isFalse());
     }
 
-    public function test_return_valid_for_empty_string()
-    {
-        $this->assertThat($this->dropdownFieldValidator->validate(["test" => ""])->isError(), $this->isFalse());
+    public function testReturnValidForEmptyString() {
+        $this->assertThat($this->dropdownFieldValidator->validate(['test' => ''])->isError(), $this->isFalse());
     }
 
-    public function test_fail_for_unkown_0()
-    {
-        $this->assertThat($this->dropdownFieldValidator->validate(["test" => "0"])->isError(), $this->isTrue());
-        $this->assertThat($this->dropdownFieldValidator->validate(["test" => 0])->isError(), $this->isTrue());
+    public function testFailForUnkown0() {
+        $this->assertThat($this->dropdownFieldValidator->validate(['test' => '0'])->isError(), $this->isTrue());
+        $this->assertThat($this->dropdownFieldValidator->validate(['test' => 0])->isError(), $this->isTrue());
     }
 
-    public function test_return_valid_for_empty_array()
-    {
-        $this->assertThat($this->dropdownFieldValidator->validate(["test" => []])->isError(), $this->isFalse());
+    public function testReturnValidForEmptyArray() {
+        $this->assertThat($this->dropdownFieldValidator->validate(['test' => []])->isError(), $this->isFalse());
     }
 
-    public function test_return_valid_for_known_value()
-    {
-        $knownKey = "knownkey";
+    public function testReturnValidForKnownValue() {
+        $knownKey = 'knownkey';
         $this->valueSupplier->expects($this->once())
-                            ->method("getValues")
-                            ->willReturn([$knownKey => "knownvalue"]);
-        $this->assertThat($this->dropdownFieldValidator->validate(["test" => [$knownKey]])->isError(),
-            $this->isFalse());
+            ->method('getValues')
+            ->willReturn([$knownKey => 'knownvalue'])
+        ;
+        $this->assertThat(
+            $this->dropdownFieldValidator->validate(['test' => [$knownKey]])->isError(),
+            $this->isFalse()
+        );
     }
 
-    public function test_return_valid_for_known_values()
-    {
-        $knownKey = "knownkey";
-        $knownKey2 = "knownkey2";
+    public function testReturnValidForKnownValues() {
+        $knownKey = 'knownkey';
+        $knownKey2 = 'knownkey2';
         $this->valueSupplier->expects($this->once())
-                            ->method("getValues")
-                            ->willReturn([$knownKey => "knownvalue", $knownKey2 => "knownvalue2"]);
-        $this->assertThat($this->dropdownFieldValidator->validate(["test" => [$knownKey, $knownKey2]])->isError(),
-            $this->isFalse());
+            ->method('getValues')
+            ->willReturn([$knownKey => 'knownvalue', $knownKey2 => 'knownvalue2'])
+        ;
+        $this->assertThat(
+            $this->dropdownFieldValidator->validate(['test' => [$knownKey, $knownKey2]])->isError(),
+            $this->isFalse()
+        );
     }
 }

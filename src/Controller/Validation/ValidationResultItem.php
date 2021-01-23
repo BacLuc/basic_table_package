@@ -1,11 +1,8 @@
 <?php
 
-
 namespace BaclucC5Crud\Controller\Validation;
 
-
-class ValidationResultItem
-{
+class ValidationResultItem {
     /**
      * @var string
      */
@@ -18,9 +15,10 @@ class ValidationResultItem
 
     /**
      * ValidationResultItem constructor.
+     *
+     * @param mixed $postValue
      */
-    public function __construct(string $name, $postValue, array $messages)
-    {
+    public function __construct(string $name, $postValue, array $messages) {
         $this->name = $name;
         $this->postValue = $postValue;
         $this->messages = $messages;
@@ -29,31 +27,25 @@ class ValidationResultItem
     /**
      * @return string
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
-
 
     /**
      * @return mixed
      */
-    public function getPostValue()
-    {
+    public function getPostValue() {
         return $this->postValue;
     }
 
     /**
      * @return array
      */
-    public function getMessages()
-    {
+    public function getMessages() {
         return $this->messages;
     }
 
-    public function isError(): bool
-    {
-        return count($this->messages) != 0;
+    public function isError(): bool {
+        return 0 != count($this->messages);
     }
-
 }

@@ -1,10 +1,8 @@
 <?php
 /**
- * define the block add/edit view here
+ * define the block add/edit view here.
  */
-
-
-defined('C5_EXECUTE') or die("Access Denied."); ?>
+defined('C5_EXECUTE') or exit('Access Denied.'); ?>
 <style type="text/css">
     div.action-options {
         position: relative;

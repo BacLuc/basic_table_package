@@ -1,16 +1,13 @@
 <?php
 
-
 namespace BaclucC5Crud\View\FormView;
-
 
 use BaclucC5Crud\Entity\ValueSupplier;
 use BaclucC5Crud\Entity\WithUniqueStringRepresentation;
-use Doctrine\Common\Collections\ArrayCollection;
 use function BaclucC5Crud\Lib\collect as collect;
+use Doctrine\Common\Collections\ArrayCollection;
 
-class MultiSelectField implements Field
-{
+class MultiSelectField implements Field {
     /**
      * @var string
      */
@@ -30,45 +27,38 @@ class MultiSelectField implements Field
 
     /**
      * TextField constructor.
-     * @param string $label
-     * @param string $postname
+     *
      * @param ArrayCollection $value
-     * @param ValueSupplier $valueSupplier
      */
-    public function __construct(string $label, string $postname, $value, ValueSupplier $valueSupplier)
-    {
+    public function __construct(string $label, string $postname, $value, ValueSupplier $valueSupplier) {
         $this->label = $label;
         $this->value = $value;
         $this->postname = $postname;
         $this->valueSupplier = $valueSupplier;
     }
 
-    /**
-     * @return string
-     */
-    public function getLabel(): string
-    {
+    public function getLabel(): string {
         return $this->label;
     }
 
-
-    public function getFormView(): string
-    {
-
+    public function getFormView(): string {
         $values = $this->valueSupplier->getValues();
         $values = collect($values)
             ->map(function (WithUniqueStringRepresentation $value) {
                 return $value->createUniqueString();
-            });
-        $variables = array(
-            "postname" => $this->postname,
-            "sqlValue" => $this->value,
-            "options"  => $values,
-        );
+            })
+        ;
+        $variables = [
+            'postname' => $this->postname,
+            'sqlValue' => $this->value,
+            'options' => $values,
+        ];
         extract($variables);
         ob_start();
-        include __DIR__ . "/../../../resources/formfields/multiselectfield.php";
+
+        include __DIR__.'/../../../resources/formfields/multiselectfield.php';
         $content = ob_get_clean();
+
         return $content;
     }
 }

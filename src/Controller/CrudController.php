@@ -1,12 +1,10 @@
 <?php
 
-
 namespace BaclucC5Crud\Controller;
 
 use BaclucC5Crud\Controller\ActionProcessors\BlockIdAwareActionProcessor;
 
-class CrudController
-{
+class CrudController {
     /**
      * @var ActionRegistry
      */
@@ -16,22 +14,23 @@ class CrudController
      */
     private $blockIdSupplier;
 
-    public function __construct(ActionRegistry $actionRegistry, BlockIdSupplier $blockIdSupplier)
-    {
+    public function __construct(ActionRegistry $actionRegistry, BlockIdSupplier $blockIdSupplier) {
         $this->actionRegistry = $actionRegistry;
         $this->blockIdSupplier = $blockIdSupplier;
     }
 
-    public function getActionFor(string $string, $blockIdOfRequest): ActionProcessor
-    {
+    public function getActionFor(string $string, $blockIdOfRequest): ActionProcessor {
         $blockIdOfRequest = filter_var($blockIdOfRequest, FILTER_VALIDATE_INT);
-        if ($blockIdOfRequest === false) {
+        if (false === $blockIdOfRequest) {
             $blockIdOfRequest = null;
         }
+
         return
-            new BlockIdAwareActionProcessor($this->blockIdSupplier,
+            new BlockIdAwareActionProcessor(
+                $this->blockIdSupplier,
                 $blockIdOfRequest,
                 $this->actionRegistry->getByName($string),
-                $this->actionRegistry->getByName(ActionRegistryFactory::SHOW_TABLE));
+                $this->actionRegistry->getByName(ActionRegistryFactory::SHOW_TABLE)
+            );
     }
 }

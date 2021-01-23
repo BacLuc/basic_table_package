@@ -1,11 +1,8 @@
 <?php
 
-
 namespace BaclucC5Crud\View\FormView;
 
-
-class FormView
-{
+class FormView {
     /**
      * @var Field[]
      */
@@ -14,16 +11,14 @@ class FormView
     /**
      * FormView constructor.
      */
-    public function __construct(array $fields)
-    {
+    public function __construct(array $fields) {
         $this->fields = $fields;
     }
 
     /**
      * @return Field[]
      */
-    public function getFields()
-    {
+    public function getFields() {
         return $this->fields;
     }
 }

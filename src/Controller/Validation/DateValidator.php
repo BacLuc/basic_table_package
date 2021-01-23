@@ -1,12 +1,8 @@
 <?php
 
-
 namespace BaclucC5Crud\Controller\Validation;
 
-
-class DateValidator implements FieldValidator
-{
-
+class DateValidator implements FieldValidator {
     /**
      * @var string
      */
@@ -15,21 +11,21 @@ class DateValidator implements FieldValidator
     /**
      * TextFieldValidator constructor.
      */
-    public function __construct(string $name)
-    {
+    public function __construct(string $name) {
         $this->name = $name;
     }
 
-    public function validate($post): ValidationResultItem
-    {
+    public function validate($post): ValidationResultItem {
         $postValue = key_exists($this->name, $post) ? $post[$this->name] : null;
-        if ($postValue === null || $postValue === ""
-            || (strtotime($postValue) !== false
-                && filter_var($postValue,
-                    FILTER_VALIDATE_FLOAT) === false)) {
+        if (null === $postValue || '' === $postValue
+            || (false !== strtotime($postValue)
+                && false === filter_var(
+                    $postValue,
+                    FILTER_VALIDATE_FLOAT
+                ))) {
             return new ValidationResultItem($this->name, $postValue, []);
-        } else {
-            return new ValidationResultItem($this->name, $postValue, ["The value must be in a valid Date format"]);
         }
+
+        return new ValidationResultItem($this->name, $postValue, ['The value must be in a valid Date format']);
     }
 }

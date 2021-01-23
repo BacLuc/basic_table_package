@@ -1,11 +1,8 @@
 <?php
 
-
 namespace BaclucC5Crud\Lib;
 
-
-trait ImmutableArrayAccessTrait
-{
+trait ImmutableArrayAccessTrait {
     /**
      * @var array
      */
@@ -13,43 +10,39 @@ trait ImmutableArrayAccessTrait
 
     /**
      * FieldTypeOverride constructor.
-     * private, do not use directly
+     * private, do not use directly.
+     *
      * @param array $overrides
      */
-    function initialize(array $values)
-    {
+    public function initialize(array $values) {
         $this->values = $values;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function offsetExists($offset)
-    {
+    public function offsetExists($offset) {
         return array_key_exists($offset, $this->values);
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function offsetGet($offset)
-    {
+    public function offsetGet($offset) {
         return $this->values[$offset];
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function offsetSet($offset, $value)
-    {
-        throw new \BadMethodCallException("this array is immutable, cannot set value");
+    public function offsetSet($offset, $value) {
+        throw new \BadMethodCallException('this array is immutable, cannot set value');
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function offsetUnset($offset)
-    {
-        throw new \BadMethodCallException("this array is immutable, cannot set value");
+    public function offsetUnset($offset) {
+        throw new \BadMethodCallException('this array is immutable, cannot set value');
     }
 }

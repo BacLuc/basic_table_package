@@ -1,11 +1,8 @@
 <?php
 
-
 namespace BaclucC5Crud\View\FormView;
 
-
-class TextField implements Field
-{
+class TextField implements Field {
     /**
      * @var string
      */
@@ -21,37 +18,30 @@ class TextField implements Field
 
     /**
      * TextField constructor.
-     * @param string $label
-     * @param string $postname
+     *
      * @param string $sqlValue
      */
-    public function __construct(string $label, string $postname, $sqlValue)
-    {
+    public function __construct(string $label, string $postname, $sqlValue) {
         $this->label = $label;
         $this->sqlValue = $sqlValue;
         $this->postname = $postname;
     }
 
-    /**
-     * @return string
-     */
-    public function getLabel(): string
-    {
+    public function getLabel(): string {
         return $this->label;
     }
 
-
-    public function getFormView(): string
-    {
-        $variables = array(
-            "postname" => $this->postname,
-            "sqlValue" => $this->sqlValue,
-        );
+    public function getFormView(): string {
+        $variables = [
+            'postname' => $this->postname,
+            'sqlValue' => $this->sqlValue,
+        ];
         extract($variables);
         ob_start();
-        include __DIR__ . "/../../../resources/formfields/textfield.php";
+
+        include __DIR__.'/../../../resources/formfields/textfield.php';
         $content = ob_get_clean();
+
         return $content;
     }
-
 }

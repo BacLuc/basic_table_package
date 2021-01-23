@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BaclucC5Crud\Test\Entity;
-
 
 use BaclucC5Crud\Entity\Identifiable;
 use BaclucC5Crud\Lib\GetterTrait;
@@ -15,15 +13,21 @@ use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Table;
 
 /**
- * Class ExampleEntity
+ * Class ExampleEntity.
+ *
  * @IgnoreAnnotation("package")
  *  Concrete\Package\BaclucC5Crud\Src
  * @Entity
  * @Table(name="btSomeReferencedEntity")
  */
-class SomeReferencedEntity implements Identifiable
-{
-    use GetterTrait, SetterTrait;
+class SomeReferencedEntity implements Identifiable {
+    use GetterTrait;
+    use SetterTrait;
+
+    /**
+     * @Column(type="integer", nullable=true)
+     */
+    protected $intcolumn;
 
     /**
      * @var int
@@ -37,23 +41,15 @@ class SomeReferencedEntity implements Identifiable
      */
     private $value;
 
-    /**
-     * @Column(type="integer", nullable=true)
-     */
-    protected $intcolumn;
-
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
-    public function setId(int $id)
-    {
+    public function setId(int $id) {
         $this->id = $id;
     }
 
-    public static function getIdFieldName(): string
-    {
-        return "id";
+    public static function getIdFieldName(): string {
+        return 'id';
     }
 }

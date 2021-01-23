@@ -1,17 +1,12 @@
 <?php
 
-
 namespace BaclucC5Crud\View\FormView\ValueTransformers;
 
-
-class IdentityValueTransformer implements ValueTransformer
-{
-
+class IdentityValueTransformer implements ValueTransformer {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function transform($persistenceValue)
-    {
+    public function transform($persistenceValue) {
         return $persistenceValue;
     }
 }

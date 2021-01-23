@@ -1,15 +1,12 @@
 <?php
 
-
 namespace BaclucC5Crud\Controller\ValuePersisters;
 
-
-interface FieldPersistor
-{
+interface FieldPersistor {
     /**
      * @param $value
      * @param $toEntity
-     * @return void
+     * @param mixed $valueMap
      */
     public function persist($valueMap, $toEntity);
 }

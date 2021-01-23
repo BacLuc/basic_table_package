@@ -1,11 +1,8 @@
 <?php
 
-
 namespace BaclucC5Crud\Entity;
 
-
-class OrderConfigEntry
-{
+class OrderConfigEntry {
     /**
      * @var string
      */
@@ -16,8 +13,7 @@ class OrderConfigEntry
      */
     private $asc;
 
-    public function __construct(string $sqlFieldName, bool $asc = true)
-    {
+    public function __construct(string $sqlFieldName, bool $asc = true) {
         $this->sqlFieldName = $sqlFieldName;
         $this->asc = $asc;
     }
@@ -25,16 +21,14 @@ class OrderConfigEntry
     /**
      * @return string
      */
-    public function getSqlFieldName()
-    {
+    public function getSqlFieldName() {
         return $this->sqlFieldName;
     }
 
     /**
      * @return bool
      */
-    public function isAsc()
-    {
+    public function isAsc() {
         return $this->asc;
     }
 }

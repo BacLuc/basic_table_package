@@ -1,11 +1,8 @@
 <?php
 
-
 namespace BaclucC5Crud\FieldTypeDetermination;
 
-
-class SimplePersistenceFieldType implements PersistenceFieldType
-{
+class SimplePersistenceFieldType implements PersistenceFieldType {
     /**
      * @var string
      */
@@ -15,24 +12,19 @@ class SimplePersistenceFieldType implements PersistenceFieldType
      */
     private $nullable;
 
-    public function __construct(string $type, bool $nullable)
-    {
+    public function __construct(string $type, bool $nullable) {
         $this->type = $type;
         $this->nullable = $nullable;
     }
 
-    public function getType(): string
-    {
+    public function getType(): string {
         return $this->type;
     }
 
     /**
      * @return bool
      */
-    public function isNullable()
-    {
+    public function isNullable() {
         return $this->nullable;
     }
-
-
 }

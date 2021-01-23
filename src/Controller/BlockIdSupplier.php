@@ -1,26 +1,21 @@
 <?php
 
-
 namespace BaclucC5Crud\Controller;
 
-
-class BlockIdSupplier
-{
+class BlockIdSupplier {
     /**
      * @var string
      */
     private $blockId;
 
-    public function __construct($blockId)
-    {
+    public function __construct($blockId) {
         $this->blockId = $blockId;
     }
 
     /**
      * @return string
      */
-    public function getBlockId()
-    {
+    public function getBlockId() {
         return $this->blockId;
     }
 }

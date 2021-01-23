@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BaclucC5Crud\View\TableView;
-
 
 use BaclucC5Crud\FieldConfigurationOverride\EntityFieldOverrides;
 use BaclucC5Crud\FieldTypeDetermination\PersistenceFieldType;
@@ -11,8 +9,7 @@ use BaclucC5Crud\FieldTypeDetermination\PersistenceFieldTypes;
 use BaclucC5Crud\FieldTypeDetermination\ReferencingPersistenceFieldType;
 use function BaclucC5Crud\Lib\collect as collect;
 
-class TableViewConfigurationFactory
-{
+class TableViewConfigurationFactory {
     /**
      * @var PersistenceFieldTypeReader
      */
@@ -22,10 +19,6 @@ class TableViewConfigurationFactory
      */
     private $entityFieldOverrides;
 
-    /**
-     * @param PersistenceFieldTypeReader $persistenceFieldTypeReader
-     * @param EntityFieldOverrides $entityFieldOverrides
-     */
     public function __construct(
         PersistenceFieldTypeReader $persistenceFieldTypeReader,
         EntityFieldOverrides $entityFieldOverrides
@@ -34,19 +27,19 @@ class TableViewConfigurationFactory
         $this->entityFieldOverrides = $entityFieldOverrides;
     }
 
-    public function createConfiguration(): TableViewFieldConfiguration
-    {
+    public function createConfiguration(): TableViewFieldConfiguration {
         $persistenceFieldTypes = $this->persistenceFieldTypeReader->getPersistenceFieldTypes();
         $fieldTypes =
             collect($persistenceFieldTypes)
                 ->map(function ($persistenceFieldType) {
                     return self::createFieldTypeOf($persistenceFieldType);
-                });
+                })
+            ;
+
         return new TableViewFieldConfiguration($fieldTypes->toArray());
     }
 
-    private function createFieldTypeOf(PersistenceFieldType $persistenceFieldType)
-    {
+    private function createFieldTypeOf(PersistenceFieldType $persistenceFieldType) {
         switch ($persistenceFieldType->getType()) {
             case PersistenceFieldTypes::STRING:
             case PersistenceFieldTypes::INTEGER:
@@ -55,28 +48,33 @@ class TableViewConfigurationFactory
                     return $this->checkFieldOverride($value, $key) ? $this->checkFieldOverride($value, $key)() :
                         new TextField($value);
                 };
+
             case PersistenceFieldTypes::DATE:
                 return function ($value, $key) {
                     return $this->checkFieldOverride($value, $key) ? $this->checkFieldOverride($value, $key)() :
                         new DateField($value);
                 };
+
             case PersistenceFieldTypes::DATETIME:
                 return function ($value, $key) {
                     return $this->checkFieldOverride($value, $key) ? $this->checkFieldOverride($value, $key)() :
                         new DateTimeField($value);
                 };
+
             case PersistenceFieldTypes::MANY_TO_ONE:
                 return function ($value, $key) use ($persistenceFieldType) {
-                    /** @var ReferencingPersistenceFieldType $persistenceFieldType */
+                    // @var ReferencingPersistenceFieldType $persistenceFieldType
                     return $this->checkFieldOverride($value, $key) ? $this->checkFieldOverride($value, $key)() :
                         new DropdownField($value, $persistenceFieldType->getValueSupplier());
                 };
+
             case PersistenceFieldTypes::MANY_TO_MANY:
                 return function ($value, $key) use ($persistenceFieldType) {
-                    /** @var ReferencingPersistenceFieldType $persistenceFieldType */
+                    // @var ReferencingPersistenceFieldType $persistenceFieldType
                     return $this->checkFieldOverride($value, $key) ? $this->checkFieldOverride($value, $key)() :
                         new MultiSelectField($value, $persistenceFieldType->getValueSupplier());
                 };
+
             default:
                 return null;
         }
@@ -85,15 +83,15 @@ class TableViewConfigurationFactory
     /**
      * @param $value
      * @param $key
-     * @return callable|null
+     *
+     * @return null|callable
      */
-    private function checkFieldOverride($value, $key)
-    {
-        if (isset($this->entityFieldOverrides[$key]) &&
-            isset($this->entityFieldOverrides[$key][Field::class])) {
+    private function checkFieldOverride($value, $key) {
+        if (isset($this->entityFieldOverrides[$key], $this->entityFieldOverrides[$key][Field::class])
+            ) {
             return $this->entityFieldOverrides[$key][Field::class]($value);
-        } else {
-            return null;
         }
+
+        return null;
     }
 }

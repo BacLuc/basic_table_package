@@ -1,11 +1,8 @@
 <?php
 
-
 namespace BaclucC5Crud\View\TableView;
 
-
-class TextField implements Field
-{
+class TextField implements Field {
     /**
      * @var string
      */
@@ -13,16 +10,14 @@ class TextField implements Field
 
     /**
      * TextField constructor.
+     *
+     * @param mixed $sqlValue
      */
-    public function __construct($sqlValue)
-    {
+    public function __construct($sqlValue) {
         $this->sqlValue = $sqlValue;
     }
 
-    public function getTableView(): string
-    {
-        return $this->sqlValue ?: "";
+    public function getTableView(): string {
+        return $this->sqlValue ?: '';
     }
-
-
 }

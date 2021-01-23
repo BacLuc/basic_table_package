@@ -2,7 +2,6 @@
 
 namespace BaclucC5Crud\Test\Controller\ActionProcessors;
 
-
 use BaclucC5Crud\Controller\ActionRegistryFactory;
 use BaclucC5Crud\Controller\CrudController;
 use BaclucC5Crud\Entity\ExampleEntity;
@@ -12,40 +11,20 @@ use DI\Container;
 use Doctrine\ORM\EntityManager;
 use PHPUnit\Framework\TestCase;
 
-class ShowNewEntryFormTest extends TestCase
-{
+/**
+ * @internal
+ */
+class ShowNewEntryFormTest extends TestCase {
     /**
      * @var CrudController
      */
     private $crudController;
 
-    public function test_new_row_form_has_empty_fields()
-    {
-        ob_start();
-        $this->crudController->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM, "0")
-                             ->process([], []);
-
-        $output = ob_get_clean();
-        $this->assertStringNotContainsString(ExampleEntityConstants::TEXT_VAL_1, $output);
-        $this->assertStringNotContainsString(ExampleEntityConstants::INT_VAL_1, $output);
-        $this->assertStringNotContainsString(ExampleEntityConstants::DATE_VALUE_1, $output);
-        $this->assertStringNotContainsString(ExampleEntityConstants::DATETIME_VALUE_1, $output);
-        $this->assertStringNotContainsString(ExampleEntityConstants::WYSIWYG_VALUE_1, $output);
-        $this->assertStringContainsString("<option selected/>", $output);
-        $this->assertStringContainsString(self::createOptionStringFor(ExampleEntityConstants::REFERENCED_ENTITY_ID_1),
-            $output);
-        $this->assertStringContainsString(self::createOptionStringFor(ExampleEntityConstants::REFERENCED_ENTITY_ID_2),
-            $output);
-        $this->assertThat($output, Matchers::stringContainsAll(array_keys(ExampleEntityConstants::ENTRY_1_POST)));
-        $this->assertThat($output, $this->stringContains("action=\"post_form\""));
-    }
-
     /**
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      */
-    protected function setUp()
-    {
+    protected function setUp() {
         /** @var EntityManager $entityManager */
         $entityManager = $this->createMock(EntityManager::class);
         /** @var Container $container */
@@ -54,12 +33,35 @@ class ShowNewEntryFormTest extends TestCase
         $this->crudController = $container->get(CrudController::class);
     }
 
+    public function testNewRowFormHasEmptyFields() {
+        ob_start();
+        $this->crudController->getActionFor(ActionRegistryFactory::ADD_NEW_ROW_FORM, '0')
+            ->process([], [])
+        ;
+
+        $output = ob_get_clean();
+        $this->assertStringNotContainsString(ExampleEntityConstants::TEXT_VAL_1, $output);
+        $this->assertStringNotContainsString(ExampleEntityConstants::INT_VAL_1, $output);
+        $this->assertStringNotContainsString(ExampleEntityConstants::DATE_VALUE_1, $output);
+        $this->assertStringNotContainsString(ExampleEntityConstants::DATETIME_VALUE_1, $output);
+        $this->assertStringNotContainsString(ExampleEntityConstants::WYSIWYG_VALUE_1, $output);
+        $this->assertStringContainsString('<option selected/>', $output);
+        $this->assertStringContainsString(
+            self::createOptionStringFor(ExampleEntityConstants::REFERENCED_ENTITY_ID_1),
+            $output
+        );
+        $this->assertStringContainsString(
+            self::createOptionStringFor(ExampleEntityConstants::REFERENCED_ENTITY_ID_2),
+            $output
+        );
+        $this->assertThat($output, Matchers::stringContainsAll(array_keys(ExampleEntityConstants::ENTRY_1_POST)));
+        $this->assertThat($output, $this->stringContains('action="post_form"'));
+    }
+
     /**
      * @param $id
-     * @return string
      */
-    public static function createOptionStringFor($id): string
-    {
-        return "<option value=\"" . $id . "\" >";
+    public static function createOptionStringFor($id): string {
+        return '<option value="'.$id.'" >';
     }
 }
