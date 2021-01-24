@@ -8,7 +8,8 @@
     "concrete5/core": "8.5.4",
     "friendsofphp/php-cs-fixer": "2.18.0",
     "php": ">=7",
-    "phpunit/phpunit": "7.5.20"
+    "phpunit/phpunit": "7.5.20",
+    "phpstan/phpstan": "^0.12.69"
   },
   "autoload": {
     "psr-4": {
@@ -26,6 +27,7 @@
   "scripts": {
     "cs-check": "vendor/bin/php-cs-fixer fix --dry-run",
     "cs-fix": "vendor/bin/php-cs-fixer fix",
+    "static-analysis": "vendor/bin/phpstan analyse",
     "test": "vendor/bin/phpunit -d memory_limit=-1 tests"
   }
 }

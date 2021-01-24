@@ -55,10 +55,7 @@ class DuplicateRejectingMap implements \IteratorAggregate, ArrayAccess, Collecti
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function clear() {
+    public function clear(): void {
         $this->map->clear();
     }
 
@@ -157,7 +154,7 @@ class DuplicateRejectingMap implements \IteratorAggregate, ArrayAccess, Collecti
      * {@inheritDoc}
      */
     public function count(): int {
-        return count($this->pairs);
+        return count($this->pairs());
     }
 
     /**
