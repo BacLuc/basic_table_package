@@ -1,4 +1,8 @@
 {
+  "name": "bacluc/bacluc_c5_crud",
+  "type": "library",
+  "description": "A concrete5 package to provide crud functionality",
+  "license": "MIT",
   "require": {
     "php-di/php-di": "6.0.11",
     "tightenco/collect": "6.0.4",
