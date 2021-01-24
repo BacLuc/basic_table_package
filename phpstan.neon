@@ -1,0 +1,10 @@
+parameters:
+  level: 0
+  parallel:
+    maximumNumberOfProcesses: 1
+  paths:
+    - blocks
+    - resources
+    - src
+    - tests
+    - controller.php
